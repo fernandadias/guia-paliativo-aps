@@ -1,6 +1,13 @@
 import { motion } from 'motion/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faXmark, faVolumeHigh, faVolumeXmark } from '@fortawesome/free-solid-svg-icons'
+import {
+  faArrowLeft,
+  faXmark,
+  faVolumeHigh,
+  faVolumeXmark,
+  faListCheck,
+  faAnglesRight,
+} from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import { useGuide } from './useGuideState'
 import { gentle } from '@/lib/motion'
@@ -8,16 +15,17 @@ import { gentle } from '@/lib/motion'
 interface GuideChromeProps {
   musicOn: boolean
   onToggleMusic: () => void
+  onOpenRespostas: () => void
 }
 
-/** Barra superior do guia: voltar, progresso, música e sair. */
-export function GuideChrome({ musicOn, onToggleMusic }: GuideChromeProps) {
-  const { canGoBack, back, progressIndex, progressTotal, atTerminal } = useGuide()
+/** Barra superior do guia: voltar, progresso, respostas, pular, música e sair. */
+export function GuideChrome({ musicOn, onToggleMusic, onOpenRespostas }: GuideChromeProps) {
+  const { canGoBack, back, next, progressIndex, progressTotal, atTerminal } = useGuide()
   const pct = atTerminal ? 100 : Math.min(100, (progressIndex / progressTotal) * 100)
 
   return (
     <div className="sticky top-0 z-30 border-b border-forest/10 bg-paper/85 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-2xl items-center gap-3 px-5 py-3.5 sm:px-6">
+      <div className="mx-auto flex max-w-2xl items-center gap-2 px-4 py-3 sm:gap-3 sm:px-6">
         <button
           onClick={back}
           disabled={!canGoBack}
@@ -37,9 +45,27 @@ export function GuideChrome({ musicOn, onToggleMusic }: GuideChromeProps) {
           </div>
         </div>
 
-        <span className="w-10 text-right text-xs tabular-nums text-forest/50">
+        <span className="w-9 text-right text-xs tabular-nums text-forest/50">
           {progressIndex}/{progressTotal}
         </span>
+
+        <button
+          onClick={onOpenRespostas}
+          aria-label="Ver respostas até agora"
+          className="rounded-full p-2 text-forest transition-colors hover:bg-forest/10"
+        >
+          <FontAwesomeIcon icon={faListCheck} className="text-sm" />
+        </button>
+
+        {!atTerminal && (
+          <button
+            onClick={next}
+            aria-label="Pular esta etapa"
+            className="rounded-full p-2 text-forest/60 transition-colors hover:bg-forest/10 hover:text-forest"
+          >
+            <FontAwesomeIcon icon={faAnglesRight} className="text-sm" />
+          </button>
+        )}
 
         <button
           onClick={onToggleMusic}

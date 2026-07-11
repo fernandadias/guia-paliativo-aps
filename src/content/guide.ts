@@ -74,6 +74,9 @@ export type Step = StepCommon &
     | { kind: 'clinicos'; kicker: string; title: string; intro: string; answerKey: string }
     | { kind: 'edmonton'; kicker: string; title: string; intro: string; answerKey: string }
     | { kind: 'familiar'; kicker: string; title: string; intro: string; answerKey: string }
+    | { kind: 'fisica'; kicker: string; title: string; intro: string; answerKey: string }
+    | { kind: 'social'; kicker: string; title: string; intro: string; answerKey: string }
+    | { kind: 'plano'; kicker: string; title: string; answerKey: string }
     | {
         kind: 'checklist'
         kicker: string
@@ -223,12 +226,12 @@ export const steps: Record<StepId, Step> = {
   // ── Cinco dimensões ───────────────────────────────────────
   fisica: {
     id: 'fisica',
-    kind: 'placeholder',
+    kind: 'fisica',
     progress: true,
     kicker: 'Dimensão física',
     title: 'Dor',
-    body: 'Fluxo: "Tem dor?" Se sim, "Paciente consciente?" leva à EVA (faces) ou à PAINAD (ilustrações). Mais local da dor e medicações em uso. UI a ser construída no sandbox.',
-    epic: 'C · Física / Dor (T11)',
+    intro: 'A avaliação começa pela dor.',
+    answerKey: 'fisica',
   },
   psicologica: {
     id: 'psicologica',
@@ -245,17 +248,12 @@ export const steps: Record<StepId, Step> = {
   },
   social: {
     id: 'social',
-    kind: 'fields',
+    kind: 'social',
     progress: true,
     kicker: 'Dimensão social',
     title: 'Social',
     answerKey: 'dimSocial',
-    intro: 'Rede de apoio e benefícios sociais. A lógica condicional (rede de apoio sim/não) e as opções de benefícios entram na sequência (cliente).',
-    fields: [
-      { id: 'quemCuida', label: 'Quem cuida?', placeholder: 'Anotar…' },
-      { id: 'redeApoio', label: 'Existe rede de apoio? Quem é?', placeholder: 'Anotar…', multiline: true },
-      { id: 'beneficios', label: 'Benefícios sociais', placeholder: 'Anotar… (opções virão da cliente)' },
-    ],
+    intro: 'Rede de apoio e benefícios sociais.',
   },
   espiritual: {
     id: 'espiritual',
@@ -339,21 +337,11 @@ export const steps: Record<StepId, Step> = {
   },
   plano: {
     id: 'plano',
-    kind: 'fields',
+    kind: 'plano',
     progress: true,
     kicker: 'Plano compartilhado',
     title: 'Plano compartilhado',
     answerKey: 'plano',
-    todo: true,
-    fields: [
-      { id: 'desejos', label: 'Desejos do paciente', placeholder: 'O que importa para esta pessoa…', multiline: true },
-      { id: 'objetivos', label: 'Objetivos do cuidado', placeholder: 'Para onde caminhamos juntos…', multiline: true },
-      { id: 'sintomas', label: 'Controle de sintomas', placeholder: 'Prioridades de manejo…', multiline: true },
-      { id: 'responsavel', label: 'Quem será responsável', placeholder: 'Profissional ou cuidador de referência…' },
-      { id: 'matriciado', label: 'Será matriciado o caso? (sim/não)', placeholder: 'Sim ou não… (vira Sim/Não na Trilha 1)' },
-      { id: 'emad', label: 'Encaminhamento a EMAD? (sim/não)', placeholder: 'Sim ou não… (vira Sim/Não na Trilha 1)' },
-      { id: 'reavaliar', label: 'Quando reavaliar', placeholder: 'Semanalmente / Quinzenalmente / Mensalmente / Outro…' },
-    ],
   },
   reflexao: {
     id: 'reflexao',

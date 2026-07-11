@@ -4,6 +4,7 @@ import type { Step } from '@/content/guide'
 import { GuideProvider, useGuide } from './useGuideState'
 import { GuideChrome } from './GuideChrome'
 import { GuideIntro } from './GuideIntro'
+import { AnswersDrawer } from './AnswersDrawer'
 import { IntroStep } from './steps/IntroStep'
 import { ChoiceStep } from './steps/ChoiceStep'
 import { ScaleStep } from './steps/ScaleStep'
@@ -11,6 +12,9 @@ import { PpsStep } from './steps/PpsStep'
 import { ClinicosStep } from './steps/ClinicosStep'
 import { EdmontonStep } from './steps/EdmontonStep'
 import { FamiliarStep } from './steps/FamiliarStep'
+import { FisicaStep } from './steps/FisicaStep'
+import { SocialStep } from './steps/SocialStep'
+import { PlanoStep } from './steps/PlanoStep'
 import { ChecklistStep } from './steps/ChecklistStep'
 import { ResultStep } from './steps/ResultStep'
 import { DimensionsStep } from './steps/DimensionsStep'
@@ -40,6 +44,12 @@ function CurrentStep({ step }: { step: Step }) {
       return <EdmontonStep step={step} />
     case 'familiar':
       return <FamiliarStep step={step} />
+    case 'fisica':
+      return <FisicaStep step={step} />
+    case 'social':
+      return <SocialStep step={step} />
+    case 'plano':
+      return <PlanoStep step={step} />
     case 'checklist':
       return <ChecklistStep step={step} />
     case 'result':
@@ -68,16 +78,22 @@ interface GuideInnerProps {
 
 function GuideInner({ musicOn, onToggleMusic }: GuideInnerProps) {
   const { current, step } = useGuide()
+  const [respostasOpen, setRespostasOpen] = useState(false)
   return (
     <div className="min-h-[100svh] bg-paper">
       {step.kind !== 'loading' && (
-        <GuideChrome musicOn={musicOn} onToggleMusic={onToggleMusic} />
+        <GuideChrome
+          musicOn={musicOn}
+          onToggleMusic={onToggleMusic}
+          onOpenRespostas={() => setRespostasOpen(true)}
+        />
       )}
       <AnimatePresence mode="wait">
         <motion.div key={current} variants={stepFade} initial="initial" animate="animate" exit="exit">
           <CurrentStep step={step} />
         </motion.div>
       </AnimatePresence>
+      <AnswersDrawer open={respostasOpen} onClose={() => setRespostasOpen(false)} />
     </div>
   )
 }

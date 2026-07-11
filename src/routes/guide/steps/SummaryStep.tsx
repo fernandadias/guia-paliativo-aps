@@ -3,7 +3,7 @@ import { faPrint, faFilePdf, faFileMedical, faRotateLeft } from '@fortawesome/fr
 import { StepShell } from '../StepShell'
 import { useGuide } from '../useGuideState'
 import { ppsBand, resultReading, davReading, spictCount } from '../interpret'
-import { steps } from '@/content/guide'
+import { planoFields, planoValorLegivel } from '@/content/plano'
 import type { Step } from '@/content/guide'
 
 export function SummaryStep({ step }: { step: Extract<Step, { kind: 'summary' }> }) {
@@ -12,8 +12,6 @@ export function SummaryStep({ step }: { step: Extract<Step, { kind: 'summary' }>
   const reading = resultReading(answers)
   const dav = davReading(answers)
   const plano = (answers.plano as Record<string, string> | undefined) ?? {}
-
-  const planoFields = steps.plano.kind === 'fields' ? steps.plano.fields : []
 
   // Dimensões avaliadas: quais têm alguma anotação preenchida.
   const dims: { key: string; label: string }[] = [
@@ -40,6 +38,9 @@ export function SummaryStep({ step }: { step: Extract<Step, { kind: 'summary' }>
         </Row>
         <Row label="Interpretação">{reading.title}</Row>
         <Row label="Indicadores SPICT-BR">{spictCount(answers)} marcado(s)</Row>
+        {answers.perguntaSurpresa === 'sim' && (
+          <Row label="Recomendação">Recomenda-se reavaliação periódica</Row>
+        )}
 
         <Divider />
 
@@ -49,11 +50,14 @@ export function SummaryStep({ step }: { step: Extract<Step, { kind: 'summary' }>
 
         <Divider />
 
-        {planoFields.map((f) => (
-          <Row key={f.id} label={f.label}>
-            {plano[f.id]?.trim() || <span className="text-forest/35">Em aberto</span>}
-          </Row>
-        ))}
+        {planoFields.map((f) => {
+          const val = planoValorLegivel(f, plano)
+          return (
+            <Row key={f.id} label={f.label}>
+              {val || <span className="text-forest/35">Em aberto</span>}
+            </Row>
+          )
+        })}
 
         {dav && (
           <>
