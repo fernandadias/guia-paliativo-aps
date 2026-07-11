@@ -15,6 +15,7 @@ import { useGuide } from '../useGuideState'
 import { gentleFast } from '@/lib/motion'
 import {
   evaCategoria,
+  evaCategorias,
   painadItems,
   painadScore,
   painadComplete,
@@ -96,7 +97,7 @@ export function FisicaStep({ step }: { step: Extract<Step, { kind: 'fisica' }> }
                 {consciente === 'sim' && (
                   <div className="rounded-3xl border border-forest/10 bg-cream-50/60 p-5">
                     <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-moss">
-                      EVA · escala de faces
+                      EVA · Escala Visual Analógica
                     </p>
                     <div className="mt-4 flex flex-col items-center">
                       <FontAwesomeIcon
@@ -107,7 +108,33 @@ export function FisicaStep({ step }: { step: Extract<Step, { kind: 'fisica' }> }
                         {eva != null ? evaCategoria(eva) : 'Selecione'}
                       </p>
                     </div>
-                    <div className="mt-4 flex flex-wrap justify-center gap-2">
+
+                    {/* Escala de cor de referência */}
+                    <div className="mt-5">
+                      <div
+                        className="relative h-3 w-full rounded-full"
+                        style={{
+                          background:
+                            'linear-gradient(to right,#3fae4a,#8fce3f,#f4d13d,#f39c3d,#e8642f,#e23b2e)',
+                        }}
+                      >
+                        {eva != null && (
+                          <span
+                            className="absolute top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-paper bg-forest shadow"
+                            style={{ left: `${(eva / 10) * 100}%` }}
+                          />
+                        )}
+                      </div>
+                      <div className="mt-2 flex justify-between gap-1 text-center text-[0.6rem] leading-tight text-forest/55">
+                        {evaCategorias.map((c) => (
+                          <span key={c} className="flex-1">
+                            {c}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="mt-5 flex flex-wrap justify-center gap-2">
                       {EVA_VALUES.map((v) => {
                         const active = eva === v
                         return (

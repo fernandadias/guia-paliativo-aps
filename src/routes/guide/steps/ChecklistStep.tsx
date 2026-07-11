@@ -39,34 +39,34 @@ export function ChecklistStep({ step }: { step: Extract<Step, { kind: 'checklist
                 active ? 'border-moss bg-sage-100' : 'border-forest/15 bg-cream-50/60'
               }`}
             >
-              <div className="flex items-start gap-4 p-4">
-                <button
-                  onClick={() => toggle(item.id)}
-                  aria-pressed={active}
-                  className="flex flex-1 items-start gap-4 text-left"
+              <button
+                onClick={() => toggle(item.id)}
+                aria-pressed={active}
+                className="flex w-full items-start gap-4 px-4 pb-2 pt-4 text-left"
+              >
+                <span
+                  className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md border transition-colors ${
+                    active ? 'border-moss bg-moss text-cream-50' : 'border-forest/25'
+                  }`}
                 >
-                  <span
-                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md border transition-colors ${
-                      active ? 'border-moss bg-moss text-cream-50' : 'border-forest/25'
-                    }`}
-                  >
-                    {active && <FontAwesomeIcon icon={faCheck} className="text-[0.7rem]" />}
-                  </span>
-                  <span className="flex items-start gap-2.5 leading-relaxed text-forest/85">
-                    {item.code && (
-                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-forest/85 text-xs font-semibold text-cream-50">
-                        {item.code}
-                      </span>
-                    )}
-                    <span>{item.label}</span>
-                  </span>
-                </button>
+                  {active && <FontAwesomeIcon icon={faCheck} className="text-[0.7rem]" />}
+                </span>
+                <span className="flex items-start gap-2.5 leading-relaxed text-forest/85">
+                  {item.code && (
+                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-forest/85 text-xs font-semibold text-cream-50">
+                      {item.code}
+                    </span>
+                  )}
+                  <span>{item.label}</span>
+                </span>
+              </button>
 
-                {item.detail && (
+              {item.detail && (
+                <div className="px-4 pb-3">
                   <button
                     onClick={() => toggleDetail(item.id)}
                     aria-expanded={isOpen}
-                    className="mt-0.5 flex shrink-0 items-center gap-1.5 rounded-full px-2 py-1 text-xs text-forest/50 transition-colors hover:text-moss"
+                    className="ml-10 inline-flex items-center gap-1.5 text-xs text-forest/50 transition-colors hover:text-moss"
                   >
                     Mais detalhes
                     <FontAwesomeIcon
@@ -76,8 +76,8 @@ export function ChecklistStep({ step }: { step: Extract<Step, { kind: 'checklist
                       }`}
                     />
                   </button>
-                )}
-              </div>
+                </div>
+              )}
 
               {item.detail && (
                 <AnimatePresence initial={false}>

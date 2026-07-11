@@ -5,12 +5,22 @@
  *  - Medicações em uso: seleção múltipla.
  */
 
+export const evaCategorias = [
+  'Sem dor',
+  'Dor leve',
+  'Dor moderada',
+  'Dor severa',
+  'Dor muito severa',
+  'Pior dor possível',
+]
+
 export function evaCategoria(value: number): string {
-  if (value === 0) return 'Sem dor'
-  if (value <= 3) return 'Dor leve'
-  if (value <= 6) return 'Dor moderada'
-  if (value <= 9) return 'Dor severa'
-  return 'Pior dor possível'
+  if (value === 0) return evaCategorias[0]
+  if (value <= 3) return evaCategorias[1]
+  if (value <= 6) return evaCategorias[2]
+  if (value <= 8) return evaCategorias[3]
+  if (value === 9) return evaCategorias[4]
+  return evaCategorias[5]
 }
 
 export interface PainadItem {
