@@ -22,7 +22,6 @@ export function PpsStep({ step }: { step: Extract<Step, { kind: 'pps' }> }) {
   const { answers, answer, next } = useGuide()
 
   const sel = (answers.ppsSelecao as Record<string, string> | undefined) ?? {}
-  const isMorte = sel[MORTE_KEY] === '1'
   const ajustado = answers.ppsAjustado === true
   const effective = answers.pps as number | undefined
 
@@ -45,9 +44,11 @@ export function PpsStep({ step }: { step: Extract<Step, { kind: 'pps' }> }) {
   }
 
   const selectMorte = () => {
+    // Óbito encerra a análise: registra e transita suave para o acolhimento.
     answer('ppsSelecao', { [MORTE_KEY]: '1' })
     answer('pps', 0)
     answer('ppsAjustado', false)
+    next()
   }
 
   const setManual = (value: number) => {
@@ -61,33 +62,18 @@ export function PpsStep({ step }: { step: Extract<Step, { kind: 'pps' }> }) {
   }
 
   const band = effective != null && effective > 0 ? bandInfo(effective) : null
-  const canContinue = isMorte || allChosen
+  const canContinue = allChosen
 
   return (
     <StepShell
       kicker={step.kicker}
       title={step.question}
       note={step.note}
-      continueLabel={isMorte ? 'Continuar' : 'Continuar'}
+      continueLabel="Continuar"
       onContinue={next}
       continueDisabled={!canContinue}
     >
-      {isMorte ? (
-        <div className="rounded-3xl border border-forest/10 bg-gradient-to-br from-sage-100 to-cream-50 p-8">
-          <p className="font-serif text-2xl leading-snug text-forest">Óbito registrado.</p>
-          <p className="mt-3 leading-relaxed text-forest/70">
-            Seguiremos para o acolhimento da família.
-          </p>
-          <button
-            onClick={() => answer('ppsSelecao', {})}
-            className="mt-5 inline-flex items-center gap-2 text-sm text-forest/55 transition-colors hover:text-moss"
-          >
-            <FontAwesomeIcon icon={faRotateLeft} className="text-xs" />
-            Refazer a avaliação
-          </button>
-        </div>
-      ) : (
-        <div className="space-y-8">
+      <div className="space-y-8">
           {ppsColumns.map((col) => {
             const options = ppsOptions(col.key)
             return (
@@ -121,7 +107,7 @@ export function PpsStep({ step }: { step: Extract<Step, { kind: 'pps' }> }) {
                   {col.key === 'deamb' && (
                     <button
                       onClick={selectMorte}
-                      className="col-span-2 flex min-h-[3rem] items-center justify-center rounded-2xl border border-dashed border-forest/20 bg-cream-50/40 px-3 py-2 text-center text-sm text-forest/55 transition-colors hover:border-forest/40 sm:col-span-3"
+                      className="flex min-h-[4.5rem] items-center justify-center rounded-2xl border border-forest/15 bg-cream-50/60 px-3 py-3 text-center text-sm leading-snug text-forest/80 transition-colors duration-200 hover:border-forest/35"
                     >
                       {PPS_MORTE}
                     </button>
@@ -190,7 +176,6 @@ export function PpsStep({ step }: { step: Extract<Step, { kind: 'pps' }> }) {
             )}
           </AnimatePresence>
         </div>
-      )}
     </StepShell>
   )
 }
