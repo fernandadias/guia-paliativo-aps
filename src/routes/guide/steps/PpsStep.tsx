@@ -95,26 +95,24 @@ export function PpsStep({ step }: { step: Extract<Step, { kind: 'pps' }> }) {
                 <legend className="mb-3 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-moss">
                   {col.label}
                 </legend>
-                <div className="space-y-2">
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {options.map((text) => {
                     const active = sel[col.key] === text
                     return (
                       <button
                         key={text}
                         onClick={() => selectCell(col.key, text)}
-                        className={`flex w-full items-start gap-3 rounded-2xl border p-3.5 text-left text-sm leading-relaxed transition-colors duration-200 ${
+                        className={`relative flex min-h-[4.5rem] items-center justify-center rounded-2xl border px-3 py-3 text-center text-sm leading-snug transition-colors duration-200 ${
                           active
-                            ? 'border-moss bg-sage-100 text-forest'
+                            ? 'border-moss bg-sage-100 font-medium text-forest'
                             : 'border-forest/15 bg-cream-50/60 text-forest/80 hover:border-forest/35'
                         }`}
                       >
-                        <span
-                          className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors ${
-                            active ? 'border-moss bg-moss text-cream-50' : 'border-forest/25'
-                          }`}
-                        >
-                          {active && <FontAwesomeIcon icon={faCheck} className="text-[0.6rem]" />}
-                        </span>
+                        {active && (
+                          <span className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-moss text-cream-50">
+                            <FontAwesomeIcon icon={faCheck} className="text-[0.55rem]" />
+                          </span>
+                        )}
                         {text}
                       </button>
                     )
@@ -123,9 +121,8 @@ export function PpsStep({ step }: { step: Extract<Step, { kind: 'pps' }> }) {
                   {col.key === 'deamb' && (
                     <button
                       onClick={selectMorte}
-                      className="flex w-full items-center gap-3 rounded-2xl border border-forest/15 bg-cream-50/40 p-3.5 text-left text-sm text-forest/60 transition-colors hover:border-forest/35"
+                      className="col-span-2 flex min-h-[3rem] items-center justify-center rounded-2xl border border-dashed border-forest/20 bg-cream-50/40 px-3 py-2 text-center text-sm text-forest/55 transition-colors hover:border-forest/40 sm:col-span-3"
                     >
-                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-forest/25" />
                       {PPS_MORTE}
                     </button>
                   )}
