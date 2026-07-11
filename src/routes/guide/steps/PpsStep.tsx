@@ -36,6 +36,14 @@ export function PpsStep({ step }: { step: Extract<Step, { kind: 'pps' }> }) {
     delete nextSel[MORTE_KEY]
     nextSel[key] = text
     answer('ppsSelecao', nextSel)
+
+    // O PPS só é calculado quando todas as 5 colunas estão preenchidas.
+    const complete = ppsColumns.every((c) => nextSel[c.key])
+    if (!complete) {
+      answer('pps', undefined)
+      answer('ppsAjustado', false)
+      return
+    }
     if (!ajustado) {
       const clean: PpsSelection = {}
       for (const c of ppsColumns) if (nextSel[c.key]) clean[c.key] = nextSel[c.key]
@@ -63,7 +71,6 @@ export function PpsStep({ step }: { step: Extract<Step, { kind: 'pps' }> }) {
   }
 
   const band = effective != null && effective > 0 ? bandInfo(effective) : null
-  const canContinue = allChosen
 
   return (
     <StepShell
@@ -72,7 +79,6 @@ export function PpsStep({ step }: { step: Extract<Step, { kind: 'pps' }> }) {
       note={step.note}
       continueLabel="Continuar"
       onContinue={next}
-      continueDisabled={!canContinue}
     >
       <div className="space-y-8">
           {ppsColumns.map((col) => {
