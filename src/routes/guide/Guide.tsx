@@ -7,6 +7,7 @@ import { GuideIntro } from './GuideIntro'
 import { IntroStep } from './steps/IntroStep'
 import { ChoiceStep } from './steps/ChoiceStep'
 import { ScaleStep } from './steps/ScaleStep'
+import { PpsStep } from './steps/PpsStep'
 import { ChecklistStep } from './steps/ChecklistStep'
 import { ResultStep } from './steps/ResultStep'
 import { DimensionsStep } from './steps/DimensionsStep'
@@ -28,6 +29,8 @@ function CurrentStep({ step }: { step: Step }) {
       return <ChoiceStep step={step} />
     case 'scale':
       return <ScaleStep step={step} />
+    case 'pps':
+      return <PpsStep step={step} />
     case 'checklist':
       return <ChecklistStep step={step} />
     case 'result':

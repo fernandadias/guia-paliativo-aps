@@ -1,25 +1,17 @@
-import { steps, type Answers, type PpsBand } from '@/content/guide'
+import type { Answers, PpsBand } from '@/content/guide'
+import { bandInfo } from '@/content/pps'
 
 /**
  * Interpretação das respostas → textos exibidos.
  * ⚠️  As mensagens são PLACEHOLDER clínico; a lógica de faixas/contagem é real.
  */
 
-const bandLabel: Record<PpsBand, string> = {
-  precoce: 'Cuidados paliativos precoces',
-  complementar: 'Cuidados paliativos complementares',
-  predominante: 'Cuidados paliativos predominantes',
-  exclusivo: 'Cuidados paliativos exclusivos',
-}
-
 export function ppsBand(answers: Answers): { value: number; band: PpsBand; label: string } | null {
   const value = answers.pps as number | undefined
   if (value == null) return null
-  const ppsStep = steps.pps
-  if (ppsStep.kind !== 'scale') return null
-  const opt = ppsStep.options.find((o) => o.value === value)
-  if (!opt) return null
-  return { value, band: opt.band, label: bandLabel[opt.band] }
+  const info = bandInfo(value)
+  if (!info) return null // óbito (0) não tem faixa
+  return { value, band: info.band, label: info.label }
 }
 
 export function spictCount(answers: Answers): number {

@@ -70,6 +70,7 @@ export type Step = StepCommon &
         options: { value: number; meaning: string; band: PpsBand }[]
         todo?: boolean
       }
+    | { kind: 'pps'; kicker: string; question: string; note: string; answerKey: string; todo?: boolean }
     | {
         kind: 'checklist'
         kicker: string
@@ -190,25 +191,13 @@ export const steps: Record<StepId, Step> = {
   },
   pps: {
     id: 'pps',
-    kind: 'scale',
+    kind: 'pps',
     progress: true,
     kicker: 'PPS',
     question: 'Vamos avaliar a funcionalidade.',
-    note: 'Palliative Performance Scale (PPS). Versão a ser refeita no Épico C (método Maciel 2009, com ajuste manual).',
+    note: 'Palliative Performance Scale. Selecione uma opção em cada coluna. O sistema sugere o PPS (base: Maciel 2009); ajuste se o julgamento clínico indicar.',
     answerKey: 'pps',
     todo: true,
-    options: [
-      { value: 100, meaning: 'Deambulação plena, sem evidência de doença', band: 'precoce' },
-      { value: 90, meaning: 'Deambulação plena, alguma evidência de doença', band: 'precoce' },
-      { value: 80, meaning: 'Paciente em CP precoce', band: 'precoce' },
-      { value: 70, meaning: 'Redução da capacidade para o trabalho', band: 'complementar' },
-      { value: 60, meaning: 'Necessita assistência ocasional', band: 'complementar' },
-      { value: 50, meaning: 'CP complementar', band: 'complementar' },
-      { value: 40, meaning: 'Maior parte do tempo acamado', band: 'predominante' },
-      { value: 30, meaning: 'CP predominante', band: 'predominante' },
-      { value: 20, meaning: 'Totalmente acamado, ingesta mínima', band: 'exclusivo' },
-      { value: 10, meaning: 'CP exclusivo', band: 'exclusivo' },
-    ],
   },
   acolhimento: {
     id: 'acolhimento',
