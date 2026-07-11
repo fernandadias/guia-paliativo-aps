@@ -78,7 +78,7 @@ export const condicoesClinicas: CondicaoClinica[] = [
   {
     id: 'figado',
     label: 'Fígado',
-    icon: 'stethoscope',
+    icon: 'flask',
     indicadores: [
       { id: 'fig-1', label: 'Agravamento recente com complicações (líquido na barriga, confusão, infecções, sangramento).' },
       { id: 'fig-2', label: 'Transplante não é possível.' },

@@ -14,11 +14,11 @@
 import type { PpsBand } from './guide'
 
 export const ppsColumns = [
-  { key: 'deamb', label: 'Deambulação' },
-  { key: 'ativ', label: 'Atividade e evidência de doença' },
-  { key: 'auto', label: 'Autocuidado' },
-  { key: 'ing', label: 'Ingestão' },
-  { key: 'consc', label: 'Nível de consciência' },
+  { key: 'deamb', label: 'Deambulação', icon: 'person-walking' },
+  { key: 'ativ', label: 'Atividade e evidência de doença', icon: 'person-running' },
+  { key: 'auto', label: 'Autocuidado', icon: 'hands-bubbles' },
+  { key: 'ing', label: 'Ingestão', icon: 'utensils' },
+  { key: 'consc', label: 'Nível de consciência', icon: 'brain' },
 ] as const
 
 export type PpsColKey = (typeof ppsColumns)[number]['key']

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faRotateLeft } from '@fortawesome/free-solid-svg-icons'
 import { StepShell } from '../StepShell'
 import { useGuide } from '../useGuideState'
+import { getIcon } from '@/lib/icons'
 import { gentleFast } from '@/lib/motion'
 import {
   bandInfo,
@@ -77,43 +78,57 @@ export function PpsStep({ step }: { step: Extract<Step, { kind: 'pps' }> }) {
           {ppsColumns.map((col) => {
             const options = ppsOptions(col.key)
             return (
-              <fieldset key={col.key}>
-                <legend className="mb-3 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-moss">
-                  {col.label}
-                </legend>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+              <div
+                className={`overflow-hidden rounded-2xl border transition-colors ${
+                  sel[col.key] ? 'border-moss bg-sage-100' : 'border-forest/15 bg-cream-50/60'
+                }`}
+              >
+                <div className="flex items-center gap-2.5 px-5 pt-4">
+                  <FontAwesomeIcon icon={getIcon(col.icon)} className="text-base text-moss" />
+                  <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-moss">
+                    {col.label}
+                  </p>
+                </div>
+                <ul className="space-y-2 px-4 pb-4 pt-3">
                   {options.map((text) => {
-                    const active = sel[col.key] === text
+                    const isSel = sel[col.key] === text
                     return (
-                      <button
-                        key={text}
-                        onClick={() => selectCell(col.key, text)}
-                        className={`relative flex min-h-[4.5rem] items-center justify-center rounded-2xl border px-3 py-3 text-center text-sm leading-snug transition-colors duration-200 ${
-                          active
-                            ? 'border-moss bg-sage-100 font-medium text-forest'
-                            : 'border-forest/15 bg-cream-50/60 text-forest/80 hover:border-forest/35'
-                        }`}
-                      >
-                        {active && (
-                          <span className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-moss text-cream-50">
-                            <FontAwesomeIcon icon={faCheck} className="text-[0.55rem]" />
+                      <li key={text}>
+                        <button
+                          onClick={() => selectCell(col.key, text)}
+                          aria-pressed={isSel}
+                          className={`flex w-full items-start gap-3 rounded-xl border p-3 text-left text-sm leading-relaxed transition-colors ${
+                            isSel
+                              ? 'border-moss bg-paper text-forest'
+                              : 'border-forest/15 bg-paper/60 text-forest/80 hover:border-forest/35'
+                          }`}
+                        >
+                          <span
+                            className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors ${
+                              isSel ? 'border-moss bg-moss text-cream-50' : 'border-forest/25'
+                            }`}
+                          >
+                            {isSel && <FontAwesomeIcon icon={faCheck} className="text-[0.6rem]" />}
                           </span>
-                        )}
-                        {text}
-                      </button>
+                          {text}
+                        </button>
+                      </li>
                     )
                   })}
 
                   {col.key === 'deamb' && (
-                    <button
-                      onClick={selectMorte}
-                      className="flex min-h-[4.5rem] items-center justify-center rounded-2xl border border-forest/15 bg-cream-50/60 px-3 py-3 text-center text-sm leading-snug text-forest/80 transition-colors duration-200 hover:border-forest/35"
-                    >
-                      {PPS_MORTE}
-                    </button>
+                    <li>
+                      <button
+                        onClick={selectMorte}
+                        className="flex w-full items-start gap-3 rounded-xl border border-forest/15 bg-paper/60 p-3 text-left text-sm leading-relaxed text-forest/80 transition-colors hover:border-forest/35"
+                      >
+                        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-forest/25" />
+                        {PPS_MORTE}
+                      </button>
+                    </li>
                   )}
-                </div>
-              </fieldset>
+                </ul>
+              </div>
             )
           })}
 
