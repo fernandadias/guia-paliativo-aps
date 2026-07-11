@@ -41,7 +41,7 @@ export function GuideIntro({ onStart, musicOn, onToggleMusic }: GuideIntroProps)
       {/* Sair */}
       <Link
         to="/"
-        className="absolute left-6 top-6 z-10 inline-flex items-center gap-2 text-sm text-cream-50/70 transition-colors hover:text-cream-50 sm:left-10"
+        className="absolute left-6 top-6 z-20 inline-flex items-center gap-2 text-sm text-cream-50/70 transition-colors hover:text-cream-50 sm:left-10"
       >
         <FontAwesomeIcon icon={faArrowLeft} className="text-xs" />
         Início
@@ -52,7 +52,7 @@ export function GuideIntro({ onStart, musicOn, onToggleMusic }: GuideIntroProps)
         onClick={onToggleMusic}
         aria-label={musicOn ? 'Desligar música' : 'Ligar música'}
         aria-pressed={musicOn}
-        className="absolute right-6 top-6 z-10 rounded-full p-2 text-cream-50/70 transition-colors hover:bg-cream-50/10 hover:text-cream-50 sm:right-10"
+        className="absolute right-6 top-6 z-20 rounded-full p-2 text-cream-50/70 transition-colors hover:bg-cream-50/10 hover:text-cream-50 sm:right-10"
       >
         <FontAwesomeIcon icon={musicOn ? faVolumeHigh : faVolumeXmark} className="text-sm" />
       </button>

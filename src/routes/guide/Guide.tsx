@@ -79,17 +79,10 @@ export default function Guide() {
     const a = audioRef.current
     if (!a) return
     a.volume = 0.35
-
-    const tryPlay = () =>
-      a.play().then(
-        () => setMusicOn(true),
-        () => setMusicOn(false),
-      )
-
-    tryPlay()
+    a.play().catch(() => {})
 
     const onFirstGesture = () => {
-      if (!manualOff.current && a.paused) tryPlay()
+      if (!manualOff.current && a.paused) a.play().catch(() => {})
       window.removeEventListener('pointerdown', onFirstGesture)
       window.removeEventListener('keydown', onFirstGesture)
     }
@@ -108,18 +101,25 @@ export default function Guide() {
     if (!a) return
     if (a.paused) {
       manualOff.current = false
-      a.play().then(() => setMusicOn(true), () => setMusicOn(false))
+      a.play().catch(() => {})
     } else {
       manualOff.current = true
       a.pause()
-      setMusicOn(false)
     }
   }
 
   return (
     <GuideProvider>
-      {/* Música de fundo em loop. Coloque o arquivo em: public/audio/music-bg.mp3 */}
-      <audio ref={audioRef} src="/audio/music-bg.mp3" loop preload="auto" />
+      {/* Música de fundo em loop. Coloque o arquivo em: public/audio/music-bg.mp3.
+          O estado do ícone segue os eventos reais play/pause do áudio. */}
+      <audio
+        ref={audioRef}
+        src="/audio/music-bg.mp3"
+        loop
+        preload="auto"
+        onPlay={() => setMusicOn(true)}
+        onPause={() => setMusicOn(false)}
+      />
       {started ? (
         <GuideInner musicOn={musicOn} onToggleMusic={toggleMusic} />
       ) : (
