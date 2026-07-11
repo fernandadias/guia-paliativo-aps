@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faRotateLeft } from '@fortawesome/free-solid-svg-icons'
@@ -72,6 +73,17 @@ export function PpsStep({ step }: { step: Extract<Step, { kind: 'pps' }> }) {
 
   const band = effective != null && effective > 0 ? bandInfo(effective) : null
 
+  // Ao completar as 5 colunas, rola até o score para sinalizar o cálculo.
+  const scoreRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (!allChosen) return
+    const t = setTimeout(
+      () => scoreRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }),
+      160,
+    )
+    return () => clearTimeout(t)
+  }, [allChosen])
+
   return (
     <StepShell
       kicker={step.kicker}
@@ -141,6 +153,7 @@ export function PpsStep({ step }: { step: Extract<Step, { kind: 'pps' }> }) {
           <AnimatePresence>
             {allChosen && effective != null && (
               <motion.div
+                ref={scoreRef}
                 className="rounded-3xl border border-moss/25 bg-sage-100 p-6"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
