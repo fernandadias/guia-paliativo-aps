@@ -11,6 +11,12 @@ import {
   faCircleCheck,
   faCircleInfo,
   faStethoscope,
+  faHeartPulse,
+  faLungs,
+  faRibbon,
+  faWaveSquare,
+  faDroplet,
+  faEllipsis,
   type IconDefinition,
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -28,6 +34,12 @@ const registry: Record<string, IconDefinition> = {
   'circle-check': faCircleCheck,
   'circle-info': faCircleInfo,
   stethoscope: faStethoscope,
+  'heart-pulse': faHeartPulse,
+  lungs: faLungs,
+  ribbon: faRibbon,
+  'wave-square': faWaveSquare,
+  droplet: faDroplet,
+  ellipsis: faEllipsis,
 }
 
 /** Resolve um nome de ícone; cai em stethoscope se não achar. */

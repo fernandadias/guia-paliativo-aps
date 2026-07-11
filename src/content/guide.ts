@@ -71,6 +71,7 @@ export type Step = StepCommon &
         todo?: boolean
       }
     | { kind: 'pps'; kicker: string; question: string; note: string; answerKey: string; todo?: boolean }
+    | { kind: 'clinicos'; kicker: string; title: string; intro: string; answerKey: string }
     | {
         kind: 'checklist'
         kicker: string
@@ -182,12 +183,12 @@ export const steps: Record<StepId, Step> = {
   },
   spictClinicos: {
     id: 'spictClinicos',
-    kind: 'placeholder',
+    kind: 'clinicos',
     progress: true,
     kicker: 'Indicadores clínicos',
     title: 'Procure por indicadores clínicos de uma ou mais condições de saúde que limitam a vida',
-    body: 'Seleção múltipla de condições (câncer, demência, sistema nervoso, cardíaco, pulmonar, renal, fígado, outras) e, dentro de cada uma, os indicadores. UI a ser refinada no sandbox.',
-    epic: 'C · Indicadores clínicos (T08)',
+    intro: 'Toque na condição para ver os indicadores e marque os presentes. Pode marcar em mais de uma condição.',
+    answerKey: 'indicadoresClinicos',
   },
   pps: {
     id: 'pps',
