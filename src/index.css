@@ -1,0 +1,97 @@
+@import 'tailwindcss';
+
+/* Fontes self-hosted via @fontsource, importadas em main.tsx */
+
+@theme {
+  /* ---- Paleta — extraída do hero de referência ---- */
+  /* Verde profundo: texto principal, botões, molduras */
+  --color-forest: #22392e;
+  --color-forest-700: #2e4a3b;
+  --color-forest-600: #3a5a48;
+  /* Verde médio: acentos e estados */
+  --color-moss: #4b6b54;
+  --color-moss-400: #6b8a72;
+  /* Verde-petróleo profundo — acento (correlato ao "fathom" do Wispr) */
+  --color-pine: #063d35;
+  --color-pine-600: #0a4f45;
+  /* Verde sálvia: topo do degradê, superfícies suaves */
+  --color-sage: #c3d3b8;
+  --color-sage-200: #d6e0cd;
+  --color-sage-100: #e6ecdf;
+  /* Bege/cream: base do degradê, fundo */
+  --color-cream: #ece6d8;
+  --color-cream-50: #f4f0e6;
+  --color-paper: #f8f5ee;
+
+  /* ---- Tipografia ---- */
+  --font-sans: 'Figtree', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'EB Garamond', ui-serif, Georgia, serif;
+
+  /* Escala tipográfica (adotada do sistema Wispr) */
+  --text-display: 7.5rem; /* hero */
+  --text-h1: 6rem;
+  --text-h2: 4rem;
+  --text-h3: 3rem;
+  --text-h4: 2rem;
+
+  /* Tracking editorial — títulos serifados "apertam" as letras */
+  --tracking-display: -0.045em; /* grandes (hero) */
+  --tracking-editorial: -0.025em; /* demais títulos */
+
+  /* ---- Raios ---- */
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.75rem;
+
+  /* ---- Easing assinatura ---- */
+  --ease-gentle: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-forest);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+  }
+
+  /* Serifada editorial (adotado do Wispr): tracking negativo + optical sizing.
+     Como a serifada é usada só em títulos, o tratamento vale para todos eles. */
+  .font-serif {
+    font-feature-settings: 'liga' 1, 'kern' 1;
+    font-optical-sizing: auto;
+    letter-spacing: var(--tracking-editorial);
+  }
+
+  /* Display (hero e títulos muito grandes): tracking ainda mais fechado. */
+  .display {
+    letter-spacing: var(--tracking-display);
+  }
+
+  /* Foco acessível e sóbrio */
+  :focus-visible {
+    outline: 2px solid var(--color-moss);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+/* Respeita quem prefere menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
