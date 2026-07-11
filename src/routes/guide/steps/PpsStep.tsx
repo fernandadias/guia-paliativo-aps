@@ -91,6 +91,7 @@ export function PpsStep({ step }: { step: Extract<Step, { kind: 'pps' }> }) {
       note={step.note}
       continueLabel="Continuar"
       onContinue={next}
+      continueDisabled={!allChosen}
     >
       <div className="space-y-8">
           {ppsColumns.map((col) => {
