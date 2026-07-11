@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle, faCircleDot } from '@fortawesome/free-solid-svg-icons'
 import { StepShell } from '../StepShell'
+import { PendingTag } from '../PendingTag'
 import { useGuide } from '../useGuideState'
 import type { Step } from '@/content/guide'
 
@@ -10,6 +11,11 @@ export function ChoiceStep({ step }: { step: Extract<Step, { kind: 'choice' }> }
 
   return (
     <StepShell kicker={step.kicker} title={step.question} todo={step.todo}>
+      {step.pendingClient && (
+        <div className="mb-5">
+          <PendingTag />
+        </div>
+      )}
       <div className="space-y-3">
         {step.options.map((opt) => {
           const active = selected === opt.value

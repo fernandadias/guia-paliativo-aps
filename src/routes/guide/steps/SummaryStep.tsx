@@ -3,7 +3,7 @@ import { faPrint, faFilePdf, faFileMedical, faRotateLeft } from '@fortawesome/fr
 import { StepShell } from '../StepShell'
 import { useGuide } from '../useGuideState'
 import { ppsBand, resultReading, davReading, spictCount } from '../interpret'
-import { steps } from '@/content/guide'
+import { planoFields, planoValorLegivel } from '@/content/plano'
 import type { Step } from '@/content/guide'
 
 export function SummaryStep({ step }: { step: Extract<Step, { kind: 'summary' }> }) {
@@ -12,10 +12,18 @@ export function SummaryStep({ step }: { step: Extract<Step, { kind: 'summary' }>
   const reading = resultReading(answers)
   const dav = davReading(answers)
   const plano = (answers.plano as Record<string, string> | undefined) ?? {}
-  const dimensoes = (answers.dimensoes as Record<string, string> | undefined) ?? {}
 
-  const planoFields = steps.plano.kind === 'fields' ? steps.plano.fields : []
-  const dims = steps.dimensoes.kind === 'dimensions' ? steps.dimensoes.dimensions : []
+  // Dimensões avaliadas: quais têm alguma anotação preenchida.
+  const dims: { key: string; label: string }[] = [
+    { key: 'dimPsicologica', label: 'Psicológica' },
+    { key: 'dimSocial', label: 'Social' },
+    { key: 'dimEspiritual', label: 'Espiritual' },
+    { key: 'dimFamiliar', label: 'Familiar' },
+  ]
+  const dimsAvaliadas = dims.filter((d) => {
+    const v = (answers[d.key] as Record<string, string> | undefined) ?? {}
+    return Object.values(v).some((x) => x?.trim())
+  })
 
   return (
     <StepShell kicker={step.kicker} title={step.title} todo={step.todo}>
@@ -30,23 +38,26 @@ export function SummaryStep({ step }: { step: Extract<Step, { kind: 'summary' }>
         </Row>
         <Row label="Interpretação">{reading.title}</Row>
         <Row label="Indicadores SPICT-BR">{spictCount(answers)} marcado(s)</Row>
+        {answers.perguntaSurpresa === 'sim' && (
+          <Row label="Recomendação">Recomenda-se reavaliação periódica</Row>
+        )}
 
         <Divider />
 
         <Row label="Dimensões avaliadas">
-          {dims
-            .filter((d) => d.fields.some((_, i) => dimensoes[`${d.id}:${i}`]?.trim()))
-            .map((d) => d.label)
-            .join(' · ') || 'Nenhuma anotação registrada'}
+          {dimsAvaliadas.map((d) => d.label).join(' · ') || 'Nenhuma anotação registrada'}
         </Row>
 
         <Divider />
 
-        {planoFields.map((f) => (
-          <Row key={f.id} label={f.label}>
-            {plano[f.id]?.trim() || <span className="text-forest/35">Em aberto</span>}
-          </Row>
-        ))}
+        {planoFields.map((f) => {
+          const val = planoValorLegivel(f, plano)
+          return (
+            <Row key={f.id} label={f.label}>
+              {val || <span className="text-forest/35">Em aberto</span>}
+            </Row>
+          )
+        })}
 
         {dav && (
           <>

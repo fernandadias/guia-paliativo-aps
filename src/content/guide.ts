@@ -1,32 +1,42 @@
 /**
- * Guia de direção clínica — definição das etapas como DADOS.
+ * Guia de direção clínica — definição das etapas como DADOS (v2).
  *
  * O motor (useGuideState) interpreta estes objetos; nenhuma tela é hardcoded.
- * Para ajustar texto ou regra depois, edita-se aqui — sem tocar em componente.
+ * Para ajustar texto ou regra depois, edita-se aqui, sem tocar em componente.
  *
- * ⚠️  Conteúdo clínico é PLACEHOLDER (campos `todo`). A LÓGICA de branching é real:
- *   - Etapa 2 "Não"  → fim provisório "reavaliar"
- *   - Etapa 3 (PPS)  → interpreta faixa (precoce / complementar / predominante / exclusivo)
- *   - Etapa 4 "Não"  → abre SPICT-BR
- *   - Etapa 10 (DAV) → ramo consciente vs. incapaz
- * Base: _refs/etapas.md
+ * Reestruturação v2 (ver .design-prototype/v2-planejamento/mapa.html):
+ *   - Fluxo: intro > doença > (surpresa > [recomendação] > SPICT gerais > SPICT clínicos > PPS) > resultado
+ *            > cinco dimensões (física, psicológica, social, espiritual, familiar, Edmonton)
+ *            > SPIKES > plano > reflexão > DAV > resumo
+ *   - Telas terminais: "reavaliar" (doença = não) e "acolhimento" (morte no PPS).
+ *   - Telas do Épico C entram como PLACEHOLDER navegável (kind 'placeholder').
+ *   - Conteúdo clínico é placeholder; parte da copy depende da cliente.
  */
 
 export type StepId =
   | 'intro'
   | 'doenca'
-  | 'pps'
+  | 'reavaliar'
   | 'surpresa'
-  | 'spict'
+  | 'recomendacao'
+  | 'spictGerais'
+  | 'spictClinicos'
+  | 'pps'
+  | 'acolhimento'
   | 'resultado'
-  | 'dimensoes'
-  | 'verso'
+  | 'fisica'
+  | 'psicologica'
+  | 'social'
+  | 'espiritual'
+  | 'familiar'
+  | 'edmonton'
   | 'spikes'
   | 'plano'
+  | 'reflexao'
   | 'dav'
+  | 'davAplicar'
   | 'preparando'
   | 'resumo'
-  | 'reavaliar'
 
 export interface ChoiceOption {
   value: string
@@ -36,8 +46,10 @@ export interface ChoiceOption {
 
 interface StepCommon {
   id: StepId
-  /** Conta na barra de progresso (telas terminais/interstícios podem não contar). */
+  /** Se a etapa conta na barra de progresso (terminais/interstícios não contam). */
   progress: boolean
+  /** Sinaliza que parte do conteúdo desta tela depende da cliente. */
+  pendingClient?: boolean
 }
 
 export type Step = StepCommon &
@@ -60,13 +72,20 @@ export type Step = StepCommon &
         options: { value: number; meaning: string; band: PpsBand }[]
         todo?: boolean
       }
+    | { kind: 'pps'; kicker: string; question: string; note: string; answerKey: string; todo?: boolean }
+    | { kind: 'clinicos'; kicker: string; title: string; intro: string; answerKey: string }
+    | { kind: 'edmonton'; kicker: string; title: string; intro: string; answerKey: string }
+    | { kind: 'familiar'; kicker: string; title: string; intro: string; answerKey: string }
+    | { kind: 'fisica'; kicker: string; title: string; intro: string; answerKey: string }
+    | { kind: 'social'; kicker: string; title: string; intro: string; answerKey: string }
+    | { kind: 'plano'; kicker: string; title: string; answerKey: string }
     | {
         kind: 'checklist'
         kicker: string
         title: string
         intro: string
         answerKey: string
-        items: { id: string; label: string }[]
+        items: { id: string; label: string; code?: string; detail?: string }[]
         todo?: boolean
       }
     | { kind: 'result'; kicker: string; title: string; todo?: boolean }
@@ -83,161 +102,273 @@ export type Step = StepCommon &
         kind: 'fields'
         kicker: string
         title: string
+        answerKey: string
+        intro?: string
         fields: { id: string; label: string; placeholder: string; multiline?: boolean }[]
         todo?: boolean
       }
     | { kind: 'summary'; kicker: string; title: string; todo?: boolean }
     | { kind: 'terminal'; icon: string; title: string; body: string; todo?: boolean }
     | { kind: 'loading'; message: string; submessage: string }
+    | { kind: 'placeholder'; kicker: string; title: string; body: string; epic: string }
   )
 
 export type PpsBand = 'precoce' | 'complementar' | 'predominante' | 'exclusivo'
 
 export const steps: Record<StepId, Step> = {
+  // ── Abertura ──────────────────────────────────────────────
   intro: {
     id: 'intro',
     kind: 'intro',
     progress: true,
-    kicker: 'Etapa 1 · Antes de tudo',
+    pendingClient: true,
+    kicker: 'Antes de tudo',
     title: 'O que são cuidados paliativos?',
-    body: 'Cuidados paliativos não significam desistir. Significam cuidar melhor. Apenas os conceitos essenciais, sem texto enorme.',
+    body: 'Cuidados paliativos não significam desistir. Significam cuidar melhor. Apenas os conceitos essenciais, sem texto enorme. (Copy final virá da cliente.)',
     asideVerseKey: 'abertura',
     todo: true,
   },
+
+  // ── Triagem ───────────────────────────────────────────────
   doenca: {
     id: 'doenca',
     kind: 'choice',
     progress: true,
-    kicker: 'Etapa 2',
-    question: 'Você está diante de uma doença ameaçadora da vida?',
+    kicker: 'Doença',
+    question: 'Você está diante de uma doença ameaçadora a vida?',
     answerKey: 'doencaAmeacadora',
     options: [
       { value: 'sim', label: 'Sim' },
       { value: 'nao', label: 'Não' },
     ],
   },
-  pps: {
-    id: 'pps',
-    kind: 'scale',
-    progress: true,
-    kicker: 'Etapa 3',
-    question: 'Vamos avaliar a funcionalidade.',
-    note: 'Palliative Performance Scale (PPS). Selecione o valor. O sistema interpreta automaticamente.',
-    answerKey: 'pps',
+  reavaliar: {
+    id: 'reavaliar',
+    kind: 'terminal',
+    progress: false,
+    pendingClient: true,
+    icon: 'clock-rotate-left',
+    title: 'Reavaliação periódica',
+    body: 'Este paciente não apresenta critérios para avaliação neste momento. Lembre-se de reavaliá-lo periodicamente. (Copy final virá da cliente.)',
     todo: true,
-    options: [
-      { value: 100, meaning: 'Deambulação plena, sem evidência de doença', band: 'precoce' },
-      { value: 90, meaning: 'Deambulação plena, alguma evidência de doença', band: 'precoce' },
-      { value: 80, meaning: 'Paciente em CP precoce', band: 'precoce' },
-      { value: 70, meaning: 'Redução da capacidade para o trabalho', band: 'complementar' },
-      { value: 60, meaning: 'Necessita assistência ocasional', band: 'complementar' },
-      { value: 50, meaning: 'CP complementar', band: 'complementar' },
-      { value: 40, meaning: 'Maior parte do tempo acamado', band: 'predominante' },
-      { value: 30, meaning: 'CP predominante', band: 'predominante' },
-      { value: 20, meaning: 'Totalmente acamado, ingesta mínima', band: 'exclusivo' },
-      { value: 10, meaning: 'CP exclusivo', band: 'exclusivo' },
-    ],
   },
   surpresa: {
     id: 'surpresa',
     kind: 'choice',
     progress: true,
-    kicker: 'Etapa 4 · Pergunta Surpresa',
-    question: 'Você se surpreenderia se este paciente morresse no próximo ano?',
+    kicker: 'Pergunta surpresa',
+    question: 'Você se surpreenderia se este paciente morresse nos próximos 12 meses?',
     answerKey: 'perguntaSurpresa',
     options: [
       { value: 'sim', label: 'Sim, me surpreenderia' },
       { value: 'nao', label: 'Não me surpreenderia' },
     ],
   },
-  spict: {
-    id: 'spict',
+  recomendacao: {
+    id: 'recomendacao',
+    kind: 'intro',
+    progress: true,
+    kicker: 'Recomendação',
+    title: 'Recomenda-se reavaliação periódica',
+    body: 'Ainda assim, vale seguir com a avaliação. Esta recomendação será registrada no resumo final do atendimento.',
+  },
+  spictGerais: {
+    id: 'spictGerais',
     kind: 'checklist',
     progress: true,
-    kicker: 'Etapa 4 · SPICT-BR',
-    title: 'Indicadores de deterioração',
-    intro: 'Marque os itens presentes. Ao final, o sistema interpreta.',
+    kicker: 'SPICT',
+    title: 'Procure por indicadores gerais de saúde em deterioração',
+    intro: 'Marque os indicadores presentes.',
     answerKey: 'spict',
     todo: true,
     items: [
-      { id: 'spict-1', label: 'Internações não planejadas recorrentes' },
-      { id: 'spict-2', label: 'Declínio funcional (PPS baixo ou em queda)' },
-      { id: 'spict-3', label: 'Dependência para cuidados por doença física ou mental' },
-      { id: 'spict-4', label: 'Perda de peso significativa nos últimos meses' },
-      { id: 'spict-5', label: 'Sintomas persistentes apesar do tratamento otimizado' },
-      { id: 'spict-6', label: 'Paciente/família solicita cuidados paliativos ou limitação de terapias' },
+      { id: 'spict-1', label: 'Internações hospitalares não programadas.' },
+      { id: 'spict-2', label: 'Declínio funcional progressivo, por exemplo na cama ou na cadeira mais da metade do tempo.' },
+      { id: 'spict-3', label: 'Depende de outros para cuidados pessoais; o cuidador precisa de mais apoio.' },
+      { id: 'spict-4', label: 'Perda de peso progressiva, baixa massa muscular.' },
+      { id: 'spict-5', label: 'Sintomas persistentes apesar do tratamento otimizado.' },
+      { id: 'spict-6', label: 'Paciente ou família pede cuidados paliativos, ou quer focar na qualidade de vida.' },
     ],
+  },
+  spictClinicos: {
+    id: 'spictClinicos',
+    kind: 'clinicos',
+    progress: true,
+    kicker: 'Indicadores clínicos',
+    title: 'Procure por indicadores clínicos de uma ou mais condições de saúde que limitam a vida',
+    intro: 'Toque na condição para ver os indicadores e marque os presentes. Pode marcar em mais de uma condição.',
+    answerKey: 'indicadoresClinicos',
+  },
+  pps: {
+    id: 'pps',
+    kind: 'pps',
+    progress: true,
+    kicker: 'PPS',
+    question: 'Vamos avaliar a funcionalidade.',
+    note: 'Palliative Performance Scale. Selecione uma opção em cada coluna. O sistema sugere o PPS (base: Maciel 2009); ajuste se o julgamento clínico indicar.',
+    answerKey: 'pps',
+    todo: true,
+  },
+  acolhimento: {
+    id: 'acolhimento',
+    kind: 'terminal',
+    progress: false,
+    pendingClient: true,
+    icon: 'hand-holding-heart',
+    title: 'Acolhimento da família',
+    body: 'Fase de acolhimento da família. Conteúdo e formato a serem definidos pela cliente. (Acionada quando a deambulação indica "Morte" no PPS.)',
+    todo: true,
   },
   resultado: {
     id: 'resultado',
     kind: 'result',
     progress: true,
-    kicker: 'Etapa 5 · Resultado',
+    kicker: 'Resultado',
     title: 'Interpretação',
     todo: true,
   },
-  dimensoes: {
-    id: 'dimensoes',
-    kind: 'dimensions',
+
+  // ── Cinco dimensões ───────────────────────────────────────
+  fisica: {
+    id: 'fisica',
+    kind: 'fisica',
     progress: true,
-    kicker: 'Etapa 6 · O cuidado começa',
-    title: 'As cinco dimensões',
-    intro: 'O cuidado começa muito antes da morte. Vai formando, automaticamente, um Plano Terapêutico Singular.',
-    todo: true,
-    dimensions: [
-      { id: 'fisica', label: 'Física', icon: 'hand-holding-medical', fields: ['Dor', 'Dispneia', 'Constipação'] },
-      { id: 'psicologica', label: 'Psicológica', icon: 'brain', fields: ['Humor', 'Ansiedade', 'Medos'] },
-      { id: 'social', label: 'Social', icon: 'people-group', fields: ['Quem cuida?', 'Existe rede de apoio?', 'Benefícios sociais?'] },
-      { id: 'espiritual', label: 'Espiritual', icon: 'dove', fields: ['Existe alguma crença importante?', 'Desejos?', 'Valores?'] },
-      { id: 'familiar', label: 'Familiar', icon: 'house-user', fields: ['Dinâmica familiar', 'Sobrecarga do cuidador', 'Conflitos'] },
+    kicker: 'Dimensão física',
+    title: 'Dor',
+    intro: 'A avaliação começa pela dor.',
+    answerKey: 'fisica',
+  },
+  psicologica: {
+    id: 'psicologica',
+    kind: 'fields',
+    progress: true,
+    kicker: 'Dimensão psicológica',
+    title: 'Psicológica',
+    answerKey: 'dimPsicologica',
+    fields: [
+      { id: 'humor', label: 'Humor', placeholder: 'Anotar…', multiline: true },
+      { id: 'ansiedade', label: 'Ansiedade', placeholder: 'Anotar…', multiline: true },
+      { id: 'medos', label: 'Medos', placeholder: 'Anotar…', multiline: true },
     ],
   },
-  verso: {
-    id: 'verso',
-    kind: 'verse',
-    progress: false,
-    verseKey: 'aposFamilia',
-    caption: 'Toda equipe também precisa saber para onde caminha.',
-    todo: true,
+  social: {
+    id: 'social',
+    kind: 'social',
+    progress: true,
+    pendingClient: true,
+    kicker: 'Dimensão social',
+    title: 'Social',
+    answerKey: 'dimSocial',
+    intro: 'Rede de apoio e benefícios sociais.',
   },
+  espiritual: {
+    id: 'espiritual',
+    kind: 'fields',
+    progress: true,
+    kicker: 'Dimensão espiritual',
+    title: 'Espiritual',
+    answerKey: 'dimEspiritual',
+    fields: [
+      { id: 'crenca', label: 'Existe alguma crença importante?', placeholder: 'Anotar…', multiline: true },
+      { id: 'desejos', label: 'Desejos?', placeholder: 'Anotar…', multiline: true },
+      { id: 'valores', label: 'Valores?', placeholder: 'Anotar…', multiline: true },
+    ],
+  },
+  familiar: {
+    id: 'familiar',
+    kind: 'familiar',
+    progress: true,
+    pendingClient: true,
+    kicker: 'Dimensão familiar',
+    title: 'Familiar',
+    answerKey: 'dimFamiliar',
+    intro: 'Dinâmica familiar, sobrecarga do cuidador e conflitos. (As opções com ícone da dinâmica virão da cliente.)',
+  },
+  edmonton: {
+    id: 'edmonton',
+    kind: 'edmonton',
+    progress: true,
+    kicker: 'Sintomas',
+    title: 'Avaliação de Sintomas de Edmonton',
+    intro: 'Para cada sintoma, arraste de 0 a 10 conforme como o paciente está agora.',
+    answerKey: 'edmonton',
+  },
+
+  // ── Comunicação e plano ───────────────────────────────────
   spikes: {
     id: 'spikes',
     kind: 'checklist',
     progress: true,
-    kicker: 'Etapa 8 · Vamos conversar?',
-    title: 'SPIKES: roteiro',
-    intro: 'Não como aula, mas como roteiro para a conversa. Marque conforme avança.',
+    kicker: 'Comunicação',
+    title: 'SPIKES: Comunicação de más notícias',
+    intro: 'Um roteiro para a conversa. Marque conforme avança; toque em "Mais detalhes" para ver a descrição.',
     answerKey: 'spikes',
-    todo: true,
     items: [
-      { id: 'spikes-s', label: 'S de Setting: prepare o ambiente' },
-      { id: 'spikes-p', label: 'P de Perception: o paciente compreendeu sua doença?' },
-      { id: 'spikes-i', label: 'I de Invitation: quanto ele deseja saber?' },
-      { id: 'spikes-k', label: 'K de Knowledge: transmita a informação com clareza' },
-      { id: 'spikes-e', label: 'E de Emotions: acolha as emoções' },
-      { id: 'spikes-s2', label: 'S de Strategy: combine a estratégia e os próximos passos' },
+      {
+        id: 'spikes-s',
+        code: 'S',
+        label: 'Setting up · Preparando-se para a conversa',
+        detail: 'No contexto domiciliar o paciente costuma se sentir mais à vontade. Aproveite o ambiente para uma comunicação aberta e transparente.',
+      },
+      {
+        id: 'spikes-p',
+        code: 'P',
+        label: 'Perception · Avaliação da percepção do paciente',
+        detail: 'Observe o contexto domiciliar e pergunte o que já foi dito ao paciente, cuidador e família sobre a doença.',
+      },
+      {
+        id: 'spikes-i',
+        code: 'I',
+        label: 'Invitation · Convidando para o diálogo',
+        detail: 'Questione se o paciente quer entender mais sobre o processo de saúde e doença.',
+      },
+      {
+        id: 'spikes-k',
+        code: 'K',
+        label: 'Knowledge · Transmitindo as informações',
+        detail: 'Informação clara e adaptada ao nível de compreensão. Evite excesso de termos técnicos, permita perguntas e divida a informação em cada visita.',
+      },
+      {
+        id: 'spikes-e',
+        code: 'E',
+        label: 'Emotions · Expressando e validando as informações',
+        detail: 'Favoreça a expressão do paciente e da família e acolha os sentimentos. Se chorar, espere retomar. Evite dizer que tudo ficará bem.',
+      },
+      {
+        id: 'spikes-s2',
+        code: 'S',
+        label: 'Summarize · Resumo e pactuação das ações',
+        detail: 'Ao fim da visita, construam juntos um plano de cuidados que considere o que foi conversado, revisando pelo entendimento do paciente.',
+      },
     ],
   },
   plano: {
     id: 'plano',
+    kind: 'plano',
+    progress: true,
+    kicker: 'Plano compartilhado',
+    title: 'Plano compartilhado',
+    answerKey: 'plano',
+  },
+  reflexao: {
+    id: 'reflexao',
     kind: 'fields',
     progress: true,
-    kicker: 'Etapa 9 · Plano compartilhado',
-    title: 'Plano compartilhado',
-    todo: true,
+    kicker: 'Reflexão',
+    title: 'O que levo desse atendimento?',
+    answerKey: 'reflexao',
     fields: [
-      { id: 'desejos', label: 'Desejos do paciente', placeholder: 'O que importa para esta pessoa…', multiline: true },
-      { id: 'objetivos', label: 'Objetivos do cuidado', placeholder: 'Para onde caminhamos juntos…', multiline: true },
-      { id: 'sintomas', label: 'Controle de sintomas', placeholder: 'Prioridades de manejo…', multiline: true },
-      { id: 'responsavel', label: 'Quem será responsável', placeholder: 'Profissional / cuidador de referência…' },
-      { id: 'reavaliar', label: 'Quando reavaliar', placeholder: 'Ex.: em 30 dias…' },
+      { id: 'sentimento', label: 'Meu sentimento após esta avaliação é:', placeholder: 'Escreva livremente…', multiline: true },
+      { id: 'paciente', label: 'O que o paciente me traz para registro?', placeholder: 'Escreva livremente…', multiline: true },
+      { id: 'familia', label: 'O que a família me traz para registro?', placeholder: 'Escreva livremente…', multiline: true },
     ],
   },
   dav: {
     id: 'dav',
     kind: 'choice',
     progress: true,
-    kicker: 'Etapa 10 · DAV',
+    pendingClient: true,
+    kicker: 'DAV',
     question: 'Qual a capacidade de decisão do paciente neste momento?',
     answerKey: 'dav',
     options: [
@@ -249,10 +380,33 @@ export const steps: Record<StepId, Step> = {
       {
         value: 'incapaz',
         label: 'Incapaz de decidir',
-        description: 'Plano de cuidados construído com o representante.',
+        description: 'Planejamento antecipado de cuidados com o representante.',
       },
     ],
   },
+  davAplicar: {
+    id: 'davAplicar',
+    kind: 'choice',
+    progress: true,
+    pendingClient: true,
+    kicker: 'DAV',
+    question: 'É possível aplicar a Diretiva Antecipada de Cuidado?',
+    answerKey: 'davAplicar',
+    options: [
+      {
+        value: 'sim',
+        label: 'Sim',
+        description: 'É possível aplicar a Diretiva Antecipada de Cuidado. (Conteúdo do desfecho: cliente.)',
+      },
+      {
+        value: 'nao',
+        label: 'Não',
+        description: 'Programe a realização. (Conteúdo do desfecho: cliente.)',
+      },
+    ],
+  },
+
+  // ── Fechamento ────────────────────────────────────────────
   preparando: {
     id: 'preparando',
     kind: 'loading',
@@ -268,31 +422,7 @@ export const steps: Record<StepId, Step> = {
     title: 'Resumo do atendimento',
     todo: true,
   },
-  reavaliar: {
-    id: 'reavaliar',
-    kind: 'terminal',
-    progress: false,
-    icon: 'clock-rotate-left',
-    title: 'Reavaliação periódica',
-    body: 'Este paciente não apresenta critérios para avaliação neste momento. Lembre-se de reavaliá-lo periodicamente.',
-    todo: true,
-  },
 }
-
-/** Ordem "principal" — usada para a barra de progresso. */
-export const progressOrder: StepId[] = [
-  'intro',
-  'doenca',
-  'pps',
-  'surpresa',
-  'spict',
-  'resultado',
-  'dimensoes',
-  'spikes',
-  'plano',
-  'dav',
-  'resumo',
-]
 
 export type Answers = Record<string, unknown>
 
@@ -302,30 +432,48 @@ export function getNextStepId(current: StepId, answers: Answers): StepId | null 
     case 'intro':
       return 'doenca'
     case 'doenca':
-      return answers.doencaAmeacadora === 'nao' ? 'reavaliar' : 'pps'
-    case 'pps':
-      return 'surpresa'
+      return answers.doencaAmeacadora === 'nao' ? 'reavaliar' : 'surpresa'
     case 'surpresa':
-      // "Não me surpreenderia" abre o SPICT-BR; "Sim" segue direto ao resultado.
-      return answers.perguntaSurpresa === 'nao' ? 'spict' : 'resultado'
-    case 'spict':
-      return 'resultado'
+      // "Sim, me surpreenderia" passa pela recomendação; "Não" vai direto ao SPICT.
+      return answers.perguntaSurpresa === 'sim' ? 'recomendacao' : 'spictGerais'
+    case 'recomendacao':
+      return 'spictGerais'
+    case 'spictGerais':
+      return 'spictClinicos'
+    case 'spictClinicos':
+      return 'pps'
+    case 'pps':
+      // Branch "Morte" na deambulação → acolhimento (a ser habilitado no Épico C).
+      return answers.pps === 0 ? 'acolhimento' : 'resultado'
     case 'resultado':
-      return 'dimensoes'
-    case 'dimensoes':
-      return 'verso'
-    case 'verso':
+      return 'fisica'
+    case 'fisica':
+      return 'psicologica'
+    case 'psicologica':
+      return 'social'
+    case 'social':
+      return 'espiritual'
+    case 'espiritual':
+      return 'familiar'
+    case 'familiar':
+      return 'edmonton'
+    case 'edmonton':
       return 'spikes'
     case 'spikes':
       return 'plano'
     case 'plano':
+      return 'reflexao'
+    case 'reflexao':
       return 'dav'
     case 'dav':
+      return answers.dav === 'consciente' ? 'davAplicar' : 'preparando'
+    case 'davAplicar':
       return 'preparando'
     case 'preparando':
       return 'resumo'
     case 'resumo':
     case 'reavaliar':
+    case 'acolhimento':
       return null
     default:
       return null
@@ -333,3 +481,36 @@ export function getNextStepId(current: StepId, answers: Answers): StepId | null 
 }
 
 export const FIRST_STEP: StepId = 'intro'
+
+/** Etapas que são interstício (não entram no histórico de navegação). */
+export function isInterstitial(id: StepId): boolean {
+  return steps[id].kind === 'loading'
+}
+
+/**
+ * Progresso dinâmico do caminho atual.
+ * Conta as etapas que já contam (history + atual) e projeta o restante do
+ * caminho via getNextStepId. Nos terminais, fecha em 100%.
+ */
+export function getProgress(
+  current: StepId,
+  history: StepId[],
+  answers: Answers,
+): { index: number; total: number; atTerminal: boolean } {
+  const done =
+    history.filter((id) => steps[id].progress).length + (steps[current].progress ? 1 : 0)
+
+  let total = done
+  const seen = new Set<StepId>([current, ...history])
+  let cursor: StepId = current
+  for (let i = 0; i < 60; i++) {
+    const next = getNextStepId(cursor, answers)
+    if (!next || seen.has(next)) break
+    seen.add(next)
+    if (steps[next].progress) total++
+    cursor = next
+  }
+
+  const atTerminal = getNextStepId(current, answers) === null
+  return { index: done, total: Math.max(total, done, 1), atTerminal }
+}

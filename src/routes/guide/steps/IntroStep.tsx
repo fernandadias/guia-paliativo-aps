@@ -1,5 +1,6 @@
 import { verses } from '@/content/quotes'
 import { StepShell } from '../StepShell'
+import { PendingTag } from '../PendingTag'
 import { useGuide } from '../useGuideState'
 import type { Step } from '@/content/guide'
 
@@ -15,6 +16,11 @@ export function IntroStep({ step }: { step: Extract<Step, { kind: 'intro' }> }) 
       continueLabel="Continuar"
       onContinue={next}
     >
+      {step.pendingClient && (
+        <div className="mb-5">
+          <PendingTag />
+        </div>
+      )}
       <p className="text-lg leading-relaxed text-forest/80">{step.body}</p>
 
       {verse && (

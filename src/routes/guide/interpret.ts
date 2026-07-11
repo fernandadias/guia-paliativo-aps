@@ -1,25 +1,17 @@
-import { steps, type Answers, type PpsBand } from '@/content/guide'
+import type { Answers, PpsBand } from '@/content/guide'
+import { bandInfo } from '@/content/pps'
 
 /**
  * Interpretação das respostas → textos exibidos.
  * ⚠️  As mensagens são PLACEHOLDER clínico; a lógica de faixas/contagem é real.
  */
 
-const bandLabel: Record<PpsBand, string> = {
-  precoce: 'Cuidados paliativos precoces',
-  complementar: 'Cuidados paliativos complementares',
-  predominante: 'Cuidados paliativos predominantes',
-  exclusivo: 'Cuidados paliativos exclusivos',
-}
-
 export function ppsBand(answers: Answers): { value: number; band: PpsBand; label: string } | null {
   const value = answers.pps as number | undefined
   if (value == null) return null
-  const ppsStep = steps.pps
-  if (ppsStep.kind !== 'scale') return null
-  const opt = ppsStep.options.find((o) => o.value === value)
-  if (!opt) return null
-  return { value, band: opt.band, label: bandLabel[opt.band] }
+  const info = bandInfo(value)
+  if (!info) return null // óbito (0) não tem faixa
+  return { value, band: info.band, label: info.label }
 }
 
 export function spictCount(answers: Answers): number {
@@ -40,12 +32,12 @@ export function resultReading(answers: Answers): ResultReading {
   const surprise = answers.perguntaSurpresa
   const spict = spictCount(answers)
 
-  // "Não me surpreenderia" + indicadores → critérios para inclusão.
+  // Indicadores presentes → critérios para inclusão.
   if (surprise === 'nao' && spict >= 2) {
     return {
       tone: 'atencao',
       title: 'Este paciente apresenta critérios para inclusão em cuidados paliativos.',
-      body: `Pergunta Surpresa negativa e ${spict} indicador(es) do SPICT-BR${
+      body: `${spict} indicador(es) presente(s)${
         pps ? `, com funcionalidade em ${pps.label.toLowerCase()}` : ''
       }. Recomenda-se elevada atenção ao planejamento compartilhado.`,
     }
@@ -54,10 +46,10 @@ export function resultReading(answers: Answers): ResultReading {
   if (surprise === 'nao') {
     return {
       tone: 'atencao',
-      title: 'O paciente apresenta elevada necessidade de planejamento compartilhado.',
-      body: `Pergunta Surpresa negativa${
-        pps ? `, funcionalidade em ${pps.label.toLowerCase()}` : ''
-      }. Vale seguir com a avaliação das dimensões do cuidado.`,
+      title: 'O paciente apresenta necessidade de planejamento compartilhado.',
+      body: `${
+        pps ? `Funcionalidade em ${pps.label.toLowerCase()}. ` : ''
+      }Vale seguir com a avaliação das dimensões do cuidado.`,
     }
   }
 

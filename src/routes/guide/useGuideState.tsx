@@ -3,7 +3,8 @@ import type { ReactNode } from 'react'
 import {
   FIRST_STEP,
   getNextStepId,
-  progressOrder,
+  getProgress,
+  isInterstitial,
   steps,
   type Answers,
   type StepId,
@@ -37,12 +38,12 @@ function reducer(state: GuideState, action: Action): GuideState {
     case 'next': {
       const next = getNextStepId(state.current, state.answers)
       if (!next) return state
-      return {
-        ...state,
-        current: next,
-        history: [...state.history, state.current],
-        direction: 1,
-      }
+      // Interstícios (loading) não entram no histórico: ao voltar, o usuário
+      // pula direto para a etapa real anterior, sem ficar preso no loading.
+      const history = isInterstitial(state.current)
+        ? state.history
+        : [...state.history, state.current]
+      return { ...state, current: next, history, direction: 1 }
     }
     case 'back': {
       if (state.history.length === 0) return state
@@ -65,9 +66,12 @@ interface GuideContextValue extends GuideState {
   reset: () => void
   answerAndNext: (key: string, value: unknown) => void
   canGoBack: boolean
-  /** Índice 1-based na barra de progresso, ou null se etapa não conta. */
-  progressIndex: number | null
+  /** Posição no caminho atual (1-based). */
+  progressIndex: number
+  /** Total estimado do caminho atual (dinâmico por branch). */
   progressTotal: number
+  /** Se a etapa atual encerra o guia. */
+  atTerminal: boolean
 }
 
 const GuideContext = createContext<GuideContextValue | null>(null)
@@ -91,7 +95,7 @@ export function GuideProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<GuideContextValue>(() => {
     const step = steps[state.current]
-    const idx = progressOrder.indexOf(state.current)
+    const progress = getProgress(state.current, state.history, state.answers)
     return {
       ...state,
       step,
@@ -101,8 +105,9 @@ export function GuideProvider({ children }: { children: ReactNode }) {
       reset,
       answerAndNext,
       canGoBack: state.history.length > 0,
-      progressIndex: step.progress && idx >= 0 ? idx + 1 : null,
-      progressTotal: progressOrder.length,
+      progressIndex: progress.index,
+      progressTotal: progress.total,
+      atTerminal: progress.atTerminal,
     }
   }, [state, answer, next, back, reset, answerAndNext])
 

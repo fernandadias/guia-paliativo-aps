@@ -4,16 +4,17 @@ import type { Step } from '@/content/guide'
 
 export function FieldsStep({ step }: { step: Extract<Step, { kind: 'fields' }> }) {
   const { answers, answer, next } = useGuide()
-  const values = (answers.plano as Record<string, string> | undefined) ?? {}
+  const values = (answers[step.answerKey] as Record<string, string> | undefined) ?? {}
 
   const setField = (id: string, value: string) => {
-    answer('plano', { ...values, [id]: value })
+    answer(step.answerKey, { ...values, [id]: value })
   }
 
   return (
     <StepShell
       kicker={step.kicker}
       title={step.title}
+      note={step.intro}
       todo={step.todo}
       continueLabel="Continuar"
       onContinue={next}
