@@ -2,11 +2,11 @@ import { motion } from 'motion/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faArrowLeft,
+  faArrowRight,
   faXmark,
   faVolumeHigh,
   faVolumeXmark,
   faListCheck,
-  faAnglesRight,
 } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import { useGuide } from './useGuideState'
@@ -63,7 +63,7 @@ export function GuideChrome({ musicOn, onToggleMusic, onOpenRespostas }: GuideCh
             aria-label="Pular esta etapa"
             className="rounded-full p-2 text-forest/60 transition-colors hover:bg-forest/10 hover:text-forest"
           >
-            <FontAwesomeIcon icon={faAnglesRight} className="text-sm" />
+            <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
           </button>
         )}
 
