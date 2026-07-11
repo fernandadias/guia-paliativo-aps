@@ -72,6 +72,7 @@ export type Step = StepCommon &
       }
     | { kind: 'pps'; kicker: string; question: string; note: string; answerKey: string; todo?: boolean }
     | { kind: 'clinicos'; kicker: string; title: string; intro: string; answerKey: string }
+    | { kind: 'edmonton'; kicker: string; title: string; intro: string; answerKey: string }
     | {
         kind: 'checklist'
         kicker: string
@@ -284,12 +285,12 @@ export const steps: Record<StepId, Step> = {
   },
   edmonton: {
     id: 'edmonton',
-    kind: 'placeholder',
+    kind: 'edmonton',
     progress: true,
     kicker: 'Sintomas',
-    title: 'Avaliação de Sintomas de Edmonton (ESAS-r)',
-    body: 'Sliders de 0 a 10 para dor, cansaço, sonolência, náusea, apetite, falta de ar, depressão, ansiedade e bem-estar, mais "outro problema". Fecha a seção das cinco dimensões. UI a ser construída no sandbox.',
-    epic: 'C · Edmonton (T16)',
+    title: 'Avaliação de Sintomas de Edmonton',
+    intro: 'Para cada sintoma, arraste de 0 a 10 conforme como o paciente está agora.',
+    answerKey: 'edmonton',
   },
 
   // ── Comunicação e plano ───────────────────────────────────

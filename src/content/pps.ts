@@ -16,7 +16,7 @@ import type { PpsBand } from './guide'
 export const ppsColumns = [
   { key: 'deamb', label: 'Deambulação', icon: 'person-walking' },
   { key: 'ativ', label: 'Atividade e evidência de doença', icon: 'person-running' },
-  { key: 'auto', label: 'Autocuidado', icon: 'hands-bubbles' },
+  { key: 'auto', label: 'Autocuidado', icon: 'heart' },
   { key: 'ing', label: 'Ingestão', icon: 'utensils' },
   { key: 'consc', label: 'Nível de consciência', icon: 'brain' },
 ] as const
