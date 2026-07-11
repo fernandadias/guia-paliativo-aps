@@ -39,7 +39,7 @@ export const ppsRows: PpsRow[] = [
       ativ: 'Normal, sem evidência de doença',
       auto: 'Completo',
       ing: 'Normal',
-      consc: 'Completa',
+      consc: 'Completo',
     },
   },
   {
@@ -49,7 +49,7 @@ export const ppsRows: PpsRow[] = [
       ativ: 'Normal, alguma evidência de doença',
       auto: 'Completo',
       ing: 'Normal',
-      consc: 'Completa',
+      consc: 'Completo',
     },
   },
   {
@@ -59,7 +59,7 @@ export const ppsRows: PpsRow[] = [
       ativ: 'Normal com esforço, alguma doença',
       auto: 'Completo',
       ing: 'Normal ou reduzida',
-      consc: 'Completa',
+      consc: 'Completo',
     },
   },
   {
@@ -69,7 +69,7 @@ export const ppsRows: PpsRow[] = [
       ativ: 'Incapaz de trabalhar, doença significativa',
       auto: 'Completo',
       ing: 'Normal ou reduzida',
-      consc: 'Completa',
+      consc: 'Completo',
     },
   },
   {
@@ -79,7 +79,7 @@ export const ppsRows: PpsRow[] = [
       ativ: 'Incapaz de hobbies, doença significativa',
       auto: 'Assistência ocasional',
       ing: 'Normal ou reduzida',
-      consc: 'Completa ou confusão',
+      consc: 'Completo ou com períodos de confusão',
     },
   },
   {
@@ -89,7 +89,7 @@ export const ppsRows: PpsRow[] = [
       ativ: 'Incapaz de trabalhar, doença extensa',
       auto: 'Assistência considerável',
       ing: 'Normal ou reduzida',
-      consc: 'Completa ou confusão',
+      consc: 'Completo ou com períodos de confusão',
     },
   },
   {
@@ -99,7 +99,7 @@ export const ppsRows: PpsRow[] = [
       ativ: 'Incapaz de trabalhar, doença extensa',
       auto: 'Assistência quase total',
       ing: 'Normal ou reduzida',
-      consc: 'Completa ou sonolência',
+      consc: 'Completo ou com períodos de confusão',
     },
   },
   {
@@ -109,7 +109,7 @@ export const ppsRows: PpsRow[] = [
       ativ: 'Incapaz de trabalhar, doença extensa',
       auto: 'Dependência completa',
       ing: 'Reduzida',
-      consc: 'Completa ou sonolência',
+      consc: 'Completo ou com períodos de confusão',
     },
   },
   {
@@ -119,7 +119,7 @@ export const ppsRows: PpsRow[] = [
       ativ: 'Incapaz de trabalhar, doença extensa',
       auto: 'Dependência completa',
       ing: 'Mínima',
-      consc: 'Completa ou sonolência',
+      consc: 'Completo ou com períodos de confusão',
     },
   },
   {
@@ -129,7 +129,7 @@ export const ppsRows: PpsRow[] = [
       ativ: 'Incapaz de trabalhar, doença extensa',
       auto: 'Dependência completa',
       ing: 'Cuidados com a boca',
-      consc: 'Sonolência ou coma',
+      consc: 'Confuso ou em coma',
     },
   },
 ]
