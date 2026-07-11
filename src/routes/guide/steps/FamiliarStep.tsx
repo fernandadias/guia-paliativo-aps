@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { StepShell } from '../StepShell'
+import { PendingTag } from '../PendingTag'
 import { useGuide } from '../useGuideState'
 import { gentleFast } from '@/lib/motion'
 import {
@@ -35,6 +36,11 @@ export function FamiliarStep({ step }: { step: Extract<Step, { kind: 'familiar' 
       continueLabel="Continuar"
       onContinue={next}
     >
+      {step.pendingClient && (
+        <div className="mb-5">
+          <PendingTag />
+        </div>
+      )}
       <div className="space-y-6">
         {/* Dinâmica familiar */}
         <label className="block">

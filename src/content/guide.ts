@@ -48,6 +48,8 @@ interface StepCommon {
   id: StepId
   /** Se a etapa conta na barra de progresso (terminais/interstícios não contam). */
   progress: boolean
+  /** Sinaliza que parte do conteúdo desta tela depende da cliente. */
+  pendingClient?: boolean
 }
 
 export type Step = StepCommon &
@@ -119,6 +121,7 @@ export const steps: Record<StepId, Step> = {
     id: 'intro',
     kind: 'intro',
     progress: true,
+    pendingClient: true,
     kicker: 'Antes de tudo',
     title: 'O que são cuidados paliativos?',
     body: 'Cuidados paliativos não significam desistir. Significam cuidar melhor. Apenas os conceitos essenciais, sem texto enorme. (Copy final virá da cliente.)',
@@ -143,6 +146,7 @@ export const steps: Record<StepId, Step> = {
     id: 'reavaliar',
     kind: 'terminal',
     progress: false,
+    pendingClient: true,
     icon: 'clock-rotate-left',
     title: 'Reavaliação periódica',
     body: 'Este paciente não apresenta critérios para avaliação neste momento. Lembre-se de reavaliá-lo periodicamente. (Copy final virá da cliente.)',
@@ -209,6 +213,7 @@ export const steps: Record<StepId, Step> = {
     id: 'acolhimento',
     kind: 'terminal',
     progress: false,
+    pendingClient: true,
     icon: 'hand-holding-heart',
     title: 'Acolhimento da família',
     body: 'Fase de acolhimento da família. Conteúdo e formato a serem definidos pela cliente. (Acionada quando a deambulação indica "Morte" no PPS.)',
@@ -250,6 +255,7 @@ export const steps: Record<StepId, Step> = {
     id: 'social',
     kind: 'social',
     progress: true,
+    pendingClient: true,
     kicker: 'Dimensão social',
     title: 'Social',
     answerKey: 'dimSocial',
@@ -272,6 +278,7 @@ export const steps: Record<StepId, Step> = {
     id: 'familiar',
     kind: 'familiar',
     progress: true,
+    pendingClient: true,
     kicker: 'Dimensão familiar',
     title: 'Familiar',
     answerKey: 'dimFamiliar',
@@ -360,6 +367,7 @@ export const steps: Record<StepId, Step> = {
     id: 'dav',
     kind: 'choice',
     progress: true,
+    pendingClient: true,
     kicker: 'DAV',
     question: 'Qual a capacidade de decisão do paciente neste momento?',
     answerKey: 'dav',
@@ -380,6 +388,7 @@ export const steps: Record<StepId, Step> = {
     id: 'davAplicar',
     kind: 'choice',
     progress: true,
+    pendingClient: true,
     kicker: 'DAV',
     question: 'É possível aplicar a Diretiva Antecipada de Cuidado?',
     answerKey: 'davAplicar',
