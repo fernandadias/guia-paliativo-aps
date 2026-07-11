@@ -10,6 +10,7 @@ import { ScaleStep } from './steps/ScaleStep'
 import { PpsStep } from './steps/PpsStep'
 import { ClinicosStep } from './steps/ClinicosStep'
 import { EdmontonStep } from './steps/EdmontonStep'
+import { FamiliarStep } from './steps/FamiliarStep'
 import { ChecklistStep } from './steps/ChecklistStep'
 import { ResultStep } from './steps/ResultStep'
 import { DimensionsStep } from './steps/DimensionsStep'
@@ -37,6 +38,8 @@ function CurrentStep({ step }: { step: Step }) {
       return <ClinicosStep step={step} />
     case 'edmonton':
       return <EdmontonStep step={step} />
+    case 'familiar':
+      return <FamiliarStep step={step} />
     case 'checklist':
       return <ChecklistStep step={step} />
     case 'result':

@@ -43,16 +43,18 @@ export function EdmontonStep({ step }: { step: Extract<Step, { kind: 'edmonton' 
             placeholder="Outro problema (ex.: prisão de ventre)"
             className="w-full rounded-xl border border-forest/15 bg-paper px-4 py-2.5 text-forest outline-none transition-colors placeholder:text-forest/30 focus:border-moss"
           />
-          <div className="mt-4">
-            <SliderRow
-              label={outroNome.trim() || 'Outro problema'}
-              left="Sem sintoma"
-              right="Pior possível"
-              value={values.outro}
-              onChange={(v) => setValue('outro', v)}
-              bare
-            />
-          </div>
+          {outroNome.trim() && (
+            <div className="mt-4">
+              <SliderRow
+                label={outroNome.trim()}
+                left="Sem sintoma"
+                right="Pior possível"
+                value={values.outro}
+                onChange={(v) => setValue('outro', v)}
+                bare
+              />
+            </div>
+          )}
         </div>
       </div>
     </StepShell>

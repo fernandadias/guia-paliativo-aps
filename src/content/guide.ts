@@ -73,6 +73,7 @@ export type Step = StepCommon &
     | { kind: 'pps'; kicker: string; question: string; note: string; answerKey: string; todo?: boolean }
     | { kind: 'clinicos'; kicker: string; title: string; intro: string; answerKey: string }
     | { kind: 'edmonton'; kicker: string; title: string; intro: string; answerKey: string }
+    | { kind: 'familiar'; kicker: string; title: string; intro: string; answerKey: string }
     | {
         kind: 'checklist'
         kicker: string
@@ -271,17 +272,12 @@ export const steps: Record<StepId, Step> = {
   },
   familiar: {
     id: 'familiar',
-    kind: 'fields',
+    kind: 'familiar',
     progress: true,
     kicker: 'Dimensão familiar',
     title: 'Familiar',
     answerKey: 'dimFamiliar',
-    intro: 'Dinâmica familiar (caixinhas com ícone, copy da cliente) e sobrecarga do cuidador (escala ZARIT) serão construídas no Épico C. Conflitos em texto livre.',
-    fields: [
-      { id: 'dinamica', label: 'Dinâmica familiar', placeholder: 'Anotar…', multiline: true },
-      { id: 'sobrecarga', label: 'Sobrecarga do cuidador', placeholder: 'Anotar… (escala ZARIT no Épico C)', multiline: true },
-      { id: 'conflitos', label: 'Conflitos', placeholder: 'Anotar…', multiline: true },
-    ],
+    intro: 'Dinâmica familiar, sobrecarga do cuidador e conflitos. (As opções com ícone da dinâmica virão da cliente.)',
   },
   edmonton: {
     id: 'edmonton',
