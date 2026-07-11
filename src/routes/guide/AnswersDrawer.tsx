@@ -9,23 +9,23 @@ import { zaritScore, zaritComplete, zaritFaixa } from '@/content/zarit'
 import { painadScore, painadComplete, painadFaixa, evaCategoria } from '@/content/dor'
 import { planoFields, planoValorLegivel } from '@/content/plano'
 import { zaritQuestions } from '@/content/zarit'
-import type { Answers } from '@/content/guide'
+import { steps, type Answers, type StepId } from '@/content/guide'
 
 interface Item {
   label: string
   value: string
 }
 
-function hasContent(obj: unknown): boolean {
-  if (!obj || typeof obj !== 'object') return false
-  return Object.values(obj as Record<string, unknown>).some((v) =>
-    typeof v === 'string' ? v.trim() !== '' : v != null && v !== false,
-  )
-}
-
 function buildItems(answers: Answers): Item[] {
   const items: Item[] = []
   const push = (label: string, value: string) => value && items.push({ label, value })
+
+  const pushFields = (stepId: StepId) => {
+    const st = steps[stepId]
+    if (st.kind !== 'fields') return
+    const vals = (answers[st.answerKey] as Record<string, string> | undefined) ?? {}
+    for (const f of st.fields) push(f.label, (vals[f.id] ?? '').trim())
+  }
 
   if (answers.doencaAmeacadora)
     push('Doença ameaçadora a vida', answers.doencaAmeacadora === 'sim' ? 'Sim' : 'Não')
@@ -68,10 +68,23 @@ function buildItems(answers: Answers): Item[] {
     } else push('Dor', 'Com dor')
   }
 
-  if (hasContent(answers.dimPsicologica)) push('Psicológica', 'Preenchida')
-  if (hasContent(answers.dimSocial)) push('Social', 'Preenchida')
-  if (hasContent(answers.dimEspiritual)) push('Espiritual', 'Preenchida')
-  if (hasContent(answers.dimFamiliar)) push('Familiar', 'Preenchida')
+  // Psicológica e Espiritual: campos de texto
+  pushFields('psicologica')
+
+  // Social
+  const social = (answers.dimSocial as Record<string, string> | undefined) ?? {}
+  push('Quem cuida?', (social.quemCuida ?? '').trim())
+  if (social.redeApoio) push('Existe rede de apoio?', social.redeApoio === 'sim' ? 'Sim' : 'Não')
+  push('Rede de apoio, quem é?', (social.redeApoioQuem ?? '').trim())
+  push('Benefícios sociais', (social.beneficios ?? '').trim())
+
+  pushFields('espiritual')
+
+  // Familiar
+  const fam = (answers.dimFamiliar as Record<string, string> | undefined) ?? {}
+  push('Dinâmica familiar', (fam.dinamica ?? '').trim())
+  if (fam.sobrecarga) push('Sobrecarga do cuidador', fam.sobrecarga === 'sim' ? 'Sim' : 'Não')
+  push('Conflitos', (fam.conflitos ?? '').trim())
 
   const zarit = answers.zarit as Record<string, number> | undefined
   if (zarit && zaritComplete(zarit)) {
@@ -99,7 +112,7 @@ function buildItems(answers: Answers): Item[] {
     if (val) push(f.label, val)
   })
 
-  if (hasContent(answers.reflexao)) push('O que levo do atendimento', 'Registrado')
+  pushFields('reflexao')
 
   if (answers.dav)
     push('DAV', answers.dav === 'consciente' ? 'Consciente e capaz' : 'Incapaz de decidir')
