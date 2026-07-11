@@ -40,6 +40,9 @@ export function SocialStep({ step }: { step: Extract<Step, { kind: 'social' }> }
         <div>
           <span className="mb-2 block text-sm font-medium text-forest/70">
             Existe rede de apoio?
+            <span className="mt-0.5 block text-xs font-normal text-forest/45">
+              Ex.: igreja, ONG, vizinhos ou outros
+            </span>
           </span>
           <div className="grid grid-cols-2 gap-3">
             {[
@@ -78,7 +81,7 @@ export function SocialStep({ step }: { step: Extract<Step, { kind: 'social' }> }
                     type="text"
                     value={values.redeApoioQuem ?? ''}
                     onChange={(e) => setField('redeApoioQuem', e.target.value)}
-                    placeholder="Anotar…"
+                    placeholder="Ex.: igreja, ONG, vizinhos, outros"
                     className="w-full rounded-2xl border border-forest/15 bg-cream-50/60 px-4 py-3 text-forest outline-none transition-colors placeholder:text-forest/30 focus:border-moss"
                   />
                 </label>
