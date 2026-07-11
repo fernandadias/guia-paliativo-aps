@@ -15,6 +15,7 @@ import { FieldsStep } from './steps/FieldsStep'
 import { SummaryStep } from './steps/SummaryStep'
 import { TerminalStep } from './steps/TerminalStep'
 import { LoadingStep } from './steps/LoadingStep'
+import { PlaceholderStep } from './steps/PlaceholderStep'
 import { stepFade } from '@/lib/motion'
 
 // Recebe a etapa por PROP (não lê do contexto): assim o elemento que está saindo
@@ -43,6 +44,8 @@ function CurrentStep({ step }: { step: Step }) {
       return <TerminalStep step={step} />
     case 'loading':
       return <LoadingStep step={step} />
+    case 'placeholder':
+      return <PlaceholderStep step={step} />
   }
 }
 

@@ -40,12 +40,12 @@ export function resultReading(answers: Answers): ResultReading {
   const surprise = answers.perguntaSurpresa
   const spict = spictCount(answers)
 
-  // "Não me surpreenderia" + indicadores → critérios para inclusão.
+  // Indicadores presentes → critérios para inclusão.
   if (surprise === 'nao' && spict >= 2) {
     return {
       tone: 'atencao',
       title: 'Este paciente apresenta critérios para inclusão em cuidados paliativos.',
-      body: `Pergunta Surpresa negativa e ${spict} indicador(es) do SPICT-BR${
+      body: `${spict} indicador(es) presente(s)${
         pps ? `, com funcionalidade em ${pps.label.toLowerCase()}` : ''
       }. Recomenda-se elevada atenção ao planejamento compartilhado.`,
     }
@@ -54,10 +54,10 @@ export function resultReading(answers: Answers): ResultReading {
   if (surprise === 'nao') {
     return {
       tone: 'atencao',
-      title: 'O paciente apresenta elevada necessidade de planejamento compartilhado.',
-      body: `Pergunta Surpresa negativa${
-        pps ? `, funcionalidade em ${pps.label.toLowerCase()}` : ''
-      }. Vale seguir com a avaliação das dimensões do cuidado.`,
+      title: 'O paciente apresenta necessidade de planejamento compartilhado.',
+      body: `${
+        pps ? `Funcionalidade em ${pps.label.toLowerCase()}. ` : ''
+      }Vale seguir com a avaliação das dimensões do cuidado.`,
     }
   }
 

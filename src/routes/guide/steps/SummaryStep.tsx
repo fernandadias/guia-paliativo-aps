@@ -12,10 +12,20 @@ export function SummaryStep({ step }: { step: Extract<Step, { kind: 'summary' }>
   const reading = resultReading(answers)
   const dav = davReading(answers)
   const plano = (answers.plano as Record<string, string> | undefined) ?? {}
-  const dimensoes = (answers.dimensoes as Record<string, string> | undefined) ?? {}
 
   const planoFields = steps.plano.kind === 'fields' ? steps.plano.fields : []
-  const dims = steps.dimensoes.kind === 'dimensions' ? steps.dimensoes.dimensions : []
+
+  // Dimensões avaliadas: quais têm alguma anotação preenchida.
+  const dims: { key: string; label: string }[] = [
+    { key: 'dimPsicologica', label: 'Psicológica' },
+    { key: 'dimSocial', label: 'Social' },
+    { key: 'dimEspiritual', label: 'Espiritual' },
+    { key: 'dimFamiliar', label: 'Familiar' },
+  ]
+  const dimsAvaliadas = dims.filter((d) => {
+    const v = (answers[d.key] as Record<string, string> | undefined) ?? {}
+    return Object.values(v).some((x) => x?.trim())
+  })
 
   return (
     <StepShell kicker={step.kicker} title={step.title} todo={step.todo}>
@@ -34,10 +44,7 @@ export function SummaryStep({ step }: { step: Extract<Step, { kind: 'summary' }>
         <Divider />
 
         <Row label="Dimensões avaliadas">
-          {dims
-            .filter((d) => d.fields.some((_, i) => dimensoes[`${d.id}:${i}`]?.trim()))
-            .map((d) => d.label)
-            .join(' · ') || 'Nenhuma anotação registrada'}
+          {dimsAvaliadas.map((d) => d.label).join(' · ') || 'Nenhuma anotação registrada'}
         </Row>
 
         <Divider />

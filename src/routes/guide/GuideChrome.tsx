@@ -12,8 +12,8 @@ interface GuideChromeProps {
 
 /** Barra superior do guia: voltar, progresso, música e sair. */
 export function GuideChrome({ musicOn, onToggleMusic }: GuideChromeProps) {
-  const { canGoBack, back, progressIndex, progressTotal } = useGuide()
-  const pct = progressIndex ? (progressIndex / progressTotal) * 100 : 0
+  const { canGoBack, back, progressIndex, progressTotal, atTerminal } = useGuide()
+  const pct = atTerminal ? 100 : Math.min(100, (progressIndex / progressTotal) * 100)
 
   return (
     <div className="sticky top-0 z-30 border-b border-forest/10 bg-paper/85 backdrop-blur-sm">
@@ -38,7 +38,7 @@ export function GuideChrome({ musicOn, onToggleMusic }: GuideChromeProps) {
         </div>
 
         <span className="w-10 text-right text-xs tabular-nums text-forest/50">
-          {progressIndex ? `${progressIndex}/${progressTotal}` : '·'}
+          {progressIndex}/{progressTotal}
         </span>
 
         <button
