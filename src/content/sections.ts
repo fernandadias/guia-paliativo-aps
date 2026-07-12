@@ -149,6 +149,12 @@ export const sections: Section[] = [
           'Instrumento de triagem que ajuda os profissionais de saúde a identificar precocemente ' +
           'pacientes que podem se beneficiar de uma abordagem paliativa, antes que haja um declínio ' +
           'visível das condições de saúde.',
+        href: '/pdfs/spict-br-cuidados-paliativos.pdf',
+      },
+      {
+        kind: 'callout',
+        icon: 'clipboard-question',
+        title: 'SPICT-BR Acessível',
         href: '/pdfs/spict-br-versao-acessivel.pdf',
       },
       {
@@ -161,7 +167,7 @@ export const sections: Section[] = [
           'Ele parte do conceito de “dor total”, proposto por Cicely Saunders, segundo o qual o ' +
           'sofrimento no fim da vida nunca é apenas físico, mas se manifesta em quatro dimensões ' +
           'interligadas.',
-        href: '/pdfs/diretiva-antecipada-de-cuidado.pdf',
+        href: '/pdfs/plano-de-cuidados-cuidados-paliativos.pdf',
       },
       {
         kind: 'callout',
