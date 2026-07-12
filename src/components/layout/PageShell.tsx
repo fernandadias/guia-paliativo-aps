@@ -1,9 +1,7 @@
 import type { ReactNode } from 'react'
 import { motion } from 'motion/react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
-import { Link } from 'react-router-dom'
 import { gentle } from '@/lib/motion'
+import { PageNav } from './PageNav'
 
 interface PageShellProps {
   kicker: string
@@ -23,13 +21,7 @@ export function PageShell({ kicker, title, intro, children }: PageShellProps) {
       <div className="absolute inset-x-0 top-0 -z-10 h-72 bg-gradient-to-b from-sage-100 to-paper" />
 
       <div className="mx-auto max-w-3xl px-6 pb-24 pt-32 sm:px-10 sm:pt-36">
-        <Link
-          to="/"
-          className="mb-10 inline-flex items-center gap-2 text-sm text-forest/50 transition-colors hover:text-moss"
-        >
-          <FontAwesomeIcon icon={faArrowLeft} className="text-xs" />
-          Início
-        </Link>
+        <PageNav />
 
         <motion.p
           className="mb-4 text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-moss"
