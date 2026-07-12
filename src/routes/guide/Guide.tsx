@@ -17,7 +17,7 @@ function GuideInner({ musicOn, onToggleMusic }: GuideInnerProps) {
   const [respostasOpen, setRespostasOpen] = useState(false)
   return (
     <div className="min-h-[100svh] bg-paper">
-      {step.kind !== 'loading' && (
+      {step.kind !== 'loading' && step.kind !== 'closing' && (
         <GuideChrome
           musicOn={musicOn}
           onToggleMusic={onToggleMusic}

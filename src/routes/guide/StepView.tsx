@@ -19,6 +19,7 @@ import { SummaryStep } from './steps/SummaryStep'
 import { TerminalStep } from './steps/TerminalStep'
 import { LoadingStep } from './steps/LoadingStep'
 import { PlaceholderStep } from './steps/PlaceholderStep'
+import { ClosingStep } from './steps/ClosingStep'
 
 /**
  * Renderiza uma etapa a partir do seu tipo. Recebe a etapa por PROP (não do
@@ -67,5 +68,7 @@ export function StepView({ step }: { step: Step }) {
       return <LoadingStep step={step} />
     case 'placeholder':
       return <PlaceholderStep step={step} />
+    case 'closing':
+      return <ClosingStep step={step} />
   }
 }

@@ -13,7 +13,7 @@ export function IntroStep({ step }: { step: Extract<Step, { kind: 'intro' }> }) 
       kicker={step.kicker}
       title={step.title}
       todo={step.todo}
-      continueLabel="Continuar"
+      continueLabel={step.continueLabel ?? 'Continuar'}
       onContinue={next}
     >
       {step.pendingClient && (
@@ -21,7 +21,7 @@ export function IntroStep({ step }: { step: Extract<Step, { kind: 'intro' }> }) 
           <PendingTag />
         </div>
       )}
-      <p className="text-lg leading-relaxed text-forest/80">{step.body}</p>
+      {step.body && <p className="text-lg leading-relaxed text-forest/80">{step.body}</p>}
 
       {verse && (
         <figure className="mt-10 rounded-3xl bg-gradient-to-br from-sage-100 to-cream-50 p-8">

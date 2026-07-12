@@ -33,9 +33,11 @@ export type StepId =
   | 'plano'
   | 'reflexao'
   | 'dav'
-  | 'davAplicar'
+  | 'davConsciente'
+  | 'davIncapaz'
   | 'preparando'
   | 'resumo'
+  | 'final'
 
 export interface ChoiceOption {
   value: string
@@ -53,7 +55,15 @@ interface StepCommon {
 
 export type Step = StepCommon &
   (
-    | { kind: 'intro'; kicker: string; title: string; body: string; asideVerseKey?: string; todo?: boolean }
+    | {
+        kind: 'intro'
+        kicker: string
+        title?: string
+        body?: string
+        continueLabel?: string
+        asideVerseKey?: string
+        todo?: boolean
+      }
     | {
         kind: 'choice'
         kicker: string
@@ -109,6 +119,7 @@ export type Step = StepCommon &
         todo?: boolean
       }
     | { kind: 'summary'; kicker: string; title: string; todo?: boolean }
+    | { kind: 'closing'; lines: string[]; body: string; signature: string[] }
     | { kind: 'terminal'; icon: string; title: string; body: string; todo?: boolean }
     | { kind: 'loading'; message: string; submessage: string }
     | { kind: 'placeholder'; kicker: string; title: string; body: string; epic: string }
@@ -322,7 +333,6 @@ export const steps: Record<StepId, Step> = {
     id: 'dav',
     kind: 'choice',
     progress: true,
-    pendingClient: true,
     kicker: 'DAV',
     question: 'Qual a capacidade de decisão do paciente neste momento?',
     body: 'Nem sempre é possível mudar o curso da doença. Mas ainda é possível conversar sobre escolhas, desejos e o que faz sentido para cada pessoa.',
@@ -338,38 +348,27 @@ export const steps: Record<StepId, Step> = {
     },
     answerKey: 'dav',
     options: [
-      {
-        value: 'consciente',
-        label: 'Consciente e capaz',
-        description: 'Planejamento antecipado de cuidados com o próprio paciente.',
-      },
-      {
-        value: 'incapaz',
-        label: 'Incapaz de decidir',
-        description: 'Planejamento antecipado de cuidados com o representante.',
-      },
+      { value: 'consciente', label: 'Consciente e capaz' },
+      { value: 'incapaz', label: 'Incapaz de decidir' },
     ],
   },
-  davAplicar: {
-    id: 'davAplicar',
-    kind: 'choice',
+  davConsciente: {
+    id: 'davConsciente',
+    kind: 'intro',
     progress: true,
-    pendingClient: true,
     kicker: 'DAV',
-    question: 'É possível aplicar a Diretiva Antecipada de Cuidado?',
-    answerKey: 'davAplicar',
-    options: [
-      {
-        value: 'sim',
-        label: 'Sim',
-        description: 'É possível aplicar a Diretiva Antecipada de Cuidado. (Conteúdo do desfecho: cliente.)',
-      },
-      {
-        value: 'nao',
-        label: 'Não',
-        description: 'Programe a realização. (Conteúdo do desfecho: cliente.)',
-      },
-    ],
+    title:
+      'Programe a aplicação da DAV (Diretivas Antecipadas de Vontade) juntamente com o paciente e a família.',
+    continueLabel: 'Finalizar',
+  },
+  davIncapaz: {
+    id: 'davIncapaz',
+    kind: 'intro',
+    progress: true,
+    kicker: 'DAV',
+    title:
+      'Programe com a família ou o cuidador responsável a aplicação do Plano Antecipado de Cuidados.',
+    continueLabel: 'Finalizar',
   },
 
   // ── Fechamento ────────────────────────────────────────────
@@ -387,6 +386,14 @@ export const steps: Record<StepId, Step> = {
     kicker: 'Final',
     title: 'Resumo do atendimento',
     todo: true,
+  },
+  final: {
+    id: 'final',
+    kind: 'closing',
+    progress: false,
+    lines: ['você marcha, José!', 'José, para onde?'],
+    body: 'Que este percurso ajude a transformar a dúvida em caminho e o conhecimento em cuidado.',
+    signature: ['Thais Cristina da Silva', 'Mestranda em Saúde da Família — PROFSAÚDE'],
   },
 }
 
@@ -430,12 +437,15 @@ export function getNextStepId(current: StepId, answers: Answers): StepId | null 
     case 'reflexao':
       return 'dav'
     case 'dav':
-      return answers.dav === 'consciente' ? 'davAplicar' : 'preparando'
-    case 'davAplicar':
+      return answers.dav === 'consciente' ? 'davConsciente' : 'davIncapaz'
+    case 'davConsciente':
+    case 'davIncapaz':
       return 'preparando'
     case 'preparando':
       return 'resumo'
     case 'resumo':
+      return 'final'
+    case 'final':
     case 'reavaliar':
     case 'acolhimento':
       return null

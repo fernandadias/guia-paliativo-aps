@@ -60,7 +60,7 @@ export function StepShell({
 
   return (
     <div className="mx-auto flex min-h-[calc(100svh-3.5rem)] w-full max-w-2xl flex-col px-6 pt-10 sm:pt-16">
-      <div ref={topRef} tabIndex={-1} className="flex-1 pb-6 outline-none">
+      <div ref={topRef} tabIndex={-1} className="flex-1 pb-12 outline-none">
         {kicker && (
           <div className="mb-4 flex flex-wrap items-center gap-3">
             <span className="text-[0.75rem] font-semibold uppercase tracking-[0.16em] text-moss">

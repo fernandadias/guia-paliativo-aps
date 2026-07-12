@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFilePdf, faRotateLeft, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRight, faFilePdf, faRotateLeft, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { StepShell } from '../StepShell'
+import { Button } from '@/components/ui/Button'
 import { useGuide } from '../useGuideState'
 import { buildResult, type GuideResult } from '@/lib/result'
 import { formatDateTime, formatDuration } from '@/lib/format'
 import type { Step } from '@/content/guide'
 
 export function SummaryStep({ step }: { step: Extract<Step, { kind: 'summary' }> }) {
-  const { answers, reset, finish, fillId, startedAt, finishedAt } = useGuide()
+  const { answers, next, reset, finish, fillId, startedAt, finishedAt } = useGuide()
   const [downloading, setDownloading] = useState(false)
   const [pdfError, setPdfError] = useState(false)
 
@@ -118,6 +119,14 @@ export function SummaryStep({ step }: { step: Extract<Step, { kind: 'summary' }>
           Não foi possível gerar o PDF agora. Verifique a conexão e tente novamente.
         </p>
       )}
+
+      {/* Seguir para o encerramento */}
+      <div className="mt-10">
+        <Button onClick={next} size="lg" className="w-full sm:w-auto">
+          Seguir
+          <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+        </Button>
+      </div>
 
       {/* Identificador — sutil, no rodapé do resumo */}
       <div className="mt-10 border-t border-forest/10 pt-4">
