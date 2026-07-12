@@ -23,9 +23,19 @@ export function evaCategoria(value: number): string {
   return evaCategorias[5]
 }
 
+import {
+  faLungs,
+  faVolumeHigh,
+  faFaceFrown,
+  faHandFist,
+  faHandHoldingHeart,
+  type IconDefinition,
+} from '@fortawesome/free-solid-svg-icons'
+
 export interface PainadItem {
   id: string
   label: string
+  icon: IconDefinition
   niveis: { pts: number; label: string }[]
 }
 
@@ -33,6 +43,7 @@ export const painadItems: PainadItem[] = [
   {
     id: 'respiracao',
     label: 'Respiração (independente da vocalização)',
+    icon: faLungs,
     niveis: [
       { pts: 0, label: 'Normal' },
       { pts: 1, label: 'Ocasionalmente difícil, curtos períodos de hiperventilação' },
@@ -42,6 +53,7 @@ export const painadItems: PainadItem[] = [
   {
     id: 'vocalizacao',
     label: 'Vocalização negativa',
+    icon: faVolumeHigh,
     niveis: [
       { pts: 0, label: 'Nenhuma' },
       { pts: 1, label: 'Gemidos ocasionais, discurso negativo' },
@@ -51,6 +63,7 @@ export const painadItems: PainadItem[] = [
   {
     id: 'facial',
     label: 'Expressão facial',
+    icon: faFaceFrown,
     niveis: [
       { pts: 0, label: 'Sorridente ou inexpressiva' },
       { pts: 1, label: 'Triste, com medo, sobrancelhas franzidas' },
@@ -60,6 +73,7 @@ export const painadItems: PainadItem[] = [
   {
     id: 'corporal',
     label: 'Linguagem corporal',
+    icon: faHandFist,
     niveis: [
       { pts: 0, label: 'Relaxado' },
       { pts: 1, label: 'Tenso, inquieto' },
@@ -69,6 +83,7 @@ export const painadItems: PainadItem[] = [
   {
     id: 'consolabilidade',
     label: 'Consolabilidade',
+    icon: faHandHoldingHeart,
     niveis: [
       { pts: 0, label: 'Sem necessidade de consolo' },
       { pts: 1, label: 'Distrai-se ou tranquiliza-se por voz ou toque' },

@@ -110,12 +110,6 @@ function buildItems(answers: Answers): Item[] {
     if (n > 0) push('Edmonton', `${n} sintoma(s) avaliado(s)`)
   }
 
-  const spikes = answers.spikes as Record<string, boolean> | undefined
-  if (spikes) {
-    const n = Object.values(spikes).filter(Boolean).length
-    if (n > 0) push('SPIKES', `${n} de 6`)
-  }
-
   const plano = (answers.plano as Record<string, string> | undefined) ?? {}
   planoFields.forEach((f) => {
     const val = planoValorLegivel(f, plano)

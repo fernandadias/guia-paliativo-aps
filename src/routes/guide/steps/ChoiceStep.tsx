@@ -10,11 +10,25 @@ export function ChoiceStep({ step }: { step: Extract<Step, { kind: 'choice' }> }
   const selected = answers[step.answerKey] as string | undefined
 
   return (
-    <StepShell kicker={step.kicker} title={step.question} todo={step.todo}>
+    <StepShell kicker={step.kicker} title={step.question} note={step.body} todo={step.todo}>
       {step.pendingClient && (
         <div className="mb-5">
           <PendingTag />
         </div>
+      )}
+      {step.poem && (
+        <figure className="mb-6 border-l-2 border-moss/40 pl-5">
+          <blockquote className="font-serif text-lg italic leading-relaxed text-forest/80 sm:text-xl">
+            {step.poem.lines.map((linha, i) => (
+              <span key={i} className="block">
+                {linha}
+              </span>
+            ))}
+          </blockquote>
+          {step.poem.author && (
+            <figcaption className="mt-3 text-sm text-forest/50">{step.poem.author}</figcaption>
+          )}
+        </figure>
       )}
       <div className="space-y-3">
         {step.options.map((opt) => {

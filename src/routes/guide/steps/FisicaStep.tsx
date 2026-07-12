@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faCheck,
-  faImage,
   faFaceSmile,
   faFaceMeh,
   faFaceFrown,
@@ -162,8 +161,8 @@ export function FisicaStep({ step }: { step: Extract<Step, { kind: 'fisica' }> }
               {painadItems.map((item) => (
                 <div key={item.id}>
                   <div className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-dashed border-forest/25 text-forest/30">
-                      <FontAwesomeIcon icon={faImage} className="text-sm" />
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-sage-100 text-moss">
+                      <FontAwesomeIcon icon={item.icon} className="text-base" />
                     </span>
                     <p className="text-sm font-medium text-forest">{item.label}</p>
                   </div>
@@ -197,9 +196,6 @@ export function FisicaStep({ step }: { step: Extract<Step, { kind: 'fisica' }> }
                 <span className="text-sm text-forest/60 tabular-nums">{pScore} pontos</span>
               </div>
             )}
-            <p className="mt-3 text-xs text-forest/45">
-              As ilustrações de cada item entram quando a cliente enviar os assets.
-            </p>
           </div>
         )}
 

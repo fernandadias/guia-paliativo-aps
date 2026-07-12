@@ -200,13 +200,6 @@ export function buildSections(answers: Answers): ResultSection[] {
     if (outroNome && esas.outro != null) add(outroNome, String(esas.outro))
   })
 
-  // Comunicação (SPIKES)
-  section('Comunicação · SPIKES', (add) => {
-    const spikes = asRecord<boolean>(answers.spikes)
-    const n = Object.values(spikes).filter(Boolean).length
-    if (n > 0) add('Etapas percorridas', `${n} de 6`)
-  })
-
   // Plano compartilhado
   section('Plano compartilhado', (add) => {
     const plano = asRecord(answers.plano)
@@ -219,7 +212,7 @@ export function buildSections(answers: Answers): ResultSection[] {
   // Reflexão
   section('Reflexão', (add) => {
     const r = asRecord(answers.reflexao)
-    add('O que familiar e paciente me traz para registro / pendência', r.registro)
+    add('O que familiar e paciente me trazem para registro / pendência', r.registro)
   })
 
   // DAV

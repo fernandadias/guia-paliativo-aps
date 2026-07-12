@@ -7,7 +7,7 @@
  * Reestruturação v2 (ver .design-prototype/v2-planejamento/mapa.html):
  *   - Fluxo: intro > doença > (surpresa > [recomendação] > SPICT gerais > SPICT clínicos > PPS) > resultado
  *            > cinco dimensões (física, psicológica, social, espiritual, familiar, Edmonton)
- *            > SPIKES > plano > reflexão > DAV > resumo
+ *            > plano > reflexão > DAV > resumo
  *   - Telas terminais: "reavaliar" (doença = não) e "acolhimento" (morte no PPS).
  *   - Telas do Épico C entram como PLACEHOLDER navegável (kind 'placeholder').
  *   - Conteúdo clínico é placeholder; parte da copy depende da cliente.
@@ -30,7 +30,6 @@ export type StepId =
   | 'espiritual'
   | 'familiar'
   | 'edmonton'
-  | 'spikes'
   | 'plano'
   | 'reflexao'
   | 'dav'
@@ -59,6 +58,8 @@ export type Step = StepCommon &
         kind: 'choice'
         kicker: string
         question: string
+        body?: string
+        poem?: { lines: string[]; author?: string }
         options: ChoiceOption[]
         answerKey: string
         todo?: boolean
@@ -297,54 +298,7 @@ export const steps: Record<StepId, Step> = {
     answerKey: 'edmonton',
   },
 
-  // ── Comunicação e plano ───────────────────────────────────
-  spikes: {
-    id: 'spikes',
-    kind: 'checklist',
-    progress: true,
-    kicker: 'Comunicação',
-    title: 'SPIKES: Comunicação de más notícias',
-    intro: 'Um roteiro para a conversa. Marque conforme avança; toque em "Mais detalhes" para ver a descrição.',
-    answerKey: 'spikes',
-    items: [
-      {
-        id: 'spikes-s',
-        code: 'S',
-        label: 'Setting up · Preparando-se para a conversa',
-        detail: 'No contexto domiciliar o paciente costuma se sentir mais à vontade. Aproveite o ambiente para uma comunicação aberta e transparente.',
-      },
-      {
-        id: 'spikes-p',
-        code: 'P',
-        label: 'Perception · Avaliação da percepção do paciente',
-        detail: 'Observe o contexto domiciliar e pergunte o que já foi dito ao paciente, cuidador e família sobre a doença.',
-      },
-      {
-        id: 'spikes-i',
-        code: 'I',
-        label: 'Invitation · Convidando para o diálogo',
-        detail: 'Questione se o paciente quer entender mais sobre o processo de saúde e doença.',
-      },
-      {
-        id: 'spikes-k',
-        code: 'K',
-        label: 'Knowledge · Transmitindo as informações',
-        detail: 'Informação clara e adaptada ao nível de compreensão. Evite excesso de termos técnicos, permita perguntas e divida a informação em cada visita.',
-      },
-      {
-        id: 'spikes-e',
-        code: 'E',
-        label: 'Emotions · Expressando e validando as informações',
-        detail: 'Favoreça a expressão do paciente e da família e acolha os sentimentos. Se chorar, espere retomar. Evite dizer que tudo ficará bem.',
-      },
-      {
-        id: 'spikes-s2',
-        code: 'S',
-        label: 'Summarize · Resumo e pactuação das ações',
-        detail: 'Ao fim da visita, construam juntos um plano de cuidados que considere o que foi conversado, revisando pelo entendimento do paciente.',
-      },
-    ],
-  },
+  // ── Plano ─────────────────────────────────────────────────
   plano: {
     id: 'plano',
     kind: 'plano',
@@ -358,7 +312,7 @@ export const steps: Record<StepId, Step> = {
     kind: 'fields',
     progress: true,
     kicker: 'Reflexão',
-    title: 'O que familiar e paciente me traz para registro / pendência?',
+    title: 'O que familiar e paciente me trazem para registro / pendência?',
     answerKey: 'reflexao',
     fields: [
       { id: 'registro', label: '', placeholder: 'Escreva livremente…', multiline: true },
@@ -371,6 +325,17 @@ export const steps: Record<StepId, Step> = {
     pendingClient: true,
     kicker: 'DAV',
     question: 'Qual a capacidade de decisão do paciente neste momento?',
+    body: 'Nem sempre é possível mudar o curso da doença. Mas ainda é possível conversar sobre escolhas, desejos e o que faz sentido para cada pessoa.',
+    poem: {
+      lines: [
+        'Com a chave na mão',
+        'quer abrir a porta,',
+        'não existe porta;',
+        'quer morrer no mar,',
+        'mas o mar secou;',
+      ],
+      author: 'Carlos Drummond de Andrade',
+    },
     answerKey: 'dav',
     options: [
       {
@@ -459,8 +424,6 @@ export function getNextStepId(current: StepId, answers: Answers): StepId | null 
     case 'familiar':
       return 'edmonton'
     case 'edmonton':
-      return 'spikes'
-    case 'spikes':
       return 'plano'
     case 'plano':
       return 'reflexao'
