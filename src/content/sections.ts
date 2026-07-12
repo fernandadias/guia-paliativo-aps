@@ -65,7 +65,7 @@ export const sections: Section[] = [
   {
     slug: 'por-que-aps',
     path: '/por-que-aps',
-    menuLabel: 'Por que atuar em CP na APS',
+    menuLabel: 'Por que atuar em cuidados paliativos na APS',
     kicker: 'O seu papel',
     title: 'Por que você deve atuar em cuidados paliativos na APS',
     intro:
@@ -86,7 +86,7 @@ export const sections: Section[] = [
   {
     slug: 'politica',
     path: '/politica',
-    menuLabel: 'Política Nacional de CP',
+    menuLabel: 'Política Nacional de Cuidados Paliativos',
     kicker: 'Marco normativo',
     title: 'Política Nacional de Cuidados Paliativos',
     intro:
