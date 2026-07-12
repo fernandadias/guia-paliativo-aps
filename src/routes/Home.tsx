@@ -79,9 +79,9 @@ function Hero() {
             Presença, ciência e cuidado: passo a passo.
           </p>
           <img
-            src="/imagens/logo_prof-saude.png"
+            src="/imagens/logo_prof-saude-horizontal.png"
             alt="PROFSAÚDE — Mestrado Profissional em Saúde da Família. Realização: ABRASCO, Fiocruz e Ministério da Saúde."
-            className="mt-8 h-14 w-auto sm:h-16"
+            className="mx-auto mt-8 h-8 w-auto max-w-full sm:mx-0 sm:h-10"
           />
         </motion.div>
       </div>
