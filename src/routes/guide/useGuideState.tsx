@@ -98,7 +98,11 @@ function reducer(state: GuideState, action: Action): GuideState {
   }
 }
 
+export type GuideMode = 'page' | 'fast'
+
 interface GuideContextValue extends GuideState {
+  /** 'page' = wizard tela a tela; 'fast' = checklist em scroll único. */
+  mode: GuideMode
   step: (typeof steps)[StepId]
   answer: (key: string, value: unknown) => void
   next: () => void
@@ -118,7 +122,13 @@ interface GuideContextValue extends GuideState {
 
 const GuideContext = createContext<GuideContextValue | null>(null)
 
-export function GuideProvider({ children }: { children: ReactNode }) {
+export function GuideProvider({
+  children,
+  mode = 'page',
+}: {
+  children: ReactNode
+  mode?: GuideMode
+}) {
   const [state, dispatch] = useReducer(reducer, undefined, loadState)
 
   // Salva a sessão a cada mudança (some ao fechar a aba).
@@ -133,23 +143,31 @@ export function GuideProvider({ children }: { children: ReactNode }) {
   const answer = useCallback((key: string, value: unknown) => {
     dispatch({ type: 'answer', key, value })
   }, [])
-  const next = useCallback(() => dispatch({ type: 'next' }), [])
+  // No modo rápido não há navegação entre telas: next é inócuo e answerAndNext
+  // apenas grava a resposta (a revelação das etapas é recalculada pelo checklist).
+  const next = useCallback(() => {
+    if (mode !== 'fast') dispatch({ type: 'next' })
+  }, [mode])
   const back = useCallback(() => dispatch({ type: 'back' }), [])
   const reset = useCallback(() => dispatch({ type: 'reset' }), [])
   const finish = useCallback(() => dispatch({ type: 'finish' }), [])
 
   // answer + next em um passo só. Os dispatches são aplicados em ordem:
   // o reducer de 'next' já enxerga a resposta gravada por 'answer'.
-  const answerAndNext = useCallback((key: string, value: unknown) => {
-    dispatch({ type: 'answer', key, value })
-    dispatch({ type: 'next' })
-  }, [])
+  const answerAndNext = useCallback(
+    (key: string, value: unknown) => {
+      dispatch({ type: 'answer', key, value })
+      if (mode !== 'fast') dispatch({ type: 'next' })
+    },
+    [mode],
+  )
 
   const value = useMemo<GuideContextValue>(() => {
     const step = steps[state.current]
     const progress = getProgress(state.current, state.history, state.answers)
     return {
       ...state,
+      mode,
       step,
       answer,
       next,
@@ -162,7 +180,7 @@ export function GuideProvider({ children }: { children: ReactNode }) {
       progressTotal: progress.total,
       atTerminal: progress.atTerminal,
     }
-  }, [state, answer, next, back, reset, answerAndNext, finish])
+  }, [state, mode, answer, next, back, reset, answerAndNext, finish])
 
   return <GuideContext.Provider value={value}>{children}</GuideContext.Provider>
 }

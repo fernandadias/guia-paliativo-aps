@@ -2,6 +2,7 @@ import { useEffect, useRef, type ReactNode } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { Button } from '@/components/ui/Button'
+import { useGuide } from './useGuideState'
 
 interface StepShellProps {
   kicker?: string
@@ -26,15 +27,36 @@ export function StepShell({
   onContinue,
   continueDisabled,
 }: StepShellProps) {
+  const { mode } = useGuide()
+  const fast = mode === 'fast'
   const titleRef = useRef<HTMLHeadingElement>(null)
   const topRef = useRef<HTMLDivElement>(null)
 
-  // Ao entrar em uma etapa, volta ao topo e leva o foco para o título.
+  // Ao entrar em uma etapa (só no wizard), volta ao topo e foca o título.
+  // No modo rápido as etapas convivem numa página; não faz sentido rolar.
   useEffect(() => {
+    if (fast) return
     window.scrollTo({ top: 0 })
     const el = titleRef.current ?? topRef.current
     el?.focus({ preventScroll: true })
-  }, [])
+  }, [fast])
+
+  if (fast) {
+    return (
+      <div className="rounded-3xl border border-forest/10 bg-paper p-6 sm:p-7">
+        {kicker && (
+          <span className="mb-2 block text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-moss">
+            {kicker}
+          </span>
+        )}
+        {title && (
+          <h2 className="font-serif text-2xl leading-tight text-forest">{title}</h2>
+        )}
+        {note && <p className="mt-3 leading-relaxed text-forest/60">{note}</p>}
+        <div className="mt-6">{children}</div>
+      </div>
+    )
+  }
 
   return (
     <div className="mx-auto flex min-h-[calc(100svh-3.5rem)] w-full max-w-2xl flex-col px-6 pt-10 sm:pt-16">

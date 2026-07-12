@@ -76,7 +76,7 @@ export function GuideIntro({ onStart, musicOn, onToggleMusic }: GuideIntroProps)
         </motion.div>
 
         <motion.div
-          className="flex justify-center"
+          className="flex flex-col items-center gap-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ ...gentle, delay: 0.3 }}
@@ -85,6 +85,12 @@ export function GuideIntro({ onStart, musicOn, onToggleMusic }: GuideIntroProps)
             Começar
             <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
           </Button>
+          <Link
+            to="/guia/rapido"
+            className="text-sm text-cream-50/70 underline-offset-4 transition-colors hover:text-cream-50 hover:underline"
+          >
+            Ir mais rápido: versão em checklist
+          </Link>
         </motion.div>
       </div>
     </section>
