@@ -94,8 +94,7 @@ function buildItems(answers: Answers): Item[] {
   // Familiar
   const fam = (answers.dimFamiliar as Record<string, string> | undefined) ?? {}
   push('Dinâmica familiar', (fam.dinamica ?? '').trim())
-  if (fam.sobrecarga) push('Sobrecarga do cuidador', fam.sobrecarga === 'sim' ? 'Sim' : 'Não')
-  push('Conflitos', (fam.conflitos ?? '').trim())
+  push('Ações para o cuidador', (fam.conflitos ?? '').trim())
 
   const zarit = answers.zarit as Record<string, number> | undefined
   if (zarit && zaritComplete(zarit)) {
