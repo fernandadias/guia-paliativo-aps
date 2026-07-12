@@ -11,8 +11,9 @@ export type SectionBlock =
   | { kind: 'paragraph'; text: string; todo?: boolean }
   | { kind: 'quote'; text: string; author?: string; todo?: boolean }
   | { kind: 'list'; title?: string; items: string[]; todo?: boolean }
-  | { kind: 'callout'; icon: string; title: string; text?: string; items?: string[]; todo?: boolean }
+  | { kind: 'callout'; icon: string; title: string; text?: string; items?: string[]; href?: string; todo?: boolean }
   | { kind: 'link'; text: string; href: string; todo?: boolean }
+  | { kind: 'links'; title?: string; items: { text: string; href: string }[]; todo?: boolean }
 
 export interface Section {
   slug: string
@@ -132,26 +133,88 @@ export const sections: Section[] = [
     intro:
       'Instrumentos que ajudam a identificar quem se beneficia do cuidado paliativo, e quando.',
     blurb: 'PPS, Pergunta Surpresa e SPICT-BR: quem se beneficia, e quando.',
-    todo: true,
     blocks: [
-      { kind: 'lead', text: LOREM, todo: true },
       {
         kind: 'callout',
         icon: 'gauge',
         title: 'PPS: Palliative Performance Scale',
         text: 'Avalia a funcionalidade e ajuda a situar o paciente na linha do cuidado.',
-        todo: true,
+        href: '/pdfs/PPS CUIDADOS PALIATIVOS.pdf',
       },
       {
         kind: 'callout',
         icon: 'clipboard-question',
-        title: 'Pergunta Surpresa & SPICT-BR',
-        text: 'Instrumentos de triagem para identificar necessidade de cuidados paliativos.',
-        todo: true,
+        title: 'SPICT-BR',
+        text:
+          'Instrumento de triagem que ajuda os profissionais de saúde a identificar precocemente ' +
+          'pacientes que podem se beneficiar de uma abordagem paliativa, antes que haja um declínio ' +
+          'visível das condições de saúde.',
+        href: '/pdfs/SPICT-BR-VERSÃO ACESSÍVEL.pdf',
+      },
+      {
+        kind: 'callout',
+        icon: 'hand-holding-medical',
+        title: 'Plano de cuidados paliativos',
+        text:
+          'O Plano de Cuidados Paliativos é o documento em que a equipe organiza, de forma ' +
+          'individualizada, as ações voltadas ao alívio do sofrimento do paciente e da família. ' +
+          'Ele parte do conceito de “dor total”, proposto por Cicely Saunders, segundo o qual o ' +
+          'sofrimento no fim da vida nunca é apenas físico, mas se manifesta em quatro dimensões ' +
+          'interligadas.',
+        href: '/pdfs/DIRETIVA ANTECIPADA DE CUIDADO.pdf',
+      },
+      {
+        kind: 'callout',
+        icon: 'dove',
+        title: 'SPIKES — protocolo de comunicação de más notícias',
+        text:
+          'O SPIKES orienta profissionais na comunicação de más notícias, como um diagnóstico grave, ' +
+          'o agravamento de uma doença ou o óbito de um paciente. Seu nome é um acrônimo que representa ' +
+          'seis etapas sequenciais da conversa.',
+        href: '/pdfs/SPIKES.pdf',
+      },
+      {
+        kind: 'callout',
+        icon: 'people-group',
+        title: 'Escala de ZARIT',
+        text:
+          'A Escala de ZARIT é um instrumento para avaliar a sobrecarga do cuidador, ou seja, o quanto ' +
+          'a rotina de cuidar de uma pessoa com doença crônica ou em cuidados paliativos está afetando ' +
+          'a vida física, emocional, social e financeira de quem cuida.',
+        href: '/pdfs/ESCALA DE ZARIT CUIDADOS PALIATIVOS.pdf',
+      },
+      {
+        kind: 'callout',
+        icon: 'wave-square',
+        title: 'ESAS',
+        text:
+          'O ESAS, sigla para Edmonton Symptom Assessment System, é um instrumento de avaliação de ' +
+          'sintomas que mensura, em escala numérica, a intensidade de sintomas físicos e psicológicos ' +
+          'apresentados pelo paciente em cuidados paliativos, como dor, fadiga, náusea, ansiedade, ' +
+          'depressão, sonolência e falta de ar.',
+        href: '/pdfs/ESAS-r CUIDADOS PALIATIVOS.pdf',
+      },
+      {
+        kind: 'links',
+        title: 'Para mais informações, acesse:',
+        items: [
+          {
+            text: 'Kit de Cuidados Paliativos',
+            href: 'https://prefeitura.sp.gov.br/documents/d/saude/kit_cuidados_paliativos_v1_24-pdf',
+          },
+          {
+            text: 'Instrumento de Avaliação de Necessidades de Cuidados Paliativos',
+            href: 'https://prefeitura.sp.gov.br/documents/d/saude/incp-instrumento-de-avaliacao-de-necessidades-de-cuidados-paliativos-pdf',
+          },
+          {
+            text: 'Diretriz Técnica de Cuidados Paliativos na Atenção Domiciliar',
+            href: 'https://prefeitura.sp.gov.br/documents/d/saude/diretrizes_cuidados_paliativos_25_v2-pdf-1',
+          },
+        ],
       },
       {
         kind: 'paragraph',
-        text: 'Estas ferramentas estão aplicadas de forma prática no Guia de direção clínica.',
+        text: 'Algumas dessas ferramentas estão aplicadas de forma prática no Guia de direção clínica.',
       },
     ],
   },

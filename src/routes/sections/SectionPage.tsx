@@ -84,7 +84,7 @@ function Block({ block }: { block: SectionBlock }) {
     case 'link':
       return (
         <a
-          href={block.href}
+          href={encodeURI(block.href)}
           target="_blank"
           rel="noopener noreferrer"
           className="group inline-flex items-center gap-2 font-medium text-moss transition-colors hover:text-forest"
@@ -96,13 +96,54 @@ function Block({ block }: { block: SectionBlock }) {
           />
         </a>
       )
-    case 'callout':
+    case 'links':
       return (
-        <Card tone="sage">
+        <div>
+          {block.title && (
+            <p className="mb-4 leading-relaxed text-forest/70">{block.title}</p>
+          )}
+          <ul className="space-y-3">
+            {block.items.map((item, i) => (
+              <li key={i}>
+                <a
+                  href={encodeURI(item.href)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-baseline gap-2 font-medium text-moss transition-colors hover:text-forest"
+                >
+                  {item.text}
+                  <FontAwesomeIcon
+                    icon={faArrowUpRightFromSquare}
+                    className="text-xs transition-transform duration-300 ease-gentle group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    case 'callout': {
+      const inner = (
+        <Card
+          tone="sage"
+          className={
+            block.href
+              ? 'transition-colors group-hover:border-moss/40 group-hover:bg-sage-100'
+              : undefined
+          }
+        >
           <div className="flex gap-4">
             <FontAwesomeIcon icon={getIcon(block.icon)} className="mt-1 text-lg text-moss" />
-            <div>
-              <h3 className="font-serif text-xl text-forest">{block.title}</h3>
+            <div className="flex-1">
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="font-serif text-xl text-forest">{block.title}</h3>
+                {block.href && (
+                  <FontAwesomeIcon
+                    icon={faArrowUpRightFromSquare}
+                    className="mt-1.5 shrink-0 text-sm text-moss transition-transform duration-300 ease-gentle group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  />
+                )}
+              </div>
               {block.text && (
                 <p className="mt-1.5 leading-relaxed text-forest/70">{block.text}</p>
               )}
@@ -120,5 +161,18 @@ function Block({ block }: { block: SectionBlock }) {
           </div>
         </Card>
       )
+      return block.href ? (
+        <a
+          href={encodeURI(block.href)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group block"
+        >
+          {inner}
+        </a>
+      ) : (
+        inner
+      )
+    }
   }
 }
