@@ -7,6 +7,7 @@ import { sections } from '@/content/sections'
 import { gentle, gentleFast } from '@/lib/motion'
 
 const items = [
+  { label: 'E agora, José?', path: '/e-agora-jose' },
   ...sections.map((s) => ({ label: s.menuLabel, path: s.path })),
   { label: 'Guia de direção clínica', path: '/guia' },
 ]

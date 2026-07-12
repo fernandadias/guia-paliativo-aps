@@ -40,7 +40,6 @@ export const sections: Section[] = [
     intro:
       'Cuidados paliativos não significam desistir. Significam cuidar melhor, e podem começar muito antes da terminalidade.',
     blurb: 'O conceito, os princípios e por que o cuidado pode começar cedo.',
-    todo: true,
     blocks: [
       {
         kind: 'lead',
@@ -61,7 +60,6 @@ export const sections: Section[] = [
           'Planejamento compartilhado do cuidado',
         ],
       },
-      { kind: 'paragraph', text: LOREM, todo: true },
     ],
   },
   {

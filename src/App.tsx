@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { SiteLayout } from '@/components/layout/Layout'
 import Home from '@/routes/Home'
+import EAgoraJose from '@/routes/EAgoraJose'
 import SectionPage from '@/routes/sections/SectionPage'
 import Guide from '@/routes/guide/Guide'
 import FastGuide from '@/routes/guide/FastGuide'
@@ -17,6 +18,7 @@ export default function App() {
       {/* Site informativo com header/footer e transições de página. */}
       <Route element={<SiteLayout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/e-agora-jose" element={<EAgoraJose />} />
         {sections.map((s) => (
           <Route key={s.path} path={s.path} element={<SectionPage />} />
         ))}
