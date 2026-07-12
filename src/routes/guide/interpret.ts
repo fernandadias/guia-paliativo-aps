@@ -37,9 +37,7 @@ export function resultReading(answers: Answers): ResultReading {
     return {
       tone: 'atencao',
       title: 'Este paciente apresenta critérios para inclusão em cuidados paliativos.',
-      body: `${spict} indicador(es) presente(s)${
-        pps ? `, com funcionalidade em ${pps.label.toLowerCase()}` : ''
-      }. Recomenda-se elevada atenção ao planejamento compartilhado.`,
+      body: 'Recomenda-se elevada atenção ao planejamento compartilhado.',
     }
   }
 

@@ -71,6 +71,22 @@ export function FisicaStep({ step }: { step: Extract<Step, { kind: 'fisica' }> }
       continueDisabled={!temDor}
     >
       <div className="space-y-6">
+        <figure className="border-l-2 border-moss/40 pl-5">
+          <blockquote className="font-serif text-lg italic leading-relaxed text-forest/80 sm:text-xl">
+            {[
+              'E agora, José?',
+              'Sua doce palavra,',
+              'seu instante de febre,',
+              'sua gula e jejum',
+              '[...] seu ódio — e agora?',
+            ].map((linha, i) => (
+              <span key={i} className="block">
+                {linha}
+              </span>
+            ))}
+          </blockquote>
+        </figure>
+
         <ChoiceRow
           label="Há dor?"
           value={temDor}

@@ -15,7 +15,6 @@
 
 export type StepId =
   | 'consentimento'
-  | 'intro'
   | 'doenca'
   | 'reavaliar'
   | 'surpresa'
@@ -130,24 +129,10 @@ export const steps: Record<StepId, Step> = {
     id: 'consentimento',
     kind: 'consent',
     progress: false,
-    pendingClient: true,
     kicker: 'Antes de começar',
     title: 'Uso dos dados desta avaliação',
-    body: 'Podemos guardar este preenchimento de forma anônima, apenas com um identificador, para pesquisa. Nenhum dado pessoal é armazenado. (Texto final: cliente / CEP.)',
+    body: 'Podemos guardar este preenchimento de forma anônima, apenas com um identificador, para pesquisa. Nenhum dado pessoal é armazenado.',
     answerKey: 'consentimento',
-  },
-
-  // ── Abertura ──────────────────────────────────────────────
-  intro: {
-    id: 'intro',
-    kind: 'intro',
-    progress: true,
-    pendingClient: true,
-    kicker: 'Antes de tudo',
-    title: 'O que são cuidados paliativos?',
-    body: 'Cuidados paliativos não significam desistir. Significam cuidar melhor. Apenas os conceitos essenciais, sem texto enorme. (Copy final virá da cliente.)',
-    asideVerseKey: 'abertura',
-    todo: true,
   },
 
   // ── Triagem ───────────────────────────────────────────────
@@ -253,7 +238,7 @@ export const steps: Record<StepId, Step> = {
     id: 'fisica',
     kind: 'fisica',
     progress: true,
-    kicker: 'Dimensão física',
+    kicker: 'Diagrama de abordagem multidimensional',
     title: 'Dor',
     intro: 'A avaliação começa pela dor.',
     answerKey: 'fisica',
@@ -447,8 +432,6 @@ export type Answers = Record<string, unknown>
 export function getNextStepId(current: StepId, answers: Answers): StepId | null {
   switch (current) {
     case 'consentimento':
-      return 'intro'
-    case 'intro':
       return 'doenca'
     case 'doenca':
       return answers.doencaAmeacadora === 'nao' ? 'reavaliar' : 'surpresa'
