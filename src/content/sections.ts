@@ -11,7 +11,7 @@ export type SectionBlock =
   | { kind: 'paragraph'; text: string; todo?: boolean }
   | { kind: 'quote'; text: string; author?: string; todo?: boolean }
   | { kind: 'list'; title?: string; items: string[]; todo?: boolean }
-  | { kind: 'callout'; icon: string; title: string; text: string; todo?: boolean }
+  | { kind: 'callout'; icon: string; title: string; text?: string; items?: string[]; todo?: boolean }
 
 export interface Section {
   slug: string
@@ -34,24 +34,25 @@ export const sections: Section[] = [
   {
     slug: 'sobre',
     path: '/sobre',
-    menuLabel: 'O que são cuidados paliativos?',
+    menuLabel: 'O que são cuidados paliativos',
     kicker: 'Antes de tudo',
-    title: 'O que são cuidados paliativos?',
+    title: 'O que são cuidados paliativos',
     intro:
       'Cuidados paliativos não significam desistir. Significam cuidar melhor, e podem começar muito antes da terminalidade.',
     blurb: 'O conceito, os princípios e por que o cuidado pode começar cedo.',
     todo: true,
     blocks: [
-      { kind: 'lead', text: LOREM, todo: true },
+      {
+        kind: 'lead',
+        text:
+          '“uma abordagem que melhora a qualidade de vida de pacientes com doenças que ameacem a vida, ' +
+          'integrando a família nesse contexto, para prevenção e alívio do sofrimento por meio da ' +
+          'identificação precoce, avaliação correta e tratamento da dor e de outros problemas físicos, ' +
+          'psicossociais e espirituais” (OMS, 2020)',
+      },
       {
         kind: 'callout',
         icon: 'heart',
-        title: 'Um princípio',
-        text: 'Nem todo sofrimento precisa esperar a terminalidade para ser cuidado.',
-      },
-      { kind: 'paragraph', text: LOREM, todo: true },
-      {
-        kind: 'list',
         title: 'Conceitos essenciais',
         items: [
           'Cuidado centrado na pessoa e na sua família',
@@ -59,8 +60,8 @@ export const sections: Section[] = [
           'Comunicação honesta e compassiva',
           'Planejamento compartilhado do cuidado',
         ],
-        todo: true,
       },
+      { kind: 'paragraph', text: LOREM, todo: true },
     ],
   },
   {

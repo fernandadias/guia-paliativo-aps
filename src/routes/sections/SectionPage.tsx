@@ -87,7 +87,19 @@ function Block({ block }: { block: SectionBlock }) {
             <FontAwesomeIcon icon={getIcon(block.icon)} className="mt-1 text-lg text-moss" />
             <div>
               <h3 className="font-serif text-xl text-forest">{block.title}</h3>
-              <p className="mt-1.5 leading-relaxed text-forest/70">{block.text}</p>
+              {block.text && (
+                <p className="mt-1.5 leading-relaxed text-forest/70">{block.text}</p>
+              )}
+              {block.items && (
+                <ul className="mt-3 space-y-2.5">
+                  {block.items.map((item, i) => (
+                    <li key={i} className="flex gap-3 text-forest/70">
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-moss" />
+                      <span className="leading-relaxed">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
         </Card>
