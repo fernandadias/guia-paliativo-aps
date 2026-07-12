@@ -59,25 +59,28 @@ export function SummaryStep({ step }: { step: Extract<Step, { kind: 'summary' }>
     }
   }
 
+  const pdfButton = (
+    <button
+      onClick={baixarPdf}
+      disabled={downloading}
+      className="inline-flex items-center gap-2 rounded-full bg-forest px-6 py-3 text-sm font-medium text-cream-50 transition-colors hover:bg-pine disabled:opacity-60"
+    >
+      <FontAwesomeIcon
+        icon={downloading ? faSpinner : faFilePdf}
+        className={`text-sm ${downloading ? 'animate-spin' : ''}`}
+      />
+      {downloading ? 'Gerando PDF…' : 'Baixar PDF'}
+    </button>
+  )
+
   return (
     <StepShell kicker={step.kicker} title={step.title} todo={step.todo}>
-      <p className="text-forest/60">
-        Um retrato do que foi construído neste atendimento. Guarde o PDF com você: ele traz o
-        identificador deste preenchimento.
+      <p className="text-sm text-forest/55">
+        {formatDateTime(result.finishedAt)} · {formatDuration(result.durationMs)}
       </p>
 
-      {/* Identificador + metadados */}
-      <div className="mt-6 flex flex-wrap items-end justify-between gap-4 rounded-3xl border border-moss/20 bg-sage-100 p-5 sm:p-6">
-        <div>
-          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-moss/80">
-            Identificador do preenchimento
-          </p>
-          <p className="mt-1 font-mono text-sm text-forest/90 sm:text-base">{fillId}</p>
-        </div>
-        <p className="text-xs leading-relaxed text-forest/55">
-          {formatDateTime(result.finishedAt)} · {formatDuration(result.durationMs)}
-        </p>
-      </div>
+      {/* CTA principal (topo) */}
+      <div className="mt-5">{pdfButton}</div>
 
       {/* Respostas estruturadas */}
       <div className="mt-8 space-y-8">
@@ -100,18 +103,7 @@ export function SummaryStep({ step }: { step: Extract<Step, { kind: 'summary' }>
 
       {/* Ações */}
       <div className="mt-8 flex flex-wrap items-center gap-3">
-        <button
-          onClick={baixarPdf}
-          disabled={downloading}
-          className="inline-flex items-center gap-2 rounded-full bg-forest px-6 py-3 text-sm font-medium text-cream-50 transition-colors hover:bg-pine disabled:opacity-60"
-        >
-          <FontAwesomeIcon
-            icon={downloading ? faSpinner : faFilePdf}
-            className={`text-sm ${downloading ? 'animate-spin' : ''}`}
-          />
-          {downloading ? 'Gerando PDF…' : 'Baixar PDF'}
-        </button>
-
+        {pdfButton}
         <button
           onClick={reset}
           className="inline-flex items-center gap-2 text-sm text-forest/55 transition-colors hover:text-moss"
@@ -126,6 +118,14 @@ export function SummaryStep({ step }: { step: Extract<Step, { kind: 'summary' }>
           Não foi possível gerar o PDF agora. Verifique a conexão e tente novamente.
         </p>
       )}
+
+      {/* Identificador — sutil, no rodapé do resumo */}
+      <div className="mt-10 border-t border-forest/10 pt-4">
+        <span className="text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-forest/40">
+          Identificador
+        </span>
+        <p className="mt-0.5 font-mono text-xs text-forest/45">{fillId}</p>
+      </div>
     </StepShell>
   )
 }

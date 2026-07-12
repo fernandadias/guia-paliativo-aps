@@ -133,8 +133,7 @@ export const steps: Record<StepId, Step> = {
     pendingClient: true,
     kicker: 'Antes de começar',
     title: 'Uso dos dados desta avaliação',
-    body: 'Os dados deste preenchimento podem ser guardados de forma anônima e usados para pesquisa e melhoria do cuidado paliativo na Atenção Primária. Não guardamos nenhum dado pessoal do paciente nem do profissional: cada preenchimento recebe apenas um identificador. Você pode seguir com a avaliação mesmo sem consentir; nesse caso, nada é enviado. (Texto final do termo virá da cliente / CEP.)',
-    note: 'Você pode baixar o resultado em PDF ao final, independentemente desta escolha.',
+    body: 'Podemos guardar este preenchimento de forma anônima, apenas com um identificador, para pesquisa. Nenhum dado pessoal é armazenado. (Texto final: cliente / CEP.)',
     answerKey: 'consentimento',
   },
 

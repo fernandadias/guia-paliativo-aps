@@ -66,8 +66,22 @@ const s = StyleSheet.create({
     marginBottom: 6,
   },
   title: { fontFamily: 'EB Garamond', fontSize: 26, color: C.forest },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
   metaRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: 8 },
   metaItem: { fontSize: 8.5, color: '#22392eaa' },
+  idRight: { alignItems: 'flex-end', maxWidth: 200, paddingTop: 4 },
+  idLabelRight: {
+    fontSize: 7,
+    fontWeight: 600,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    color: '#22392e66',
+  },
+  idValueRight: { fontFamily: 'Figtree', fontSize: 8, color: '#22392e88', marginTop: 2 },
   rule: { height: 1, backgroundColor: '#22392e1a', marginTop: 16, marginBottom: 4 },
   section: { marginTop: 18 },
   sectionTitle: {
@@ -106,22 +120,6 @@ const s = StyleSheet.create({
     borderTopColor: '#22392e1a',
     paddingTop: 8,
   },
-  idBox: {
-    marginTop: 10,
-    backgroundColor: C.sage100,
-    borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    alignSelf: 'flex-start',
-  },
-  idLabel: {
-    fontSize: 7,
-    fontWeight: 600,
-    letterSpacing: 1,
-    textTransform: 'uppercase',
-    color: C.moss,
-  },
-  idValue: { fontFamily: 'Figtree', fontSize: 11, color: C.forest, marginTop: 2 },
 })
 
 function ReportDocument({ result }: { result: GuideResult }) {
@@ -132,16 +130,19 @@ function ReportDocument({ result }: { result: GuideResult }) {
       subject="Resumo do atendimento"
     >
       <Page size="A4" style={s.page}>
-        <Text style={s.kicker}>Guia Paliativo APS</Text>
-        <Text style={s.title}>Resumo do atendimento</Text>
-        <View style={s.metaRow}>
-          <Text style={s.metaItem}>Realizado em {formatDateTime(result.finishedAt)}</Text>
-          <Text style={s.metaItem}> · Duração {formatDuration(result.durationMs)}</Text>
-        </View>
-
-        <View style={s.idBox}>
-          <Text style={s.idLabel}>Identificador do preenchimento</Text>
-          <Text style={s.idValue}>{result.fillId}</Text>
+        <View style={s.headerRow}>
+          <View>
+            <Text style={s.kicker}>Guia Paliativo APS</Text>
+            <Text style={s.title}>Resumo do atendimento</Text>
+            <View style={s.metaRow}>
+              <Text style={s.metaItem}>Realizado em {formatDateTime(result.finishedAt)}</Text>
+              <Text style={s.metaItem}> · Duração {formatDuration(result.durationMs)}</Text>
+            </View>
+          </View>
+          <View style={s.idRight}>
+            <Text style={s.idLabelRight}>Identificador</Text>
+            <Text style={s.idValueRight}>{result.fillId}</Text>
+          </View>
         </View>
 
         <View style={s.rule} />
