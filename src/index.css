@@ -84,6 +84,36 @@
   }
 }
 
+/* Slider ESAS: trilha em gradiente (verde→vermelho) + thumb sóbrio.
+   A cor da escala é a mesma da EVA (dor). */
+.esas-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 0.75rem;
+  border-radius: 9999px;
+  outline: none;
+}
+.esas-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  background: var(--color-forest);
+  border: 2px solid var(--color-paper);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+.esas-slider::-moz-range-thumb {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  background: var(--color-forest);
+  border: 2px solid var(--color-paper);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
 /* Respeita quem prefere menos movimento */
 @media (prefers-reduced-motion: reduce) {
   *,

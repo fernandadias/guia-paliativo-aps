@@ -5,6 +5,25 @@ import type { Step } from '@/content/guide'
 
 type Values = Record<string, number>
 
+/** Gradiente da escala (0→10), igual ao da dor (EVA). */
+const ESAS_GRADIENT =
+  'linear-gradient(to right,#3fae4a,#8fce3f,#f4d13d,#f39c3d,#e8642f,#e23b2e)'
+
+/** Cor discreta por valor (0–10) para refletir no indicador selecionado. */
+const ESAS_COLORS = [
+  '#3fae4a',
+  '#6cbf45',
+  '#8fce3f',
+  '#bcd23e',
+  '#f4d13d',
+  '#f4b93d',
+  '#f39c3d',
+  '#ef7e34',
+  '#e8642f',
+  '#e5502e',
+  '#e23b2e',
+]
+
 export function EdmontonStep({ step }: { step: Extract<Step, { kind: 'edmonton' }> }) {
   const { answers, answer, next } = useGuide()
   const values = (answers[step.answerKey] as Values | undefined) ?? {}
@@ -82,8 +101,9 @@ function SliderRow({ label, hint, left, right, value, onChange, bare }: SliderRo
         </span>
         <span
           className={`flex h-8 min-w-8 items-center justify-center rounded-lg px-2 text-sm font-semibold tabular-nums ${
-            set ? 'bg-moss text-cream-50' : 'bg-forest/10 text-forest/40'
+            set ? 'text-cream-50' : 'bg-forest/10 text-forest/40'
           }`}
+          style={value != null ? { backgroundColor: ESAS_COLORS[value] } : undefined}
         >
           {set ? value : '—'}
         </span>
@@ -95,7 +115,8 @@ function SliderRow({ label, hint, left, right, value, onChange, bare }: SliderRo
         step={1}
         value={set ? value : 0}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="mt-3 w-full cursor-pointer accent-moss"
+        className="esas-slider mt-3 w-full cursor-pointer"
+        style={{ background: ESAS_GRADIENT }}
       />
       <div className="mt-1 flex justify-between text-xs text-forest/45">
         <span>{left}</span>

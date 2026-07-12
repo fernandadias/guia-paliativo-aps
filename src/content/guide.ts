@@ -282,11 +282,10 @@ export const steps: Record<StepId, Step> = {
     id: 'familiar',
     kind: 'familiar',
     progress: true,
-    pendingClient: true,
-    kicker: 'Dimensão familiar',
+    kicker: 'Dinâmica familiar',
     title: 'Familiar',
     answerKey: 'dimFamiliar',
-    intro: 'Dinâmica familiar, sobrecarga do cuidador e conflitos. (As opções com ícone da dinâmica virão da cliente.)',
+    intro: 'Dinâmica familiar, sobrecarga do cuidador e conflitos.',
   },
   edmonton: {
     id: 'edmonton',

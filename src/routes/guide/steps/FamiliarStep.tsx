@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from 'motion/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { StepShell } from '../StepShell'
-import { PendingTag } from '../PendingTag'
 import { useGuide } from '../useGuideState'
 import { gentleFast } from '@/lib/motion'
 import {
@@ -39,11 +38,6 @@ export function FamiliarStep({ step }: { step: Extract<Step, { kind: 'familiar' 
       continueLabel="Continuar"
       onContinue={next}
     >
-      {step.pendingClient && (
-        <div className="mb-5">
-          <PendingTag />
-        </div>
-      )}
       <div className="space-y-6">
         {/* Dinâmica familiar */}
         <label className="block">
@@ -52,9 +46,12 @@ export function FamiliarStep({ step }: { step: Extract<Step, { kind: 'familiar' 
             rows={3}
             value={values.dinamica ?? ''}
             onChange={(e) => setField('dinamica', e.target.value)}
-            placeholder="Anotar… (as opções com ícone virão da cliente)"
+            placeholder="Anotar…"
             className="w-full resize-none rounded-2xl border border-forest/15 bg-cream-50/60 px-4 py-3 leading-relaxed text-forest outline-none transition-colors placeholder:text-forest/30 focus:border-moss"
           />
+          <span className="mt-1.5 block text-xs leading-relaxed text-forest/45">
+            Acompanhamento familiar / Ausência de cuidador apto / Conflitos
+          </span>
         </label>
 
         {/* Sobrecarga do cuidador — ZARIT colapsado */}
