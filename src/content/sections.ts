@@ -71,10 +71,7 @@ export const sections: Section[] = [
     intro:
       'A Atenção Primária é o lugar do vínculo, da longitudinalidade e da proximidade. É onde o cuidado paliativo pode começar mais cedo.',
     blurb: 'Vínculo, longitudinalidade e o lugar da APS na linha de cuidado.',
-    todo: true,
     blocks: [
-      { kind: 'lead', text: LOREM, todo: true },
-      { kind: 'paragraph', text: LOREM, todo: true },
       {
         kind: 'quote',
         text:
@@ -83,7 +80,6 @@ export const sections: Section[] = [
           'eu acho muito importante, porque dá uma qualidade de vida, a pessoa se sente viva, né?',
         author: 'Agente Comunitário de Saúde 2',
       },
-      { kind: 'paragraph', text: LOREM, todo: true },
     ],
   },
   {
