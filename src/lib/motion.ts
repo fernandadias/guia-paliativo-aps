@@ -35,11 +35,15 @@ export const staggerItem: Variants = {
   visible: { opacity: 1, y: 0, transition: gentleFast },
 }
 
-/** Transição de página (via AnimatePresence). */
+/**
+ * Transição de página (via AnimatePresence mode="wait").
+ * Crossfade puro: a página atual some por completo antes de a próxima entrar —
+ * sem deslocamento, para não haver "pulo" entre as telas.
+ */
 export const pageTransition: Variants = {
-  initial: { opacity: 0, y: 12 },
-  animate: { opacity: 1, y: 0, transition: gentle },
-  exit: { opacity: 0, y: -8, transition: gentleFast },
+  initial: { opacity: 0 },
+  animate: { opacity: 1, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+  exit: { opacity: 0, transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] } },
 }
 
 /**
