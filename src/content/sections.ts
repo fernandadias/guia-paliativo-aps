@@ -12,6 +12,7 @@ export type SectionBlock =
   | { kind: 'quote'; text: string; author?: string; todo?: boolean }
   | { kind: 'list'; title?: string; items: string[]; todo?: boolean }
   | { kind: 'callout'; icon: string; title: string; text?: string; items?: string[]; todo?: boolean }
+  | { kind: 'link'; text: string; href: string; todo?: boolean }
 
 export interface Section {
   slug: string
@@ -104,23 +105,22 @@ export const sections: Section[] = [
     menuLabel: 'Política Nacional de Cuidados Paliativos',
     kicker: 'Marco normativo',
     title: 'Política Nacional de Cuidados Paliativos',
-    intro:
-      'O que diz a legislação e como ela ampara a sua prática na APS.',
     blurb: 'O que a legislação garante e como ampara a sua prática.',
-    todo: true,
     blocks: [
-      { kind: 'lead', text: LOREM, todo: true },
       {
-        kind: 'list',
-        title: 'Pontos-chave',
-        items: [
-          'Marco legal e diretrizes',
-          'Organização da rede de atenção',
-          'Papel da APS na linha de cuidado',
-        ],
-        todo: true,
+        kind: 'paragraph',
+        text:
+          'A Política Nacional de Cuidados Paliativos (PNCP), instituída pela Portaria GM/MS nº 3.681, ' +
+          'de 7 de maio de 2024, organiza os cuidados paliativos no âmbito do SUS e estabelece as bases ' +
+          'para a atuação dos profissionais de saúde, orientando a equipe multiprofissional na promoção ' +
+          'de equidade, integralidade e atendimento digno ao paciente, com foco na qualidade de vida ' +
+          'até o último dia.',
       },
-      { kind: 'paragraph', text: LOREM, todo: true },
+      {
+        kind: 'link',
+        text: 'Conheça a política na íntegra aqui',
+        href: 'https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-3.681-de-7-de-maio-de-2024-561223717',
+      },
     ],
   },
   {

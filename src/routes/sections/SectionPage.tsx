@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 import { getIcon } from '@/lib/icons'
 import { PageShell } from '@/components/layout/PageShell'
 import { Card } from '@/components/ui/Card'
@@ -79,6 +80,21 @@ function Block({ block }: { block: SectionBlock }) {
             ))}
           </ul>
         </div>
+      )
+    case 'link':
+      return (
+        <a
+          href={block.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group inline-flex items-center gap-2 font-medium text-moss transition-colors hover:text-forest"
+        >
+          {block.text}
+          <FontAwesomeIcon
+            icon={faArrowUpRightFromSquare}
+            className="text-xs transition-transform duration-300 ease-gentle group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          />
+        </a>
       )
     case 'callout':
       return (
