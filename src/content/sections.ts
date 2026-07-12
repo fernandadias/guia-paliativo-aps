@@ -19,7 +19,7 @@ export interface Section {
   menuLabel: string
   title: string
   kicker: string
-  intro: string
+  intro?: string
   /** Frase curta usada no índice "Para conhecer" da home. */
   blurb: string
   blocks: SectionBlock[]
@@ -68,10 +68,26 @@ export const sections: Section[] = [
     menuLabel: 'Por que atuar em cuidados paliativos na APS',
     kicker: 'O seu papel',
     title: 'Por que você deve atuar em cuidados paliativos na APS',
-    intro:
-      'A Atenção Primária é o lugar do vínculo, da longitudinalidade e da proximidade. É onde o cuidado paliativo pode começar mais cedo.',
     blurb: 'Vínculo, longitudinalidade e o lugar da APS na linha de cuidado.',
     blocks: [
+      {
+        kind: 'paragraph',
+        text:
+          'O cuidado paliativo deve ser exercido na Atenção Primária à Saúde porque é nesse nível que ' +
+          'se estabelece o vínculo mais próximo, contínuo e humanizado entre profissional e paciente, ' +
+          'essencial para acompanhar a pessoa e sua família ao longo de todo o processo de adoecimento ' +
+          'até o último dia de vida.',
+      },
+      {
+        kind: 'callout',
+        icon: 'house-user',
+        title: 'Importância do cuidado paliativo na APS',
+        items: [
+          'Vínculo: proximidade humaniza o cuidado.',
+          'Longitudinalidade: acompanhamento contínuo identifica necessidades cedo.',
+          'Coordenação do cuidado: articula a rede e apoia a família no fim de vida.',
+        ],
+      },
       {
         kind: 'quote',
         text:
