@@ -365,7 +365,7 @@ export const steps: Record<StepId, Step> = {
     id: 'davIncapaz',
     kind: 'intro',
     progress: true,
-    kicker: 'DAV',
+    kicker: 'Plano Antecipado de Cuidados',
     title:
       'Programe com a família ou o cuidador responsável a aplicação do Plano Antecipado de Cuidados.',
     continueLabel: 'Finalizar',
