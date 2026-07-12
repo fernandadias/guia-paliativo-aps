@@ -46,14 +46,12 @@ function Hero() {
         {/* Bloco do título — no mobile desce pro rodapé e centraliza; no desktop fica ao centro à esquerda */}
         <div className="flex flex-1 flex-col items-center justify-end pt-28 pb-6 text-center sm:items-start sm:justify-center sm:pb-10 sm:text-left">
           <motion.h1
-            className="display font-serif text-[4.25rem] leading-[0.9] text-forest sm:text-8xl md:text-[7.5rem]"
+            className="display max-w-2xl font-serif text-[2.5rem] leading-[1.02] text-forest sm:text-6xl md:text-7xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...gentle, delay: 0.1 }}
           >
-            E agora,
-            <br />
-            José?
+            Guia de direção clínica para os cuidados paliativos na APS
           </motion.h1>
 
           <motion.p
@@ -80,6 +78,11 @@ function Hero() {
           <p className="mt-5 text-center text-sm text-forest/55 sm:text-left">
             Presença, ciência e cuidado: passo a passo.
           </p>
+          <img
+            src="/imagens/logo_prof-saude.png"
+            alt="PROFSAÚDE — Mestrado Profissional em Saúde da Família. Realização: ABRASCO, Fiocruz e Ministério da Saúde."
+            className="mt-8 h-14 w-auto sm:h-16"
+          />
         </motion.div>
       </div>
     </section>
