@@ -77,8 +77,11 @@ export const sections: Section[] = [
       { kind: 'paragraph', text: LOREM, todo: true },
       {
         kind: 'quote',
-        text: 'O mais difícil nunca foi falar sobre a morte. Foi perceber que ninguém havia começado essa conversa.',
-        author: 'Profissional entrevistado',
+        text:
+          'É cuidar de pessoas que estão tendo doenças terminais, né, pra dar uma qualidade de vida, ' +
+          'cuidar da parte física, mental, psicológica e também espiritual também, né, entra. Então, ' +
+          'eu acho muito importante, porque dá uma qualidade de vida, a pessoa se sente viva, né?',
+        author: 'Agente Comunitário de Saúde 2',
       },
       { kind: 'paragraph', text: LOREM, todo: true },
     ],
