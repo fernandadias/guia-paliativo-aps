@@ -146,10 +146,9 @@ export const steps: Record<StepId, Step> = {
     id: 'reavaliar',
     kind: 'terminal',
     progress: false,
-    pendingClient: true,
     icon: 'clock-rotate-left',
     title: 'Reavaliação periódica',
-    body: 'Este paciente não apresenta critérios para avaliação neste momento. Lembre-se de reavaliá-lo periodicamente. (Copy final virá da cliente.)',
+    body: 'Este paciente não apresenta critérios para avaliação neste momento. Lembre-se de reavaliá-lo periodicamente.',
     todo: true,
   },
   surpresa: {
