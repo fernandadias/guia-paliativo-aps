@@ -25,7 +25,7 @@ function buildItems(answers: Answers): Item[] {
     const st = steps[stepId]
     if (st.kind !== 'fields') return
     const vals = (answers[st.answerKey] as Record<string, string> | undefined) ?? {}
-    for (const f of st.fields) push(f.label, (vals[f.id] ?? '').trim())
+    for (const f of st.fields) push(f.label || st.title, (vals[f.id] ?? '').trim())
   }
 
   if (answers.doencaAmeacadora)

@@ -22,7 +22,9 @@ export function FieldsStep({ step }: { step: Extract<Step, { kind: 'fields' }> }
       <div className="space-y-5">
         {step.fields.map((field) => (
           <label key={field.id} className="block">
-            <span className="mb-1.5 block text-sm font-medium text-forest/70">{field.label}</span>
+            {field.label && (
+              <span className="mb-1.5 block text-sm font-medium text-forest/70">{field.label}</span>
+            )}
             {field.multiline ? (
               <textarea
                 rows={3}

@@ -353,12 +353,10 @@ export const steps: Record<StepId, Step> = {
     kind: 'fields',
     progress: true,
     kicker: 'Reflexão',
-    title: 'O que levo desse atendimento?',
+    title: 'O que familiar e paciente me traz para registro / pendência?',
     answerKey: 'reflexao',
     fields: [
-      { id: 'sentimento', label: 'Meu sentimento após esta avaliação é:', placeholder: 'Escreva livremente…', multiline: true },
-      { id: 'paciente', label: 'O que o paciente me traz para registro?', placeholder: 'Escreva livremente…', multiline: true },
-      { id: 'familia', label: 'O que a família me traz para registro?', placeholder: 'Escreva livremente…', multiline: true },
+      { id: 'registro', label: '', placeholder: 'Escreva livremente…', multiline: true },
     ],
   },
   dav: {
