@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useReducer } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useReducer } from 'react'
 import type { ReactNode } from 'react'
 import {
   FIRST_STEP,
@@ -47,6 +47,26 @@ function createInitialState(): GuideState {
     startedAt: Date.now(),
     finishedAt: null,
   }
+}
+
+// Persistência da sessão em andamento: sobrevive a um reload acidental, mas
+// some ao fechar a aba (sessionStorage) — assim não mistura dados entre
+// pacientes/atendimentos diferentes.
+const SESSION_KEY = 'gpa:current-fill'
+
+function loadState(): GuideState {
+  try {
+    const raw = sessionStorage.getItem(SESSION_KEY)
+    if (raw) {
+      const parsed = JSON.parse(raw) as Partial<GuideState>
+      if (parsed && parsed.fillId && parsed.current && steps[parsed.current]) {
+        return { ...createInitialState(), ...parsed } as GuideState
+      }
+    }
+  } catch {
+    /* storage indisponível: começa do zero */
+  }
+  return createInitialState()
 }
 
 function reducer(state: GuideState, action: Action): GuideState {
@@ -99,7 +119,16 @@ interface GuideContextValue extends GuideState {
 const GuideContext = createContext<GuideContextValue | null>(null)
 
 export function GuideProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, undefined, createInitialState)
+  const [state, dispatch] = useReducer(reducer, undefined, loadState)
+
+  // Salva a sessão a cada mudança (some ao fechar a aba).
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify(state))
+    } catch {
+      /* ignora storage indisponível */
+    }
+  }, [state])
 
   const answer = useCallback((key: string, value: unknown) => {
     dispatch({ type: 'answer', key, value })

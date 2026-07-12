@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFilePdf, faRotateLeft, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { StepShell } from '../StepShell'
@@ -27,6 +27,16 @@ export function SummaryStep({ step }: { step: Extract<Step, { kind: 'summary' }>
       durationMs: Math.max(0, end - startedAt),
     })
   }, [answers, fillId, startedAt, finishedAt])
+
+  // Envio anonimizado, apenas com consentimento. Uma vez por preenchimento.
+  const submitted = useRef(false)
+  useEffect(() => {
+    if (submitted.current) return
+    if (finishedAt == null) return
+    if (answers.consentimento !== 'sim') return
+    submitted.current = true
+    void import('@/lib/persist').then((m) => m.submitResult(result))
+  }, [answers.consentimento, finishedAt, result])
 
   const baixarPdf = async () => {
     setDownloading(true)

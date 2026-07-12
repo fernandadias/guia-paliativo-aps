@@ -14,6 +14,7 @@
  */
 
 export type StepId =
+  | 'consentimento'
   | 'intro'
   | 'doenca'
   | 'reavaliar'
@@ -111,11 +112,32 @@ export type Step = StepCommon &
     | { kind: 'terminal'; icon: string; title: string; body: string; todo?: boolean }
     | { kind: 'loading'; message: string; submessage: string }
     | { kind: 'placeholder'; kicker: string; title: string; body: string; epic: string }
+    | {
+        kind: 'consent'
+        kicker: string
+        title: string
+        body: string
+        answerKey: string
+        note?: string
+      }
   )
 
 export type PpsBand = 'precoce' | 'complementar' | 'predominante' | 'exclusivo'
 
 export const steps: Record<StepId, Step> = {
+  // ── Consentimento ─────────────────────────────────────────
+  consentimento: {
+    id: 'consentimento',
+    kind: 'consent',
+    progress: false,
+    pendingClient: true,
+    kicker: 'Antes de começar',
+    title: 'Uso dos dados desta avaliação',
+    body: 'Os dados deste preenchimento podem ser guardados de forma anônima e usados para pesquisa e melhoria do cuidado paliativo na Atenção Primária. Não guardamos nenhum dado pessoal do paciente nem do profissional: cada preenchimento recebe apenas um identificador. Você pode seguir com a avaliação mesmo sem consentir; nesse caso, nada é enviado. (Texto final do termo virá da cliente / CEP.)',
+    note: 'Você pode baixar o resultado em PDF ao final, independentemente desta escolha.',
+    answerKey: 'consentimento',
+  },
+
   // ── Abertura ──────────────────────────────────────────────
   intro: {
     id: 'intro',
@@ -425,6 +447,8 @@ export type Answers = Record<string, unknown>
 /** Resolve a próxima etapa a partir da atual e das respostas (branching real). */
 export function getNextStepId(current: StepId, answers: Answers): StepId | null {
   switch (current) {
+    case 'consentimento':
+      return 'intro'
     case 'intro':
       return 'doenca'
     case 'doenca':
@@ -476,7 +500,7 @@ export function getNextStepId(current: StepId, answers: Answers): StepId | null 
   }
 }
 
-export const FIRST_STEP: StepId = 'intro'
+export const FIRST_STEP: StepId = 'consentimento'
 
 /** Etapas que são interstício (não entram no histórico de navegação). */
 export function isInterstitial(id: StepId): boolean {

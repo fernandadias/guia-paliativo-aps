@@ -5,6 +5,7 @@ import { GuideProvider, useGuide } from './useGuideState'
 import { GuideChrome } from './GuideChrome'
 import { GuideIntro } from './GuideIntro'
 import { AnswersDrawer } from './AnswersDrawer'
+import { ConsentStep } from './steps/ConsentStep'
 import { IntroStep } from './steps/IntroStep'
 import { ChoiceStep } from './steps/ChoiceStep'
 import { ScaleStep } from './steps/ScaleStep'
@@ -30,6 +31,8 @@ import { stepFade } from '@/lib/motion'
 // no AnimatePresence mantém o conteúdo antigo durante a transição.
 function CurrentStep({ step }: { step: Step }) {
   switch (step.kind) {
+    case 'consent':
+      return <ConsentStep step={step} />
     case 'intro':
       return <IntroStep step={step} />
     case 'choice':
@@ -123,6 +126,11 @@ export default function Guide() {
       window.removeEventListener('pointerdown', onFirstGesture)
       window.removeEventListener('keydown', onFirstGesture)
     }
+  }, [])
+
+  // Reenvia preenchimentos que ficaram na fila (offline em atendimento anterior).
+  useEffect(() => {
+    void import('@/lib/persist').then((m) => m.flushQueue())
   }, [])
 
   const start = () => setStarted(true)
