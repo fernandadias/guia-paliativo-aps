@@ -28,10 +28,6 @@ export interface Section {
   todo?: boolean
 }
 
-const LOREM =
-  'Conteúdo provisório. Este texto será substituído pelo material definitivo. ' +
-  'Descreve, de forma breve e sensível, o essencial que o profissional precisa reter neste momento.'
-
 export const sections: Section[] = [
   {
     slug: 'sobre',
@@ -218,37 +214,6 @@ export const sections: Section[] = [
       {
         kind: 'paragraph',
         text: 'Algumas dessas ferramentas estão aplicadas de forma prática no Guia de direção clínica.',
-      },
-    ],
-  },
-  {
-    slug: 'spikes',
-    path: '/spikes',
-    menuLabel: 'SPIKES',
-    kicker: 'Comunicação',
-    title: 'SPIKES',
-    intro:
-      'Um roteiro para conversas difíceis, não como aula, mas como apoio para comunicar más notícias com cuidado.',
-    blurb: 'Um roteiro para conversas difíceis, sem transformar em aula.',
-    todo: true,
-    blocks: [
-      { kind: 'lead', text: LOREM, todo: true },
-      {
-        kind: 'list',
-        title: 'As seis etapas',
-        items: [
-          'S de Setting: prepare o ambiente',
-          'P de Perception: o que o paciente já compreende',
-          'I de Invitation: quanto ele deseja saber',
-          'K de Knowledge: transmita a informação',
-          'E de Emotions: acolha as emoções',
-          'S de Strategy: combine os próximos passos',
-        ],
-        todo: true,
-      },
-      {
-        kind: 'paragraph',
-        text: 'O SPIKES também aparece como roteiro guiado dentro do Guia de direção clínica.',
       },
     ],
   },
