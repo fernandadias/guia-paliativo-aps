@@ -46,7 +46,7 @@ function Hero() {
         {/* Bloco do título — no mobile desce pro rodapé e centraliza; no desktop fica ao centro à esquerda */}
         <div className="flex flex-1 flex-col items-center justify-end pt-28 pb-6 text-center sm:items-start sm:justify-center sm:pb-10 sm:text-left">
           <motion.h1
-            className="display max-w-2xl font-serif text-[2.5rem] leading-[1.02] text-forest sm:text-6xl md:text-7xl"
+            className="display max-w-2xl font-serif text-[2rem] leading-[1.02] text-forest sm:text-6xl md:text-7xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...gentle, delay: 0.1 }}
