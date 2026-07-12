@@ -18,7 +18,7 @@ interface GuideIntroProps {
 
 /**
  * Abertura do guia — vídeo de fundo em loop e sem som, com música tocando.
- * Coloque o vídeo em: public/videos/guia-intro.mp4
+ * Coloque o vídeo em: public/videos/guia-intro-2-web.mp4
  */
 export function GuideIntro({ onStart, musicOn, onToggleMusic }: GuideIntroProps) {
   return (
@@ -32,7 +32,7 @@ export function GuideIntro({ onStart, musicOn, onToggleMusic }: GuideIntroProps)
         playsInline
         aria-hidden="true"
       >
-        <source src="/videos/guia-intro.mp4" type="video/mp4" />
+        <source src="/videos/guia-intro-2-web.mp4" type="video/mp4" />
       </video>
 
       {/* Véu para legibilidade do texto sobre o vídeo */}
