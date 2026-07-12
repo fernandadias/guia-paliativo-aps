@@ -1,7 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight, faListCheck, faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons'
+import {
+  faArrowRight,
+  faListCheck,
+  faWandMagicSparkles,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons'
 import {
   FIRST_STEP,
   getNextStepId,
@@ -77,6 +82,17 @@ function FastGuideInner() {
 
   return (
     <div className="mx-auto w-full max-w-2xl px-6 py-10">
+      <div className="mb-6 flex justify-end">
+        <Link
+          to="/"
+          aria-label="Sair do guia"
+          className="inline-flex items-center gap-2 rounded-full border border-forest/10 bg-cream-50/60 px-4 py-2 text-sm text-forest/70 transition-colors hover:text-moss"
+        >
+          <FontAwesomeIcon icon={faXmark} className="text-xs" />
+          Sair
+        </Link>
+      </div>
+
       <header className="mb-8">
         <span className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-moss">
           Versão rápida
