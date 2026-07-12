@@ -16,19 +16,37 @@ interface GuideState {
   answers: Answers
   /** +1 avançando, -1 voltando — para a direção da animação. */
   direction: number
+  /** ID anônimo do preenchimento (representa o paciente, sem dado pessoal). */
+  fillId: string
+  /** Epoch ms do início do preenchimento. */
+  startedAt: number
+  /** Epoch ms do término (fixado ao chegar no fim). */
+  finishedAt: number | null
 }
 
 type Action =
   | { type: 'answer'; key: string; value: unknown }
   | { type: 'next' }
   | { type: 'back' }
+  | { type: 'finish' }
   | { type: 'reset' }
 
-const initialState: GuideState = {
-  current: FIRST_STEP,
-  history: [],
-  answers: {},
-  direction: 1,
+function newFillId(): string {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) return crypto.randomUUID()
+  // Fallback simples para ambientes sem crypto.randomUUID.
+  return 'fill-' + Math.random().toString(36).slice(2) + Date.now().toString(36)
+}
+
+function createInitialState(): GuideState {
+  return {
+    current: FIRST_STEP,
+    history: [],
+    answers: {},
+    direction: 1,
+    fillId: newFillId(),
+    startedAt: Date.now(),
+    finishedAt: null,
+  }
 }
 
 function reducer(state: GuideState, action: Action): GuideState {
@@ -51,8 +69,10 @@ function reducer(state: GuideState, action: Action): GuideState {
       const prev = history.pop()!
       return { ...state, current: prev, history, direction: -1 }
     }
+    case 'finish':
+      return state.finishedAt ? state : { ...state, finishedAt: Date.now() }
     case 'reset':
-      return initialState
+      return createInitialState()
     default:
       return state
   }
@@ -65,6 +85,8 @@ interface GuideContextValue extends GuideState {
   back: () => void
   reset: () => void
   answerAndNext: (key: string, value: unknown) => void
+  /** Fixa o horário de término (idempotente). */
+  finish: () => void
   canGoBack: boolean
   /** Posição no caminho atual (1-based). */
   progressIndex: number
@@ -77,7 +99,7 @@ interface GuideContextValue extends GuideState {
 const GuideContext = createContext<GuideContextValue | null>(null)
 
 export function GuideProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [state, dispatch] = useReducer(reducer, undefined, createInitialState)
 
   const answer = useCallback((key: string, value: unknown) => {
     dispatch({ type: 'answer', key, value })
@@ -85,6 +107,7 @@ export function GuideProvider({ children }: { children: ReactNode }) {
   const next = useCallback(() => dispatch({ type: 'next' }), [])
   const back = useCallback(() => dispatch({ type: 'back' }), [])
   const reset = useCallback(() => dispatch({ type: 'reset' }), [])
+  const finish = useCallback(() => dispatch({ type: 'finish' }), [])
 
   // answer + next em um passo só. Os dispatches são aplicados em ordem:
   // o reducer de 'next' já enxerga a resposta gravada por 'answer'.
@@ -104,12 +127,13 @@ export function GuideProvider({ children }: { children: ReactNode }) {
       back,
       reset,
       answerAndNext,
+      finish,
       canGoBack: state.history.length > 0,
       progressIndex: progress.index,
       progressTotal: progress.total,
       atTerminal: progress.atTerminal,
     }
-  }, [state, answer, next, back, reset, answerAndNext])
+  }, [state, answer, next, back, reset, answerAndNext, finish])
 
   return <GuideContext.Provider value={value}>{children}</GuideContext.Provider>
 }

@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fluxograma de telas · E agora, José?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<style>
+  :root{
+    --forest:#22392e; --forest700:#2e4a3b; --moss:#4b6b54; --moss400:#6b8a72;
+    --pine:#063d35; --sage:#c3d3b8; --sage200:#d6e0cd; --sage100:#e6ecdf;
+    --cream:#ece6d8; --cream50:#f4f0e6; --paper:#f8f5ee;
+    --sans:'Figtree',ui-sans-serif,system-ui,sans-serif;
+    --serif:'EB Garamond',ui-serif,Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:#1a2620;
+    color:var(--forest);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    padding:0 0 120px;
+  }
+  .serif{font-family:var(--serif);letter-spacing:-.025em;font-feature-settings:'liga' 1,'kern' 1}
+
+  /* ---------- topo ---------- */
+  .top{
+    position:sticky;top:0;z-index:50;
+    background:rgba(26,38,32,.92);backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(195,211,184,.15);
+    padding:18px 28px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;
+  }
+  .top h1{font-family:var(--serif);letter-spacing:-.03em;color:var(--paper);font-size:22px;margin:0;font-weight:500}
+  .top h1 span{color:var(--sage);font-style:italic}
+  .top p{margin:0;color:rgba(214,224,205,.7);font-size:13px;max-width:520px;line-height:1.5}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-left:auto}
+  .legend .lg{display:flex;align-items:center;gap:7px;color:rgba(214,224,205,.75);font-size:12px}
+  .dot{width:11px;height:11px;border-radius:3px;display:inline-block}
+  .zoom{display:flex;gap:6px;align-items:center;margin-left:8px}
+  .zoom button{width:30px;height:30px;border-radius:8px;border:1px solid rgba(195,211,184,.25);
+    background:transparent;color:var(--sage);cursor:pointer;font-size:14px}
+  .zoom button:hover{background:rgba(195,211,184,.12)}
+
+  /* ---------- board ---------- */
+  .board-wrap{overflow:auto;padding:44px 40px}
+  .board{transform-origin:top left;transition:transform .15s ease}
+  .stage{margin-bottom:64px}
+  .stage-head{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+  .stage-head .tag{font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--sage);background:rgba(6,61,53,.5);padding:5px 12px;border-radius:999px;
+    border:1px solid rgba(195,211,184,.2)}
+  .stage-head h2{font-family:var(--serif);letter-spacing:-.025em;color:var(--paper);font-size:26px;margin:0;font-weight:500}
+  .stage-sub{color:rgba(214,224,205,.6);font-size:13.5px;margin:0 0 26px;max-width:760px;line-height:1.55}
+
+  /* ---------- screen frame ---------- */
+  .screen{
+    width:300px;background:var(--paper);border-radius:22px;overflow:hidden;
+    box-shadow:0 18px 44px rgba(0,0,0,.34);border:1px solid rgba(0,0,0,.06);
+    display:flex;flex-direction:column;
+  }
+  .screen.wide{width:340px}
+  .sbar{height:26px;background:rgba(0,0,0,.04);display:flex;align-items:center;gap:6px;padding:0 12px;
+    border-bottom:1px solid rgba(0,0,0,.05)}
+  .sbar i{width:8px;height:8px;border-radius:50%;background:rgba(34,57,46,.22)}
+  .route{margin-left:8px;font-size:10px;color:rgba(34,57,46,.4);font-family:ui-monospace,monospace}
+  .sbody{padding:20px 20px 22px;flex:1;display:flex;flex-direction:column;min-height:0}
+  .sbody.pad-lg{padding:26px 22px}
+
+  .screen-label{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+  .screen-label .n{font-family:var(--serif);font-size:14px;color:var(--paper);
+    background:var(--pine);width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .screen-label .nm{color:var(--paper);font-size:13px;font-weight:600}
+  .screen-label .kd{font-size:10px;color:rgba(214,224,205,.55);text-transform:uppercase;letter-spacing:.1em;
+    border:1px solid rgba(195,211,184,.25);padding:2px 7px;border-radius:6px;margin-left:auto}
+
+  /* UI atoms (fieis aos tokens) */
+  .kicker{font-size:9.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--moss);margin:0 0 10px}
+  .s-title{font-family:var(--serif);letter-spacing:-.025em;color:var(--forest);font-size:21px;line-height:1.12;margin:0 0 10px;font-weight:500}
+  .s-title.sm{font-size:18px}
+  .s-body{color:rgba(34,57,46,.8);font-size:12.5px;line-height:1.55;margin:0}
+  .s-note{color:rgba(34,57,46,.55);font-size:11.5px;line-height:1.5;margin:8px 0 0}
+  .opt{display:flex;gap:10px;align-items:flex-start;border:1px solid rgba(34,57,46,.15);background:rgba(244,240,230,.6);
+    border-radius:14px;padding:11px 13px;margin-top:9px}
+  .opt.active{border-color:var(--moss);background:var(--sage100)}
+  .opt i{color:rgba(34,57,46,.25);font-size:14px;margin-top:1px}
+  .opt.active i{color:var(--moss)}
+  .opt .ol{font-size:13px;font-weight:500;color:var(--forest)}
+  .opt .od{font-size:11px;color:rgba(34,57,46,.6);margin-top:2px;line-height:1.4}
+  .check{display:flex;gap:11px;align-items:center;border:1px solid rgba(34,57,46,.15);background:rgba(244,240,230,.6);
+    border-radius:13px;padding:9px 12px;margin-top:8px}
+  .check .box{width:19px;height:19px;border-radius:6px;border:1px solid rgba(34,57,46,.25);flex-shrink:0;
+    display:flex;align-items:center;justify-content:center}
+  .check.on .box{background:var(--moss);border-color:var(--moss);color:var(--paper)}
+  .check.on{border-color:var(--moss);background:var(--sage100)}
+  .check span.l{font-size:11.5px;line-height:1.4;color:rgba(34,57,46,.85)}
+  .grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:4px}
+  .cell{aspect-ratio:1;border:1px solid rgba(34,57,46,.15);background:rgba(244,240,230,.6);border-radius:11px;
+    display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--forest);font-variant-numeric:tabular-nums}
+  .cell.on{background:var(--forest);border-color:var(--forest);color:var(--cream50)}
+  .callout{background:var(--sage100);border:1px solid rgba(75,107,84,.25);border-radius:16px;padding:14px}
+  .callout .ct{font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--moss);margin:0 0 4px}
+  .callout .cl{font-family:var(--serif);font-size:16px;color:var(--forest);margin:0}
+  .callout .cx{font-size:11.5px;color:rgba(34,57,46,.65);margin:6px 0 0;line-height:1.5}
+  .figure{background:linear-gradient(135deg,var(--sage100),var(--cream50));border-radius:18px;padding:16px;margin-top:14px}
+  .figure blockquote{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--forest);margin:0;line-height:1.35}
+  .figure figcaption{font-size:10.5px;color:rgba(34,57,46,.55);margin-top:8px;line-height:1.45}
+  .field{margin-top:11px}
+  .field .fl{font-size:10.5px;font-weight:500;color:rgba(34,57,46,.7);display:block;margin-bottom:5px}
+  .field .fi{border:1px solid rgba(34,57,46,.15);background:rgba(244,240,230,.6);border-radius:12px;padding:9px 11px;
+    font-size:11px;color:rgba(34,57,46,.32)}
+  .acc{border:1px solid rgba(34,57,46,.15);background:rgba(244,240,230,.6);border-radius:13px;padding:10px 13px;
+    margin-top:8px;display:flex;align-items:center;gap:11px}
+  .acc i.di{color:var(--moss);font-size:13px;width:16px;text-align:center}
+  .acc .dl{font-size:12.5px;font-weight:500;color:var(--forest);flex:1}
+  .acc i.ch{color:rgba(34,57,46,.4);font-size:11px}
+  .cta{display:inline-flex;align-items:center;gap:8px;background:var(--forest);color:var(--cream50);
+    border-radius:999px;padding:10px 18px;font-size:12.5px;font-weight:500;margin-top:16px;align-self:flex-start}
+  .cta.cream{background:var(--cream50);color:var(--forest)}
+  .cta.outline{background:transparent;border:1px solid rgba(34,57,46,.3);color:var(--forest)}
+  .cta.block{align-self:stretch;justify-content:center}
+  .micro{font-size:10.5px;color:rgba(34,57,46,.5);margin-top:9px}
+  .todo{display:inline-flex;align-items:center;gap:6px;font-size:9.5px;font-weight:600;letter-spacing:.06em;
+    color:#8a6d2f;background:#f3e9cf;border:1px solid #e2cf9c;border-radius:999px;padding:3px 9px;text-transform:uppercase}
+  .idx-row{display:flex;align-items:baseline;gap:12px;padding:9px 0;border-bottom:1px solid rgba(34,57,46,.12)}
+  .idx-row .in{font-family:var(--serif);font-size:15px;color:rgba(75,107,84,.5);font-variant-numeric:tabular-nums}
+  .idx-row .it{font-family:var(--serif);font-size:15px;color:var(--forest);line-height:1.15}
+  .idx-row.guide{background:var(--pine);border-radius:13px;padding:11px 13px;margin-top:6px;border-bottom:none}
+  .idx-row.guide .in{color:var(--sage)}
+  .idx-row.guide .it{color:var(--cream50)}
+  .idx-row i{margin-left:auto;color:rgba(34,57,46,.4);font-size:11px}
+  .idx-row.guide i{color:var(--sage)}
+
+  .summary-card{background:rgba(244,240,230,.6);border:1px solid rgba(34,57,46,.1);border-radius:16px;padding:14px}
+  .srow{margin-bottom:9px}
+  .srow .rl{font-size:8.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(75,107,84,.8);margin:0}
+  .srow .rv{font-size:11.5px;color:rgba(34,57,46,.85);margin:2px 0 0;line-height:1.4}
+  .sdiv{height:1px;background:rgba(34,57,46,.1);margin:10px 0}
+
+  .ring{width:70px;height:70px;border-radius:50%;border:1px solid rgba(75,107,84,.4);
+    display:flex;align-items:center;justify-content:center;color:var(--moss);font-size:24px;margin:0 auto}
+
+  .term-icon{width:52px;height:52px;border-radius:50%;background:var(--sage100);color:var(--moss);
+    display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 4px}
+
+  /* dark-screen (intro do guia) */
+  .screen.dark .sbody{background:var(--forest)}
+  .screen.dark .kicker{color:var(--sage)}
+  .screen.dark .s-title{color:var(--cream50)}
+  .screen.dark .s-body{color:var(--sage200)}
+  .screen.dark .sbar{background:rgba(0,0,0,.2);border-color:rgba(255,255,255,.06)}
+  .screen.dark .route{color:rgba(214,224,205,.4)}
+
+  /* ---------- fluxo / conectores ---------- */
+  .flow{display:flex;flex-direction:column;align-items:flex-start;gap:0}
+  .node{display:flex;align-items:flex-start;gap:0}
+  .arrow{display:flex;flex-direction:column;align-items:center;padding:0 0 0 150px;margin:2px 0}
+  .arrow .line{width:2px;height:26px;background:rgba(195,211,184,.4)}
+  .arrow .lab{font-size:11px;color:var(--sage);background:rgba(6,61,53,.55);border:1px solid rgba(195,211,184,.22);
+    padding:3px 11px;border-radius:999px;margin:3px 0;white-space:nowrap}
+  .arrow .lab b{color:var(--paper);font-weight:600}
+  .arrow .head{color:rgba(195,211,184,.5);font-size:12px;margin-top:-3px}
+
+  /* linha do guia: card + desvios laterais */
+  .spine{display:flex;align-items:flex-start;gap:0}
+  .side{display:flex;align-items:center;margin-top:120px}
+  .side .hline{width:60px;height:2px;background:rgba(195,211,184,.4);position:relative}
+  .side .hlab{position:absolute;top:-24px;left:0;font-size:10.5px;color:var(--sage);
+    background:rgba(6,61,53,.55);border:1px solid rgba(195,211,184,.22);padding:2px 9px;border-radius:999px;white-space:nowrap}
+  .term{width:230px;background:var(--paper);border-radius:20px;box-shadow:0 14px 34px rgba(0,0,0,.3);
+    border:1px solid rgba(0,0,0,.06);padding:22px 20px;text-align:center}
+  .term .kd{font-size:9.5px;color:#b04a3a;text-transform:uppercase;letter-spacing:.12em;font-weight:600;margin-bottom:8px}
+  .term h3{font-family:var(--serif);font-size:18px;color:var(--forest);margin:6px 0 8px;line-height:1.15}
+  .term p{font-size:11.5px;color:rgba(34,57,46,.7);line-height:1.5;margin:0}
+
+  .note-inline{max-width:260px;font-size:12px;color:rgba(214,224,205,.7);line-height:1.55;
+    border-left:2px solid rgba(195,211,184,.35);padding:4px 0 4px 14px;margin-top:130px;margin-left:22px}
+  .note-inline b{color:var(--sage)}
+
+  .fin{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+    color:#3f7d5a;background:#dcefe2;border-radius:999px;padding:4px 11px;margin-bottom:9px}
+
+  /* site: hub */
+  .hub{display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap}
+  .fan{display:flex;flex-direction:column;gap:16px}
+  .fan-lab{font-size:11px;color:var(--sage);margin-bottom:2px}
+  .cards-row{display:flex;gap:20px;flex-wrap:wrap}
+  .conv{color:rgba(214,224,205,.55);font-size:12px;max-width:220px;line-height:1.5;align-self:center}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div>
+    <h1>Fluxograma de telas — <span>E agora, José?</span></h1>
+    <p>Guia de cuidados paliativos na APS. UI e copy reais de cada tela; a lógica de branching é a que está codada. Texto marcado <span style="color:#e2cf9c">TODO</span> ainda é provisório.</p>
+  </div>
+  <div class="legend">
+    <span class="lg"><span class="dot" style="background:var(--cream)"></span>Site informativo</span>
+    <span class="lg"><span class="dot" style="background:var(--pine)"></span>Guia clínico (/guia)</span>
+    <span class="lg"><span class="dot" style="background:#b04a3a"></span>Fim de percurso</span>
+    <span class="zoom">
+      <button id="zout" title="Diminuir">−</button>
+      <button id="zin" title="Aumentar">+</button>
+      <button id="zreset" title="Resetar" style="width:auto;padding:0 10px;font-size:12px">100%</button>
+    </span>
+  </div>
+</div>
+
+<div class="board-wrap">
+<div class="board" id="board">
+
+  <!-- ================= SITE INFORMATIVO ================= -->
+  <section class="stage">
+    <div class="stage-head">
+      <span class="tag">Parte 1</span>
+      <h2>Site informativo</h2>
+    </div>
+    <p class="stage-sub">Header + footer, transições de página. É o hub de leitura: a Home apresenta e lista as 5 seções de conteúdo. <b style="color:var(--sage)">Home e todas as seções levam ao Guia</b> (CTA "Acessar o guia" / "Ir para o Guia de direção clínica").</p>
+
+    <div class="hub">
+      <!-- HOME -->
+      <div>
+        <div class="screen-label"><span class="n"><i class="fa-solid fa-house"></i></span><span class="nm">Home</span><span class="kd">route /</span></div>
+        <div class="screen wide">
+          <div class="sbar"><i></i><i></i><i></i><span class="route">/</span></div>
+          <div class="sbody pad-lg" style="background:var(--cream)">
+            <p class="kicker" style="color:rgba(34,57,46,.5)">Hero · fundo fotográfico</p>
+            <h1 class="serif" style="font-size:40px;line-height:.9;color:var(--forest);margin:0 0 12px">E agora,<br>José?</h1>
+            <p class="serif" style="font-style:italic;font-size:15px;color:rgba(34,57,46,.75);line-height:1.4;margin:0 0 14px">Nem todo sofrimento precisa esperar a terminalidade para ser cuidado.</p>
+            <span class="cta block">Acessar o guia <i class="fa-solid fa-arrow-right" style="font-size:10px"></i></span>
+            <p class="micro">Presença, ciência e cuidado: passo a passo.</p>
+            <div style="height:1px;background:rgba(34,57,46,.12);margin:18px 0 12px"></div>
+            <p class="kicker">Para conhecer</p>
+            <div class="idx-row"><span class="in">01</span><span class="it">O que são cuidados paliativos?</span><i class="fa-solid fa-arrow-right"></i></div>
+            <div class="idx-row"><span class="in">02</span><span class="it">Por que atuar em CP na APS</span><i class="fa-solid fa-arrow-right"></i></div>
+            <div class="idx-row"><span class="in">03</span><span class="it">Política Nacional de CP</span><i class="fa-solid fa-arrow-right"></i></div>
+            <div class="idx-row"><span class="in">04</span><span class="it">Ferramentas de elegibilidade</span><i class="fa-solid fa-arrow-right"></i></div>
+            <div class="idx-row"><span class="in">05</span><span class="it">SPIKES</span><i class="fa-solid fa-arrow-right"></i></div>
+            <div class="idx-row guide"><span class="in">06</span><span class="it">Guia de direção clínica</span><i class="fa-solid fa-arrow-right"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- fan de seções -->
+      <div class="fan">
+        <div class="fan-lab"><i class="fa-solid fa-arrow-right"></i> 5 seções de conteúdo · mesmo layout (kicker · título · intro · blocos)</div>
+        <div class="cards-row">
+          <!-- Seção 01 -->
+          <div class="screen">
+            <div class="sbar"><i></i><i></i><i></i><span class="route">/sobre</span></div>
+            <div class="sbody">
+              <p class="kicker">Antes de tudo</p>
+              <h1 class="s-title sm">O que são cuidados paliativos?</h1>
+              <p class="s-body">Cuidados paliativos não significam desistir. Significam cuidar melhor, e podem começar muito antes da terminalidade.</p>
+              <span class="todo" style="margin-top:12px"><i class="fa-solid fa-pen"></i> Texto definitivo depois</span>
+              <div class="callout" style="margin-top:12px"><p class="ct"><i class="fa-solid fa-heart"></i> Um princípio</p><p class="cl">Nem todo sofrimento precisa esperar a terminalidade.</p></div>
+              <span class="cta outline" style="margin-top:14px">Ir para o Guia</span>
+            </div>
+          </div>
+          <!-- Seção 02 -->
+          <div class="screen">
+            <div class="sbar"><i></i><i></i><i></i><span class="route">/por-que-aps</span></div>
+            <div class="sbody">
+              <p class="kicker">O seu papel</p>
+              <h1 class="s-title sm">Por que você deve atuar em CP na APS</h1>
+              <p class="s-body">A Atenção Primária é o lugar do vínculo, da longitudinalidade e da proximidade.</p>
+              <div class="figure"><blockquote>"O mais difícil nunca foi falar sobre a morte. Foi perceber que ninguém havia começado essa conversa."</blockquote><figcaption>Profissional entrevistado</figcaption></div>
+              <span class="cta outline" style="margin-top:14px">Ir para o Guia</span>
+            </div>
+          </div>
+          <!-- Seção 03 -->
+          <div class="screen">
+            <div class="sbar"><i></i><i></i><i></i><span class="route">/politica</span></div>
+            <div class="sbody">
+              <p class="kicker">Marco normativo</p>
+              <h1 class="s-title sm">Política Nacional de Cuidados Paliativos</h1>
+              <p class="s-body">O que diz a legislação e como ela ampara a sua prática na APS.</p>
+              <h2 class="serif" style="font-size:15px;color:var(--forest);margin:14px 0 6px">Pontos-chave</h2>
+              <p class="s-note" style="margin-top:0">• Marco legal e diretrizes<br>• Organização da rede de atenção<br>• Papel da APS na linha de cuidado</p>
+              <span class="cta outline" style="margin-top:14px">Ir para o Guia</span>
+            </div>
+          </div>
+          <!-- Seção 04 -->
+          <div class="screen">
+            <div class="sbar"><i></i><i></i><i></i><span class="route">/ferramentas</span></div>
+            <div class="sbody">
+              <p class="kicker">Instrumentos</p>
+              <h1 class="s-title sm">Ferramentas de elegibilidade</h1>
+              <p class="s-body">Instrumentos que ajudam a identificar quem se beneficia do cuidado paliativo, e quando.</p>
+              <div class="callout" style="margin-top:12px"><p class="ct"><i class="fa-solid fa-gauge"></i> PPS</p><p class="cl" style="font-size:14px">Palliative Performance Scale</p><p class="cx">Avalia a funcionalidade e situa o paciente na linha do cuidado.</p></div>
+              <span class="cta outline" style="margin-top:14px">Ir para o Guia</span>
+            </div>
+          </div>
+          <!-- Seção 05 -->
+          <div class="screen">
+            <div class="sbar"><i></i><i></i><i></i><span class="route">/spikes</span></div>
+            <div class="sbody">
+              <p class="kicker">Comunicação</p>
+              <h1 class="s-title sm">SPIKES</h1>
+              <p class="s-body">Um roteiro para conversas difíceis, não como aula, mas como apoio para comunicar más notícias com cuidado.</p>
+              <h2 class="serif" style="font-size:15px;color:var(--forest);margin:14px 0 6px">As seis etapas</h2>
+              <p class="s-note" style="margin-top:0">S · Setting — P · Perception — I · Invitation — K · Knowledge — E · Emotions — S · Strategy</p>
+              <span class="cta outline" style="margin-top:14px">Ir para o Guia</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GUIA CLÍNICO ================= -->
+  <section class="stage">
+    <div class="stage-head">
+      <span class="tag">Parte 2</span>
+      <h2>Guia de direção clínica — /guia</h2>
+    </div>
+    <p class="stage-sub">Fullscreen, fora do layout do site, com música de fundo. Um questionário guiado onde <b style="color:var(--sage)">cada tela é um dado</b> e um motor interpreta as respostas. A coluna abaixo é o caminho principal; os desvios de branching estão anotados nas laterais.</p>
+
+    <div class="flow">
+
+      <!-- INTRO DO GUIA (pré-start) -->
+      <div class="node">
+        <div>
+          <div class="screen-label"><span class="n"><i class="fa-solid fa-play"></i></span><span class="nm">Abertura do guia</span><span class="kd">antes de começar</span></div>
+          <div class="screen dark">
+            <div class="sbar"><i></i><i></i><i></i><span class="route">/guia</span></div>
+            <div class="sbody pad-lg" style="align-items:center;text-align:center">
+              <p class="kicker">Guia de direção clínica</p>
+              <h1 class="s-title serif" style="font-size:34px;margin-top:6px">E agora, José?</h1>
+              <p class="s-body serif" style="font-style:italic;font-size:14px;margin-top:8px">Respire. Vamos conduzir este cuidado juntos, passo a passo.</p>
+              <span class="cta cream" style="margin-top:18px">Começar <i class="fa-solid fa-arrow-right" style="font-size:10px"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow"><div class="line"></div><span class="lab"><b>Começar</b></span><div class="line"></div><i class="fa-solid fa-arrow-down head"></i></div>
+
+      <!-- ETAPA 1 · INTRO -->
+      <div class="node">
+        <div>
+          <div class="screen-label"><span class="n">1</span><span class="nm">Introdução</span><span class="kd">intro</span></div>
+          <div class="screen">
+            <div class="sbar"><i></i><i></i><i></i><span class="route">/guia</span></div>
+            <div class="sbody">
+              <p class="kicker">Etapa 1 · Antes de tudo</p>
+              <h1 class="s-title">O que são cuidados paliativos?</h1>
+              <p class="s-body">Cuidados paliativos não significam desistir. Significam cuidar melhor. Apenas os conceitos essenciais, sem texto enorme.</p>
+              <div class="figure"><blockquote>E agora, José?</blockquote><figcaption>Cuidados paliativos não significam desistir. Significam cuidar melhor.</figcaption></div>
+              <span class="cta">Continuar <i class="fa-solid fa-arrow-right" style="font-size:10px"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow"><div class="line"></div><span class="lab"><b>Continuar</b></span><div class="line"></div><i class="fa-solid fa-arrow-down head"></i></div>
+
+      <!-- ETAPA 2 · DOENÇA (branch → reavaliar) -->
+      <div class="spine">
+        <div class="node">
+          <div>
+            <div class="screen-label"><span class="n">2</span><span class="nm">Doença ameaçadora</span><span class="kd">choice · branch</span></div>
+            <div class="screen">
+              <div class="sbar"><i></i><i></i><i></i><span class="route">/guia</span></div>
+              <div class="sbody">
+                <p class="kicker">Etapa 2</p>
+                <h1 class="s-title">Você está diante de uma doença ameaçadora da vida?</h1>
+                <div class="opt active"><i class="fa-solid fa-circle-dot"></i><div><span class="ol">Sim</span></div></div>
+                <div class="opt"><i class="fa-solid fa-circle"></i><div><span class="ol">Não</span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- desvio: Não → reavaliar -->
+        <div class="side">
+          <div class="side"><div class="hline"><span class="hlab">"Não" →</span></div></div>
+          <div class="term">
+            <div class="term-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            <p class="kd">Fim de percurso</p>
+            <h3>Reavaliação periódica</h3>
+            <p>Este paciente não apresenta critérios para avaliação neste momento. Lembre-se de reavaliá-lo periodicamente.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow"><div class="line"></div><span class="lab"><b>"Sim"</b> → segue</span><div class="line"></div><i class="fa-solid fa-arrow-down head"></i></div>
+
+      <!-- ETAPA 3 · PPS -->
+      <div class="node">
+        <div>
+          <div class="screen-label"><span class="n">3</span><span class="nm">Funcionalidade (PPS)</span><span class="kd">scale</span></div>
+          <div class="screen">
+            <div class="sbar"><i></i><i></i><i></i><span class="route">/guia</span></div>
+            <div class="sbody">
+              <p class="kicker">Etapa 3</p>
+              <h1 class="s-title">Vamos avaliar a funcionalidade.</h1>
+              <p class="s-note">Palliative Performance Scale (PPS). Selecione o valor. O sistema interpreta automaticamente.</p>
+              <div class="grid5" style="margin-top:12px">
+                <div class="cell">100</div><div class="cell">90</div><div class="cell">80</div><div class="cell">70</div><div class="cell">60</div>
+                <div class="cell on">50</div><div class="cell">40</div><div class="cell">30</div><div class="cell">20</div><div class="cell">10</div>
+              </div>
+              <div class="callout" style="margin-top:12px"><p class="ct">PPS 50</p><p class="cl">Cuidados paliativos complementares</p><p class="cx">CP complementar</p></div>
+              <span class="cta">Continuar <i class="fa-solid fa-arrow-right" style="font-size:10px"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="note-inline">O valor escolhido define a <b>faixa</b> (precoce · complementar · predominante · exclusivo) e alimenta o texto do resultado.</div>
+      </div>
+
+      <div class="arrow"><div class="line"></div><span class="lab"><b>Continuar</b></span><div class="line"></div><i class="fa-solid fa-arrow-down head"></i></div>
+
+      <!-- ETAPA 4 · SURPRESA (branch → spict ou pula) -->
+      <div class="spine">
+        <div class="node">
+          <div>
+            <div class="screen-label"><span class="n">4</span><span class="nm">Pergunta Surpresa</span><span class="kd">choice · branch</span></div>
+            <div class="screen">
+              <div class="sbar"><i></i><i></i><i></i><span class="route">/guia</span></div>
+              <div class="sbody">
+                <p class="kicker">Etapa 4 · Pergunta Surpresa</p>
+                <h1 class="s-title">Você se surpreenderia se este paciente morresse no próximo ano?</h1>
+                <div class="opt"><i class="fa-solid fa-circle"></i><div><span class="ol">Sim, me surpreenderia</span></div></div>
+                <div class="opt active"><i class="fa-solid fa-circle-dot"></i><div><span class="ol">Não me surpreenderia</span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="side">
+          <div class="side"><div class="hline"><span class="hlab">"Sim" → pula p/ Resultado (5)</span></div></div>
+          <div class="note-inline" style="margin-top:0">"Sim, me surpreenderia" vai <b>direto ao Resultado</b>.<br><br>"Não me surpreenderia" <b>abre o SPICT-BR</b> abaixo.</div>
+        </div>
+      </div>
+
+      <div class="arrow"><div class="line"></div><span class="lab"><b>"Não me surpreenderia"</b> → abre SPICT-BR</span><div class="line"></div><i class="fa-solid fa-arrow-down head"></i></div>
+
+      <!-- ETAPA 4 · SPICT-BR -->
+      <div class="node">
+        <div>
+          <div class="screen-label"><span class="n">4b</span><span class="nm">SPICT-BR</span><span class="kd">checklist</span></div>
+          <div class="screen">
+            <div class="sbar"><i></i><i></i><i></i><span class="route">/guia</span></div>
+            <div class="sbody">
+              <p class="kicker">Etapa 4 · SPICT-BR</p>
+              <h1 class="s-title">Indicadores de deterioração</h1>
+              <p class="s-note">Marque os itens presentes. Ao final, o sistema interpreta.</p>
+              <div class="check on" style="margin-top:12px"><span class="box"><i class="fa-solid fa-check" style="font-size:9px"></i></span><span class="l">Internações não planejadas recorrentes</span></div>
+              <div class="check on"><span class="box"><i class="fa-solid fa-check" style="font-size:9px"></i></span><span class="l">Declínio funcional (PPS baixo ou em queda)</span></div>
+              <div class="check"><span class="box"></span><span class="l">Dependência para cuidados</span></div>
+              <div class="check"><span class="box"></span><span class="l">Perda de peso significativa</span></div>
+              <div class="check"><span class="box"></span><span class="l">Sintomas persistentes apesar do tratamento</span></div>
+              <div class="check"><span class="box"></span><span class="l">Paciente/família solicita CP ou limitação</span></div>
+              <span class="cta">Continuar <i class="fa-solid fa-arrow-right" style="font-size:10px"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="note-inline">A <b>contagem</b> de itens marcados muda o texto do resultado: <b>≥ 2</b> + "Não me surpreenderia" = critérios para inclusão em CP.</div>
+      </div>
+
+      <div class="arrow"><div class="line"></div><span class="lab">os dois caminhos convergem →</span><div class="line"></div><i class="fa-solid fa-arrow-down head"></i></div>
+
+      <!-- ETAPA 5 · RESULTADO -->
+      <div class="node">
+        <div>
+          <div class="screen-label"><span class="n">5</span><span class="nm">Resultado</span><span class="kd">result · interpretado</span></div>
+          <div class="screen">
+            <div class="sbar"><i></i><i></i><i></i><span class="route">/guia</span></div>
+            <div class="sbody">
+              <p class="kicker">Etapa 5 · Resultado</p>
+              <div class="figure" style="margin-top:4px">
+                <i class="fa-solid fa-circle-info" style="color:var(--moss);font-size:18px"></i>
+                <blockquote style="font-size:17px;margin-top:10px">Este paciente apresenta critérios para inclusão em cuidados paliativos.</blockquote>
+                <figcaption style="font-size:11px">Pergunta Surpresa negativa e 2 indicador(es) do SPICT-BR, com funcionalidade em cuidados paliativos complementares. Recomenda-se elevada atenção ao planejamento compartilhado.</figcaption>
+              </div>
+              <span class="cta">Iniciar o cuidado <i class="fa-solid fa-arrow-right" style="font-size:10px"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="note-inline">Texto gerado por <b>resultReading()</b>: combina Pergunta Surpresa + contagem SPICT + faixa PPS. Três tons: atenção / atenção / reavaliar.</div>
+      </div>
+
+      <div class="arrow"><div class="line"></div><span class="lab"><b>Iniciar o cuidado</b></span><div class="line"></div><i class="fa-solid fa-arrow-down head"></i></div>
+
+      <!-- ETAPA 6 · DIMENSÕES -->
+      <div class="node">
+        <div>
+          <div class="screen-label"><span class="n">6</span><span class="nm">As cinco dimensões</span><span class="kd">dimensions</span></div>
+          <div class="screen">
+            <div class="sbar"><i></i><i></i><i></i><span class="route">/guia</span></div>
+            <div class="sbody">
+              <p class="kicker">Etapa 6 · O cuidado começa</p>
+              <h1 class="s-title">As cinco dimensões</h1>
+              <p class="s-note">O cuidado começa muito antes da morte. Vai formando um Plano Terapêutico Singular.</p>
+              <div class="acc" style="margin-top:12px;flex-direction:column;align-items:stretch;gap:0">
+                <div style="display:flex;align-items:center;gap:11px"><i class="fa-solid fa-hand-holding-medical di"></i><span class="dl">Física</span><i class="fa-solid fa-chevron-up ch"></i></div>
+                <div class="field" style="margin-top:10px"><span class="fl">Dor</span><div class="fi">Anotar…</div></div>
+                <div class="field"><span class="fl">Dispneia</span><div class="fi">Anotar…</div></div>
+              </div>
+              <div class="acc"><i class="fa-solid fa-brain di"></i><span class="dl">Psicológica</span><i class="fa-solid fa-chevron-down ch"></i></div>
+              <div class="acc"><i class="fa-solid fa-people-group di"></i><span class="dl">Social</span><i class="fa-solid fa-chevron-down ch"></i></div>
+              <div class="acc"><i class="fa-solid fa-dove di"></i><span class="dl">Espiritual</span><i class="fa-solid fa-chevron-down ch"></i></div>
+              <div class="acc"><i class="fa-solid fa-house-user di"></i><span class="dl">Familiar</span><i class="fa-solid fa-chevron-down ch"></i></div>
+              <span class="cta">Continuar <i class="fa-solid fa-arrow-right" style="font-size:10px"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow"><div class="line"></div><span class="lab"><b>Continuar</b></span><div class="line"></div><i class="fa-solid fa-arrow-down head"></i></div>
+
+      <!-- INTERSTÍCIO · VERSO -->
+      <div class="node">
+        <div>
+          <div class="screen-label"><span class="n"><i class="fa-solid fa-feather"></i></span><span class="nm">Interstício poético</span><span class="kd">verse</span></div>
+          <div class="screen">
+            <div class="sbar"><i></i><i></i><i></i><span class="route">/guia</span></div>
+            <div class="sbody" style="background:linear-gradient(180deg,var(--sage100),var(--cream));text-align:center;justify-content:center;padding:34px 22px">
+              <blockquote class="serif" style="font-style:italic;font-size:19px;color:var(--forest);line-height:1.3;margin:0">Sozinho no escuro qual bicho-do-mato, sem teogonia, sem parede nua para se encostar.</blockquote>
+              <p class="s-note" style="margin-top:14px">Toda equipe também precisa saber para onde caminha.</p>
+              <span class="cta outline" style="margin:16px auto 0">Continuar</span>
+            </div>
+          </div>
+        </div>
+        <div class="note-inline">Não conta na barra de progresso. O poema do José dialoga com o momento do percurso.</div>
+      </div>
+
+      <div class="arrow"><div class="line"></div><span class="lab"><b>Continuar</b></span><div class="line"></div><i class="fa-solid fa-arrow-down head"></i></div>
+
+      <!-- ETAPA 8 · SPIKES -->
+      <div class="node">
+        <div>
+          <div class="screen-label"><span class="n">8</span><span class="nm">SPIKES: roteiro</span><span class="kd">checklist</span></div>
+          <div class="screen">
+            <div class="sbar"><i></i><i></i><i></i><span class="route">/guia</span></div>
+            <div class="sbody">
+              <p class="kicker">Etapa 8 · Vamos conversar?</p>
+              <h1 class="s-title">SPIKES: roteiro</h1>
+              <p class="s-note">Não como aula, mas como roteiro para a conversa. Marque conforme avança.</p>
+              <div class="check on" style="margin-top:12px"><span class="box"><i class="fa-solid fa-check" style="font-size:9px"></i></span><span class="l">S · Setting: prepare o ambiente</span></div>
+              <div class="check"><span class="box"></span><span class="l">P · Perception: compreendeu a doença?</span></div>
+              <div class="check"><span class="box"></span><span class="l">I · Invitation: quanto deseja saber?</span></div>
+              <div class="check"><span class="box"></span><span class="l">K · Knowledge: transmita com clareza</span></div>
+              <div class="check"><span class="box"></span><span class="l">E · Emotions: acolha as emoções</span></div>
+              <div class="check"><span class="box"></span><span class="l">S · Strategy: combine os próximos passos</span></div>
+              <span class="cta">Continuar <i class="fa-solid fa-arrow-right" style="font-size:10px"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow"><div class="line"></div><span class="lab"><b>Continuar</b></span><div class="line"></div><i class="fa-solid fa-arrow-down head"></i></div>
+
+      <!-- ETAPA 9 · PLANO -->
+      <div class="node">
+        <div>
+          <div class="screen-label"><span class="n">9</span><span class="nm">Plano compartilhado</span><span class="kd">fields</span></div>
+          <div class="screen">
+            <div class="sbar"><i></i><i></i><i></i><span class="route">/guia</span></div>
+            <div class="sbody">
+              <p class="kicker">Etapa 9 · Plano compartilhado</p>
+              <h1 class="s-title">Plano compartilhado</h1>
+              <div class="field"><span class="fl">Desejos do paciente</span><div class="fi">O que importa para esta pessoa…</div></div>
+              <div class="field"><span class="fl">Objetivos do cuidado</span><div class="fi">Para onde caminhamos juntos…</div></div>
+              <div class="field"><span class="fl">Controle de sintomas</span><div class="fi">Prioridades de manejo…</div></div>
+              <div class="field"><span class="fl">Quem será responsável</span><div class="fi">Profissional / cuidador de referência…</div></div>
+              <div class="field"><span class="fl">Quando reavaliar</span><div class="fi">Ex.: em 30 dias…</div></div>
+              <span class="cta">Continuar <i class="fa-solid fa-arrow-right" style="font-size:10px"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow"><div class="line"></div><span class="lab"><b>Continuar</b></span><div class="line"></div><i class="fa-solid fa-arrow-down head"></i></div>
+
+      <!-- ETAPA 10 · DAV (branch → texto) -->
+      <div class="node">
+        <div>
+          <div class="screen-label"><span class="n">10</span><span class="nm">DAV</span><span class="kd">choice · branch</span></div>
+          <div class="screen">
+            <div class="sbar"><i></i><i></i><i></i><span class="route">/guia</span></div>
+            <div class="sbody">
+              <p class="kicker">Etapa 10 · DAV</p>
+              <h1 class="s-title">Qual a capacidade de decisão do paciente neste momento?</h1>
+              <div class="opt active"><i class="fa-solid fa-circle-dot"></i><div><span class="ol">Consciente e capaz</span><span class="od">Planejamento antecipado de cuidados com o próprio paciente.</span></div></div>
+              <div class="opt"><i class="fa-solid fa-circle"></i><div><span class="ol">Incapaz de decidir</span><span class="od">Plano de cuidados construído com o representante.</span></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="note-inline">Os dois caminhos seguem para o resumo. O ramo só muda o <b>texto da diretiva (DAV)</b> no resumo final: com o paciente vs. com o representante.</div>
+      </div>
+
+      <div class="arrow"><div class="line"></div><span class="lab">qualquer opção →</span><div class="line"></div><i class="fa-solid fa-arrow-down head"></i></div>
+
+      <!-- INTERSTÍCIO · PREPARANDO -->
+      <div class="node">
+        <div>
+          <div class="screen-label"><span class="n"><i class="fa-solid fa-spinner"></i></span><span class="nm">Preparando</span><span class="kd">loading · auto 4,2s</span></div>
+          <div class="screen">
+            <div class="sbar"><i></i><i></i><i></i><span class="route">/guia</span></div>
+            <div class="sbody" style="background:linear-gradient(180deg,var(--sage100),var(--cream));text-align:center;justify-content:center;gap:22px;padding:40px 22px">
+              <div class="ring"><i class="fa-solid fa-hand-holding-heart"></i></div>
+              <div>
+                <p class="serif" style="font-style:italic;font-size:18px;color:var(--forest);margin:0;line-height:1.35">Cada resposta se transformou em cuidado.</p>
+                <p class="s-note" style="margin-top:10px">Reunindo o plano de José…</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="note-inline">Sem barra de progresso, sem botão. Avança sozinho após ~4,2s. Um respiro antes do resumo.</div>
+      </div>
+
+      <div class="arrow"><div class="line"></div><span class="lab">automático →</span><div class="line"></div><i class="fa-solid fa-arrow-down head"></i></div>
+
+      <!-- FINAL · RESUMO -->
+      <div class="node">
+        <div>
+          <span class="fin"><i class="fa-solid fa-flag-checkered"></i> Final</span>
+          <div class="screen-label"><span class="n"><i class="fa-solid fa-clipboard-check"></i></span><span class="nm">Resumo do atendimento</span><span class="kd">summary</span></div>
+          <div class="screen">
+            <div class="sbar"><i></i><i></i><i></i><span class="route">/guia</span></div>
+            <div class="sbody">
+              <p class="kicker">Final</p>
+              <h1 class="s-title">Resumo do atendimento</h1>
+              <p class="s-note">Um retrato do que foi construído neste atendimento. O paciente é o José, e cada José tem seu próprio caminho.</p>
+              <div class="summary-card" style="margin-top:12px">
+                <div class="srow"><p class="rl">Funcionalidade (PPS)</p><p class="rv">CP complementares (PPS 50)</p></div>
+                <div class="srow"><p class="rl">Interpretação</p><p class="rv">Critérios para inclusão em CP</p></div>
+                <div class="srow"><p class="rl">Indicadores SPICT-BR</p><p class="rv">2 marcado(s)</p></div>
+                <div class="sdiv"></div>
+                <div class="srow"><p class="rl">Dimensões avaliadas</p><p class="rv">Física · Social</p></div>
+                <div class="sdiv"></div>
+                <div class="srow"><p class="rl">Diretiva antecipada (DAV)</p><p class="rv">Planejamento antecipado com o próprio paciente.</p></div>
+              </div>
+              <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+                <span class="cta outline" style="margin-top:0;font-size:11px;padding:7px 13px"><i class="fa-solid fa-print"></i> Imprimir</span>
+                <span class="cta outline" style="margin-top:0;font-size:11px;padding:7px 13px"><i class="fa-solid fa-file-pdf"></i> PDF</span>
+              </div>
+              <p class="micro"><i class="fa-solid fa-rotate-left"></i> Recomeçar o guia</p>
+            </div>
+          </div>
+        </div>
+        <div class="note-inline">Compila tudo: PPS, interpretação, contagem SPICT, dimensões com anotação, campos do plano e a diretiva DAV. Ações de exportar são stub na v1.</div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+</div>
+
+<script>
+  let z = 1;
+  const board = document.getElementById('board');
+  const reset = document.getElementById('zreset');
+  const apply = () => { board.style.transform = `scale(${z})`; reset.textContent = Math.round(z*100)+'%'; };
+  document.getElementById('zin').onclick  = () => { z = Math.min(1.6, z+0.1); apply(); };
+  document.getElementById('zout').onclick = () => { z = Math.max(0.4, z-0.1); apply(); };
+  reset.onclick = () => { z = 1; apply(); };
+</script>
+</body>
+</html>

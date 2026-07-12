@@ -1,114 +1,121 @@
+import { useEffect, useMemo, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPrint, faFilePdf, faFileMedical, faRotateLeft } from '@fortawesome/free-solid-svg-icons'
+import { faFilePdf, faRotateLeft, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { StepShell } from '../StepShell'
 import { useGuide } from '../useGuideState'
-import { ppsBand, resultReading, davReading, spictCount } from '../interpret'
-import { planoFields, planoValorLegivel } from '@/content/plano'
+import { buildResult, type GuideResult } from '@/lib/result'
+import { formatDateTime, formatDuration } from '@/lib/format'
 import type { Step } from '@/content/guide'
 
 export function SummaryStep({ step }: { step: Extract<Step, { kind: 'summary' }> }) {
-  const { answers, reset } = useGuide()
-  const pps = ppsBand(answers)
-  const reading = resultReading(answers)
-  const dav = davReading(answers)
-  const plano = (answers.plano as Record<string, string> | undefined) ?? {}
+  const { answers, reset, finish, fillId, startedAt, finishedAt } = useGuide()
+  const [downloading, setDownloading] = useState(false)
+  const [pdfError, setPdfError] = useState(false)
 
-  // Dimensões avaliadas: quais têm alguma anotação preenchida.
-  const dims: { key: string; label: string }[] = [
-    { key: 'dimPsicologica', label: 'Psicológica' },
-    { key: 'dimSocial', label: 'Social' },
-    { key: 'dimEspiritual', label: 'Espiritual' },
-    { key: 'dimFamiliar', label: 'Familiar' },
-  ]
-  const dimsAvaliadas = dims.filter((d) => {
-    const v = (answers[d.key] as Record<string, string> | undefined) ?? {}
-    return Object.values(v).some((x) => x?.trim())
-  })
+  // Fixa o horário de término assim que a tela de resultado aparece.
+  useEffect(() => {
+    finish()
+  }, [finish])
+
+  const result: GuideResult = useMemo(() => {
+    const end = finishedAt ?? Date.now()
+    return buildResult(answers, {
+      fillId,
+      patientId: null,
+      startedAt: new Date(startedAt).toISOString(),
+      finishedAt: new Date(end).toISOString(),
+      durationMs: Math.max(0, end - startedAt),
+    })
+  }, [answers, fillId, startedAt, finishedAt])
+
+  const baixarPdf = async () => {
+    setDownloading(true)
+    setPdfError(false)
+    try {
+      const { buildReportBlob, reportFileName } = await import('@/lib/pdf/report')
+      const blob = await buildReportBlob(result)
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = reportFileName(result)
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+    } catch {
+      setPdfError(true)
+    } finally {
+      setDownloading(false)
+    }
+  }
 
   return (
     <StepShell kicker={step.kicker} title={step.title} todo={step.todo}>
       <p className="text-forest/60">
-        Um retrato do que foi construído neste atendimento. O paciente é o José, e cada José tem
-        seu próprio caminho.
+        Um retrato do que foi construído neste atendimento. Guarde o PDF com você: ele traz o
+        identificador deste preenchimento.
       </p>
 
-      <div className="mt-8 space-y-5 rounded-3xl border border-forest/10 bg-cream-50/60 p-6 sm:p-8">
-        <Row label="Funcionalidade (PPS)">
-          {pps ? `${pps.label} (PPS ${pps.value})` : 'Não informado'}
-        </Row>
-        <Row label="Interpretação">{reading.title}</Row>
-        <Row label="Indicadores SPICT-BR">{spictCount(answers)} marcado(s)</Row>
-        {answers.perguntaSurpresa === 'sim' && (
-          <Row label="Recomendação">Recomenda-se reavaliação periódica</Row>
-        )}
-
-        <Divider />
-
-        <Row label="Dimensões avaliadas">
-          {dimsAvaliadas.map((d) => d.label).join(' · ') || 'Nenhuma anotação registrada'}
-        </Row>
-
-        <Divider />
-
-        {planoFields.map((f) => {
-          const val = planoValorLegivel(f, plano)
-          return (
-            <Row key={f.id} label={f.label}>
-              {val || <span className="text-forest/35">Em aberto</span>}
-            </Row>
-          )
-        })}
-
-        {dav && (
-          <>
-            <Divider />
-            <Row label="Diretiva antecipada (DAV)">{dav}</Row>
-          </>
-        )}
+      {/* Identificador + metadados */}
+      <div className="mt-6 flex flex-wrap items-end justify-between gap-4 rounded-3xl border border-moss/20 bg-sage-100 p-5 sm:p-6">
+        <div>
+          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-moss/80">
+            Identificador do preenchimento
+          </p>
+          <p className="mt-1 font-mono text-sm text-forest/90 sm:text-base">{fillId}</p>
+        </div>
+        <p className="text-xs leading-relaxed text-forest/55">
+          {formatDateTime(result.finishedAt)} · {formatDuration(result.durationMs)}
+        </p>
       </div>
 
-      {/* Ações — stub na v1 */}
-      <div className="mt-8 flex flex-wrap gap-3">
-        <StubAction icon={faPrint} label="Imprimir" />
-        <StubAction icon={faFilePdf} label="Salvar em PDF" />
-        <StubAction icon={faFileMedical} label="Anexar ao prontuário" />
+      {/* Respostas estruturadas */}
+      <div className="mt-8 space-y-8">
+        {result.sections.map((section) => (
+          <section key={section.title}>
+            <h2 className="font-serif text-xl text-forest">{section.title}</h2>
+            <div className="mt-3 space-y-3 rounded-2xl border border-forest/10 bg-cream-50/60 p-5">
+              {section.fields.map((f, i) => (
+                <div key={i} className="sm:flex sm:gap-4">
+                  <p className="text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-moss/80 sm:w-2/5 sm:shrink-0">
+                    {f.label}
+                  </p>
+                  <p className="mt-0.5 leading-relaxed text-forest/85 sm:mt-0 sm:flex-1">{f.value}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        ))}
       </div>
 
-      <button
-        onClick={reset}
-        className="mt-10 inline-flex items-center gap-2 text-sm text-forest/55 transition-colors hover:text-moss"
-      >
-        <FontAwesomeIcon icon={faRotateLeft} className="text-xs" />
-        Recomeçar o guia
-      </button>
+      {/* Ações */}
+      <div className="mt-8 flex flex-wrap items-center gap-3">
+        <button
+          onClick={baixarPdf}
+          disabled={downloading}
+          className="inline-flex items-center gap-2 rounded-full bg-forest px-6 py-3 text-sm font-medium text-cream-50 transition-colors hover:bg-pine disabled:opacity-60"
+        >
+          <FontAwesomeIcon
+            icon={downloading ? faSpinner : faFilePdf}
+            className={`text-sm ${downloading ? 'animate-spin' : ''}`}
+          />
+          {downloading ? 'Gerando PDF…' : 'Baixar PDF'}
+        </button>
+
+        <button
+          onClick={reset}
+          className="inline-flex items-center gap-2 text-sm text-forest/55 transition-colors hover:text-moss"
+        >
+          <FontAwesomeIcon icon={faRotateLeft} className="text-xs" />
+          Recomeçar o guia
+        </button>
+      </div>
+
+      {pdfError && (
+        <p className="mt-3 text-sm text-red-700/80">
+          Não foi possível gerar o PDF agora. Verifique a conexão e tente novamente.
+        </p>
+      )}
     </StepShell>
-  )
-}
-
-function Row({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <p className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-moss/80">
-        {label}
-      </p>
-      <p className="mt-1 leading-relaxed text-forest/85">{children}</p>
-    </div>
-  )
-}
-
-function Divider() {
-  return <div className="h-px bg-forest/10" />
-}
-
-function StubAction({ icon, label }: { icon: typeof faPrint; label: string }) {
-  return (
-    <span
-      aria-disabled
-      title="Disponível numa próxima versão"
-      className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-forest/15 px-5 py-2.5 text-sm text-forest/40"
-    >
-      <FontAwesomeIcon icon={icon} className="text-xs" />
-      {label}
-    </span>
   )
 }
