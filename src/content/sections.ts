@@ -163,10 +163,7 @@ export const sections: Section[] = [
         title: 'Plano de cuidados paliativos',
         text:
           'O Plano de Cuidados Paliativos é o documento em que a equipe organiza, de forma ' +
-          'individualizada, as ações voltadas ao alívio do sofrimento do paciente e da família. ' +
-          'Ele parte do conceito de “dor total”, proposto por Cicely Saunders, segundo o qual o ' +
-          'sofrimento no fim da vida nunca é apenas físico, mas se manifesta em quatro dimensões ' +
-          'interligadas.',
+          'individualizada, as ações voltadas ao alívio do sofrimento do paciente e da família.',
         href: '/pdfs/plano-de-cuidados-cuidados-paliativos.pdf',
       },
       {
