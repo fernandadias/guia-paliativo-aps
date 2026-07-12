@@ -8,6 +8,7 @@ import { esasItems } from '@/content/edmonton'
 import { zaritScore, zaritComplete, zaritFaixa } from '@/content/zarit'
 import { painadScore, painadComplete, painadFaixa, evaCategoria } from '@/content/dor'
 import { planoFields, planoValorLegivel } from '@/content/plano'
+import { beneficiosOpcoes } from '@/content/social'
 import { zaritQuestions } from '@/content/zarit'
 import { steps, type Answers, type StepId } from '@/content/guide'
 
@@ -76,7 +77,17 @@ function buildItems(answers: Answers): Item[] {
   push('Quem cuida?', (social.quemCuida ?? '').trim())
   if (social.redeApoio) push('Existe rede de apoio?', social.redeApoio === 'sim' ? 'Sim' : 'Não')
   push('Rede de apoio, quem é?', (social.redeApoioQuem ?? '').trim())
-  push('Benefícios sociais', (social.beneficios ?? '').trim())
+  const benef = answers.beneficiosSociais as Record<string, boolean> | undefined
+  if (benef) {
+    const labels = beneficiosOpcoes
+      .filter((o) => benef[o.id] && o.id !== 'outro')
+      .map((o) => o.label)
+    if (benef.outro) {
+      const outro = (social.beneficiosOutro ?? '').trim()
+      labels.push(outro ? `Outro: ${outro}` : 'Outro')
+    }
+    if (labels.length) push('Benefícios sociais', labels.join(', '))
+  }
 
   pushFields('espiritual')
 

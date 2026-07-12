@@ -254,7 +254,6 @@ export const steps: Record<StepId, Step> = {
     id: 'social',
     kind: 'social',
     progress: true,
-    pendingClient: true,
     kicker: 'Dimensão social',
     title: 'Social',
     answerKey: 'dimSocial',
