@@ -139,7 +139,7 @@ export const sections: Section[] = [
         icon: 'gauge',
         title: 'PPS: Palliative Performance Scale',
         text: 'Avalia a funcionalidade e ajuda a situar o paciente na linha do cuidado.',
-        href: '/pdfs/PPS CUIDADOS PALIATIVOS.pdf',
+        href: '/pdfs/pps-cuidados-paliativos.pdf',
       },
       {
         kind: 'callout',
@@ -149,7 +149,7 @@ export const sections: Section[] = [
           'Instrumento de triagem que ajuda os profissionais de saúde a identificar precocemente ' +
           'pacientes que podem se beneficiar de uma abordagem paliativa, antes que haja um declínio ' +
           'visível das condições de saúde.',
-        href: '/pdfs/SPICT-BR-VERSÃO ACESSÍVEL.pdf',
+        href: '/pdfs/spict-br-versao-acessivel.pdf',
       },
       {
         kind: 'callout',
@@ -161,7 +161,7 @@ export const sections: Section[] = [
           'Ele parte do conceito de “dor total”, proposto por Cicely Saunders, segundo o qual o ' +
           'sofrimento no fim da vida nunca é apenas físico, mas se manifesta em quatro dimensões ' +
           'interligadas.',
-        href: '/pdfs/DIRETIVA ANTECIPADA DE CUIDADO.pdf',
+        href: '/pdfs/diretiva-antecipada-de-cuidado.pdf',
       },
       {
         kind: 'callout',
@@ -171,7 +171,7 @@ export const sections: Section[] = [
           'O SPIKES orienta profissionais na comunicação de más notícias, como um diagnóstico grave, ' +
           'o agravamento de uma doença ou o óbito de um paciente. Seu nome é um acrônimo que representa ' +
           'seis etapas sequenciais da conversa.',
-        href: '/pdfs/SPIKES.pdf',
+        href: '/pdfs/spikes.pdf',
       },
       {
         kind: 'callout',
@@ -181,7 +181,7 @@ export const sections: Section[] = [
           'A Escala de ZARIT é um instrumento para avaliar a sobrecarga do cuidador, ou seja, o quanto ' +
           'a rotina de cuidar de uma pessoa com doença crônica ou em cuidados paliativos está afetando ' +
           'a vida física, emocional, social e financeira de quem cuida.',
-        href: '/pdfs/ESCALA DE ZARIT CUIDADOS PALIATIVOS.pdf',
+        href: '/pdfs/escala-de-zarit-cuidados-paliativos.pdf',
       },
       {
         kind: 'callout',
@@ -192,7 +192,7 @@ export const sections: Section[] = [
           'sintomas que mensura, em escala numérica, a intensidade de sintomas físicos e psicológicos ' +
           'apresentados pelo paciente em cuidados paliativos, como dor, fadiga, náusea, ansiedade, ' +
           'depressão, sonolência e falta de ar.',
-        href: '/pdfs/ESAS-r CUIDADOS PALIATIVOS.pdf',
+        href: '/pdfs/esas-r-cuidados-paliativos.pdf',
       },
       {
         kind: 'links',
