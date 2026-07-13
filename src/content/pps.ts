@@ -1,14 +1,15 @@
 /**
  * PPS — Palliative Performance Scale (base: Maciel, 2009 / Victoria Hospice).
  *
- * A tabela tem 5 colunas e 11 níveis (100% a 0%). O profissional seleciona uma
+ * A tabela tem 5 colunas e 10 níveis (100% a 10%). O profissional seleciona uma
  * opção em cada coluna e o sistema SUGERE o PPS.
  *
- * ⚠️  A regra de cálculo é PROVISÓRIA até validação clínica da cliente.
- * Ela segue o instrumento: melhor ajuste do conjunto com PRECEDÊNCIA das colunas
- * da esquerda (Deambulação pesa mais, depois Atividade, e assim por diante),
- * em passos de 10%. Como o método oficial pede julgamento clínico, a sugestão é
- * sempre ajustável manualmente pelo profissional.
+ * Regra de cálculo: leitura LEXICOGRÁFICA da esquerda para a direita, como no
+ * instrumento oficial. A Deambulação define o bloco; cada coluna seguinte só
+ * REFINA dentro do que as anteriores permitiram — se conflitar (não casar
+ * nenhuma candidata), é ignorada, nunca sobrepõe uma coluna mais forte. Em
+ * empate, arredonda para o nível mais grave (menor %). A sugestão é sempre
+ * ajustável manualmente pelo profissional.
  */
 
 import type { PpsBand } from './guide'
@@ -134,9 +135,6 @@ export const ppsRows: PpsRow[] = [
   },
 ]
 
-/** Pesos por coluna: as da esquerda pesam mais (precedência do instrumento). */
-const WEIGHTS: Record<PpsColKey, number> = { deamb: 5, ativ: 4, auto: 3, ing: 2, consc: 1 }
-
 /** Opções distintas de uma coluna (deduplica as células repetidas / "idem"). */
 export function ppsOptions(key: PpsColKey): string[] {
   const seen = new Set<string>()
@@ -153,26 +151,28 @@ export function ppsOptions(key: PpsColKey): string[] {
 export type PpsSelection = Partial<Record<PpsColKey, string>>
 
 /**
- * Sugere o PPS pelo melhor ajuste do conjunto, com precedência das colunas da
- * esquerda. Retorna null enquanto nada foi selecionado. É uma SUGESTÃO: o
- * profissional pode ajustar manualmente.
+ * Sugere o PPS por leitura lexicográfica da esquerda para a direita. Cada coluna
+ * (na ordem deamb → ativ → auto → ing → consc) refina o conjunto de candidatas;
+ * se não casar nenhuma, é ignorada (não sobrepõe as colunas mais fortes). Em
+ * empate, retorna o nível mais grave (menor %). Retorna null enquanto nada foi
+ * selecionado. É uma SUGESTÃO: o profissional pode ajustar manualmente.
  */
 export function suggestPps(sel: PpsSelection): number | null {
   const keys = ppsColumns.map((c) => c.key)
   if (!keys.some((k) => sel[k])) return null
 
-  let best: { value: number; score: number; deambMatch: boolean } | null = null
-  for (const r of ppsRows) {
-    let score = 0
-    for (const k of keys) if (sel[k] && sel[k] === r.cells[k]) score += WEIGHTS[k]
-    const deambMatch = !!sel.deamb && sel.deamb === r.cells.deamb
-    // Maior pontuação vence; empate → prioriza a linha que casa com a
-    // Deambulação (coluna mais forte); persistindo o empate, mantém a de maior %.
-    if (!best || score > best.score || (score === best.score && deambMatch && !best.deambMatch)) {
-      best = { value: r.value, score, deambMatch }
-    }
+  let candidates = ppsRows
+  for (const k of keys) {
+    const v = sel[k]
+    if (!v) continue
+    const matches = candidates.filter((r) => r.cells[k] === v)
+    // Só refina se houver correspondência dentro do bloco atual; conflito com
+    // coluna mais forte (matches vazio) é ignorado.
+    if (matches.length > 0) candidates = matches
   }
-  return best ? best.value : null
+
+  // Empate residual → arredonda para o mais grave (menor %).
+  return Math.min(...candidates.map((r) => r.value))
 }
 
 /** Todos os valores selecionáveis manualmente (100 a 10). */
