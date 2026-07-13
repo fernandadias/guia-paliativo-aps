@@ -175,6 +175,25 @@ export function suggestPps(sel: PpsSelection): number | null {
   return Math.min(...candidates.map((r) => r.value))
 }
 
+/**
+ * Colunas cuja seleção conflita com as de maior prioridade: na leitura
+ * lexicográfica elas não casaram dentro do bloco já definido e foram
+ * IGNORADAS. Usado para sinalizar inconsistência ao profissional.
+ */
+export function ppsConflicts(sel: PpsSelection): PpsColKey[] {
+  const keys = ppsColumns.map((c) => c.key)
+  const conflicts: PpsColKey[] = []
+  let candidates = ppsRows
+  for (const k of keys) {
+    const v = sel[k]
+    if (!v) continue
+    const matches = candidates.filter((r) => r.cells[k] === v)
+    if (matches.length > 0) candidates = matches
+    else conflicts.push(k)
+  }
+  return conflicts
+}
+
 /** Todos os valores selecionáveis manualmente (100 a 10). */
 export const ppsValues = ppsRows.map((r) => r.value)
 
