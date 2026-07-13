@@ -230,11 +230,9 @@ export const steps: Record<StepId, Step> = {
     id: 'acolhimento',
     kind: 'terminal',
     progress: false,
-    pendingClient: true,
     icon: 'hand-holding-heart',
     title: 'Acolhimento da família',
-    body: 'Fase de acolhimento da família. Conteúdo e formato a serem definidos pela cliente. (Acionada quando a deambulação indica "Morte" no PPS.)',
-    todo: true,
+    body: 'Acolher os familiares no pós-óbito por meio de escuta ativa, apoio emocional, esclarecimento de dúvidas e orientações sobre os procedimentos necessários e redes disponíveis.',
   },
   resultado: {
     id: 'resultado',
