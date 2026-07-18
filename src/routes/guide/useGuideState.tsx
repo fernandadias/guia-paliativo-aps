@@ -60,6 +60,11 @@ function loadState(): GuideState {
     if (raw) {
       const parsed = JSON.parse(raw) as Partial<GuideState>
       if (parsed && parsed.fillId && parsed.current && steps[parsed.current]) {
+        // Não retoma numa etapa terminal (guia já concluído: final, reavaliar,
+        // acolhimento) — nesse caso começa um preenchimento novo.
+        if (getNextStepId(parsed.current, parsed.answers ?? {}) === null) {
+          return createInitialState()
+        }
         return { ...createInitialState(), ...parsed } as GuideState
       }
     }
