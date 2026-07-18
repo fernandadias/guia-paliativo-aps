@@ -41,11 +41,12 @@ export function ClosingStep({ step }: { step: Extract<Step, { kind: 'closing' }>
 
         <p className="max-w-md leading-relaxed text-cream-50/85">{step.body}</p>
 
-        <div className="mt-4 text-sm leading-relaxed text-cream-50/70">
-          {step.signature.map((linha, i) => (
-            <p key={i} className={i === 0 ? 'font-medium text-cream-50/90' : ''}>
-              {linha}
-            </p>
+        <div className="mt-4 space-y-4 text-sm leading-relaxed text-cream-50/65">
+          {step.signature.map((pessoa, i) => (
+            <div key={i}>
+              <p className="font-medium text-cream-50/90">{pessoa.name}</p>
+              <p className="mx-auto max-w-xs">{pessoa.role}</p>
+            </div>
           ))}
         </div>
       </motion.div>

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faRotateLeft, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faCircleInfo, faRotateLeft } from '@fortawesome/free-solid-svg-icons'
 import { StepShell } from '../StepShell'
 import { useGuide } from '../useGuideState'
 import { getIcon } from '@/lib/icons'
@@ -9,7 +9,6 @@ import { gentleFast } from '@/lib/motion'
 import {
   bandInfo,
   ppsColumns,
-  ppsConflicts,
   ppsOptions,
   ppsValues,
   suggestPps,
@@ -32,14 +31,6 @@ export function PpsStep({ step }: { step: Extract<Step, { kind: 'pps' }> }) {
   for (const c of ppsColumns) if (sel[c.key]) cleanSel[c.key] = sel[c.key]
   const allChosen = ppsColumns.every((c) => sel[c.key])
   const suggested = suggestPps(cleanSel)
-
-  // Colunas que conflitam com a Deambulação (ignoradas no cálculo lexicográfico).
-  const conflitos = allChosen ? ppsConflicts(cleanSel) : []
-  const conflitosLabels = conflitos.map((k) => ppsColumns.find((c) => c.key === k)!.label)
-  const conflitosTexto =
-    conflitosLabels.length <= 1
-      ? conflitosLabels[0]
-      : `${conflitosLabels.slice(0, -1).join(', ')} e ${conflitosLabels.at(-1)}`
 
   const selectCell = (key: PpsColKey, text: string) => {
     const nextSel = { ...sel }
@@ -185,24 +176,15 @@ export function PpsStep({ step }: { step: Extract<Step, { kind: 'pps' }> }) {
                   </span>
                 </div>
 
-                {conflitos.length > 0 && (
-                  <div className="mt-5 rounded-2xl border border-amber-300/60 bg-amber-50 p-4">
-                    <p className="flex items-center gap-2 text-sm font-semibold text-amber-800">
-                      <FontAwesomeIcon icon={faTriangleExclamation} className="text-xs" />
-                      Respostas possivelmente inconsistentes
-                    </p>
-                    <p className="mt-1.5 text-sm leading-relaxed text-amber-800/85">
-                      A seleção de <strong>{conflitosTexto}</strong> não corresponde ao nível
-                      definido pela Deambulação e foi desconsiderada no cálculo. Revise as respostas
-                      ou ajuste o PPS manualmente.
-                    </p>
-                  </div>
-                )}
+                <div className="mt-5 flex items-start gap-2.5 rounded-2xl border border-moss/25 bg-paper/70 p-4">
+                  <FontAwesomeIcon icon={faCircleInfo} className="mt-0.5 text-base text-moss" />
+                  <p className="text-sm leading-relaxed text-forest/75">
+                    Este valor é uma <strong className="text-forest">sugestão</strong> pelo método do
+                    instrumento. Ajuste conforme o julgamento clínico.
+                  </p>
+                </div>
 
-                <p className="mt-5 text-xs text-forest/55">
-                  Sugestão pelo método do instrumento. Ajuste conforme o julgamento clínico:
-                </p>
-                <div className="mt-3 flex flex-wrap gap-2">
+                <div className="mt-4 flex flex-wrap gap-2">
                   {ppsValues.map((v) => {
                     const active = effective === v
                     return (

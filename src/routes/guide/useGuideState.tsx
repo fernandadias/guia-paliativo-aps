@@ -125,9 +125,12 @@ const GuideContext = createContext<GuideContextValue | null>(null)
 export function GuideProvider({
   children,
   mode = 'page',
+  onFastAdvance,
 }: {
   children: ReactNode
   mode?: GuideMode
+  /** No modo rápido, "avançar" (ex.: Seguir no resumo) chama isto em vez de navegar. */
+  onFastAdvance?: () => void
 }) {
   const [state, dispatch] = useReducer(reducer, undefined, loadState)
 
@@ -146,8 +149,9 @@ export function GuideProvider({
   // No modo rápido não há navegação entre telas: next é inócuo e answerAndNext
   // apenas grava a resposta (a revelação das etapas é recalculada pelo checklist).
   const next = useCallback(() => {
-    if (mode !== 'fast') dispatch({ type: 'next' })
-  }, [mode])
+    if (mode === 'fast') onFastAdvance?.()
+    else dispatch({ type: 'next' })
+  }, [mode, onFastAdvance])
   const back = useCallback(() => dispatch({ type: 'back' }), [])
   const reset = useCallback(() => dispatch({ type: 'reset' }), [])
   const finish = useCallback(() => dispatch({ type: 'finish' }), [])

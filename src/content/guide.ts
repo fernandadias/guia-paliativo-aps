@@ -119,7 +119,12 @@ export type Step = StepCommon &
         todo?: boolean
       }
     | { kind: 'summary'; kicker: string; title: string; todo?: boolean }
-    | { kind: 'closing'; lines: string[]; body: string; signature: string[] }
+    | {
+        kind: 'closing'
+        lines: string[]
+        body: string
+        signature: { name: string; role: string }[]
+      }
     | { kind: 'terminal'; icon: string; title: string; body: string; todo?: boolean }
     | { kind: 'loading'; message: string; submessage: string }
     | { kind: 'placeholder'; kicker: string; title: string; body: string; epic: string }
@@ -392,9 +397,14 @@ export const steps: Record<StepId, Step> = {
     lines: ['você marcha, José!', 'José, para onde?'],
     body: 'Que este percurso ajude a transformar a dúvida em caminho e o conhecimento em cuidado.',
     signature: [
-      'Thais Cristina da Silva',
-      'Mestranda em Saúde da Família — PROFSAÚDE',
-      'Prof. Dr Fernando Sfair Kinker',
+      {
+        name: 'Thais Cristina da Silva',
+        role: 'Mestranda em Saúde da Família — PROFSAÚDE',
+      },
+      {
+        name: 'Prof. Dr Fernando Sfair Kinker',
+        role: 'Orientador do Programa de pós-graduação em Saúde da Família, PROFSAÚDE, da Universidade Federal de São Paulo',
+      },
     ],
   },
 }

@@ -8,7 +8,6 @@ import { TodoTag } from '@/components/ui/TodoTag'
 import { Reveal } from '@/components/motion/Reveal'
 import { Button } from '@/components/ui/Button'
 import { sectionByPath, type SectionBlock } from '@/content/sections'
-import { PpsExplainer } from './PpsExplainer'
 import NotFound from '@/routes/NotFound'
 
 export default function SectionPage() {
@@ -82,8 +81,6 @@ function Block({ block }: { block: SectionBlock }) {
           </ul>
         </div>
       )
-    case 'ppsExplainer':
-      return <PpsExplainer />
     case 'link':
       return (
         <a

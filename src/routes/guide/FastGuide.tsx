@@ -38,7 +38,7 @@ function buildFastPath(answers: Answers): StepId[] {
   return out
 }
 
-function FastGuideInner() {
+function FastGuideInner({ showClosing }: { showClosing: boolean }) {
   const { answers, fillId, finish } = useGuide()
   const [showResult, setShowResult] = useState(false)
   const footerRef = useRef<HTMLDivElement>(null)
@@ -63,6 +63,10 @@ function FastGuideInner() {
     finish()
     setShowResult(true)
     window.scrollTo({ top: 0 })
+  }
+
+  if (showClosing) {
+    return <StepView step={steps.final} />
   }
 
   if (showResult) {
@@ -150,10 +154,11 @@ function FastGuideInner() {
 }
 
 export default function FastGuide() {
+  const [showClosing, setShowClosing] = useState(false)
   return (
-    <GuideProvider mode="fast">
+    <GuideProvider mode="fast" onFastAdvance={() => setShowClosing(true)}>
       <div className="min-h-[100svh] bg-paper">
-        <FastGuideInner />
+        <FastGuideInner showClosing={showClosing} />
       </div>
     </GuideProvider>
   )

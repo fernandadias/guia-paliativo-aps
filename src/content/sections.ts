@@ -14,7 +14,6 @@ export type SectionBlock =
   | { kind: 'callout'; icon: string; title: string; text?: string; items?: string[]; href?: string; todo?: boolean }
   | { kind: 'link'; text: string; href: string; todo?: boolean }
   | { kind: 'links'; title?: string; items: { text: string; href: string }[]; todo?: boolean }
-  | { kind: 'ppsExplainer' }
 
 export interface Section {
   slug: string
@@ -216,7 +215,6 @@ export const sections: Section[] = [
         kind: 'paragraph',
         text: 'Algumas dessas ferramentas estão aplicadas de forma prática no Guia de direção clínica.',
       },
-      { kind: 'ppsExplainer' },
     ],
   },
 ]
