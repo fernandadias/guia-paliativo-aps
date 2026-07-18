@@ -129,6 +129,7 @@ function SectionsIndex() {
             to={s.path}
             title={s.menuLabel}
             blurb={s.blurb}
+            noBorder={i === sections.length - 1}
             delay={(i + 1) * 0.05}
           />
         ))}
@@ -155,10 +156,12 @@ interface IndexRowProps {
   blurb: string
   verse?: string
   guide?: boolean
+  /** Suprime a linha divisória inferior (ex.: a linha antes do card do guia). */
+  noBorder?: boolean
   delay: number
 }
 
-function IndexRow({ n, to, title, blurb, verse, guide, delay }: IndexRowProps) {
+function IndexRow({ n, to, title, blurb, verse, guide, noBorder, delay }: IndexRowProps) {
   return (
     <motion.li
       initial={{ opacity: 0, y: 14 }}
@@ -168,8 +171,12 @@ function IndexRow({ n, to, title, blurb, verse, guide, delay }: IndexRowProps) {
     >
       <Link
         to={to}
-        className={`group flex items-baseline gap-6 border-b border-forest/12 py-7 sm:gap-10 sm:py-8 ${
-          guide ? 'mt-2 rounded-2xl border border-transparent bg-pine px-6 text-cream-50 sm:px-8' : ''
+        className={`group flex items-baseline gap-6 py-7 sm:gap-10 sm:py-8 ${
+          guide
+            ? 'mt-2 -mx-6 rounded-2xl bg-pine px-6 text-cream-50 sm:-mx-8 sm:px-8'
+            : noBorder
+              ? ''
+              : 'border-b border-forest/12'
         }`}
       >
         <span
