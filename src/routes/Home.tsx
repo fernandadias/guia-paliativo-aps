@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
+import { faArrowDown, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { Reveal } from '@/components/motion/Reveal'
@@ -71,9 +71,15 @@ function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...gentle, delay: 0.4 }}
         >
-          <Button to="/guia" size="lg" className="w-full sm:w-auto">
-            Acessar o guia
-            <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+          <Button
+            onClick={() =>
+              document.getElementById('conhecer')?.scrollIntoView({ behavior: 'smooth' })
+            }
+            size="lg"
+            className="w-full sm:w-auto"
+          >
+            Conheça os materiais
+            <FontAwesomeIcon icon={faArrowDown} className="text-sm" />
           </Button>
           <p className="mt-5 text-center text-sm text-forest/55 sm:text-left">
             Presença, ciência e cuidado: passo a passo.
@@ -96,7 +102,7 @@ function Hero() {
  */
 function SectionsIndex() {
   return (
-    <section className="mx-auto max-w-5xl px-6 py-24 sm:px-10 sm:py-32">
+    <section id="conhecer" className="mx-auto max-w-5xl scroll-mt-8 px-6 py-24 sm:px-10 sm:py-32">
       <Reveal>
         <p className="mb-3 text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-moss">
           Para conhecer

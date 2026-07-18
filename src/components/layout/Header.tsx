@@ -18,7 +18,7 @@ export function Header() {
             className="inline-flex items-center gap-2 rounded-full border border-forest/10 bg-paper px-4 py-2 text-[0.8rem] font-medium text-forest transition-colors hover:bg-cream-50"
           >
             <FontAwesomeIcon icon={faBars} className="text-xs" />
-            <span className="hidden sm:inline">Menu</span>
+            <span>Menu</span>
           </button>
         </div>
       </header>

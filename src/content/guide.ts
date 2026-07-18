@@ -391,7 +391,11 @@ export const steps: Record<StepId, Step> = {
     progress: false,
     lines: ['você marcha, José!', 'José, para onde?'],
     body: 'Que este percurso ajude a transformar a dúvida em caminho e o conhecimento em cuidado.',
-    signature: ['Thais Cristina da Silva', 'Mestranda em Saúde da Família — PROFSAÚDE'],
+    signature: [
+      'Thais Cristina da Silva',
+      'Mestranda em Saúde da Família — PROFSAÚDE',
+      'Prof. Dr Fernando Sfair Kinker',
+    ],
   },
 }
 
