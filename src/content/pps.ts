@@ -7,8 +7,13 @@
  * Regra de cálculo: leitura LEXICOGRÁFICA da esquerda para a direita, como no
  * instrumento oficial. A Deambulação define o bloco; cada coluna seguinte só
  * REFINA dentro do que as anteriores permitiram — se conflitar (não casar
- * nenhuma candidata), é ignorada, nunca sobrepõe uma coluna mais forte. Em
- * empate, arredonda para o nível mais grave (menor %). A sugestão é sempre
+ * nenhuma candidata), é ignorada, nunca sobrepõe uma coluna mais forte.
+ *
+ * Com a tabela fiel ao instrumento, o refinamento clínico normalmente já fixa a
+ * linha (o caso do paciente acamado mas lúcido e alimentando-se cai em 30% por
+ * correspondência real). O desempate residual é só uma REDE DE SEGURANÇA para
+ * seleções contraditórias: mantém o valor no topo do bloco fixado pelas colunas
+ * fortes (maior %), sem subir acima nem descer abaixo dele. A sugestão é sempre
  * ajustável manualmente pelo profissional.
  */
 
@@ -16,9 +21,9 @@ import type { PpsBand } from './guide'
 
 export const ppsColumns = [
   { key: 'deamb', label: 'Deambulação', icon: 'person-walking' },
-  { key: 'ativ', label: 'Atividade e evidência de doença', icon: 'person-running' },
+  { key: 'ativ', label: 'Atividade / Evidência de doença', icon: 'person-running' },
   { key: 'auto', label: 'Autocuidado', icon: 'heart' },
-  { key: 'ing', label: 'Ingestão', icon: 'utensils' },
+  { key: 'ing', label: 'Ingesta', icon: 'utensils' },
   { key: 'consc', label: 'Nível de consciência', icon: 'brain' },
 ] as const
 
@@ -57,7 +62,7 @@ export const ppsRows: PpsRow[] = [
     value: 80,
     cells: {
       deamb: 'Completa',
-      ativ: 'Normal com esforço, alguma doença',
+      ativ: 'Normal com esforço, alguma evidência de doença',
       auto: 'Completo',
       ing: 'Normal ou reduzida',
       consc: 'Completo',
@@ -67,7 +72,7 @@ export const ppsRows: PpsRow[] = [
     value: 70,
     cells: {
       deamb: 'Reduzida',
-      ativ: 'Incapaz de trabalhar, doença significativa',
+      ativ: 'Incapaz para trabalho normal, alguma evidência de doença',
       auto: 'Completo',
       ing: 'Normal ou reduzida',
       consc: 'Completo',
@@ -77,60 +82,60 @@ export const ppsRows: PpsRow[] = [
     value: 60,
     cells: {
       deamb: 'Reduzida',
-      ativ: 'Incapaz de hobbies, doença significativa',
+      ativ: 'Incapaz para hobbies/trabalho doméstico, doença significativa',
       auto: 'Assistência ocasional',
       ing: 'Normal ou reduzida',
-      consc: 'Completo ou com períodos de confusão',
+      consc: 'Completo ou confuso',
     },
   },
   {
     value: 50,
     cells: {
-      deamb: 'Sentado ou deitado',
-      ativ: 'Incapaz de trabalhar, doença extensa',
+      deamb: 'Sentado/deitado a maior parte do tempo',
+      ativ: 'Incapaz para qualquer trabalho, doença extensa',
       auto: 'Assistência considerável',
       ing: 'Normal ou reduzida',
-      consc: 'Completo ou com períodos de confusão',
+      consc: 'Completo ou confuso',
     },
   },
   {
     value: 40,
     cells: {
-      deamb: 'Muito tempo acamado',
-      ativ: 'Incapaz de trabalhar, doença extensa',
+      deamb: 'Principalmente acamado',
+      ativ: 'Incapaz para qualquer trabalho, doença extensa',
       auto: 'Assistência quase total',
       ing: 'Normal ou reduzida',
-      consc: 'Completo ou com períodos de confusão',
+      consc: 'Completo, sonolento ou confuso',
     },
   },
   {
     value: 30,
     cells: {
       deamb: 'Totalmente acamado',
-      ativ: 'Incapaz de trabalhar, doença extensa',
-      auto: 'Dependência completa',
-      ing: 'Reduzida',
-      consc: 'Completo ou com períodos de confusão',
+      ativ: 'Incapaz para qualquer trabalho, doença extensa',
+      auto: 'Cuidado total',
+      ing: 'Normal ou reduzida',
+      consc: 'Completo, sonolento ou confuso',
     },
   },
   {
     value: 20,
     cells: {
       deamb: 'Totalmente acamado',
-      ativ: 'Incapaz de trabalhar, doença extensa',
-      auto: 'Dependência completa',
-      ing: 'Mínima',
-      consc: 'Completo ou com períodos de confusão',
+      ativ: 'Incapaz para qualquer trabalho, doença extensa',
+      auto: 'Cuidado total',
+      ing: 'Mínima, goles',
+      consc: 'Completo, sonolento ou confuso',
     },
   },
   {
     value: 10,
     cells: {
       deamb: 'Totalmente acamado',
-      ativ: 'Incapaz de trabalhar, doença extensa',
-      auto: 'Dependência completa',
-      ing: 'Cuidados com a boca',
-      consc: 'Confuso ou em coma',
+      ativ: 'Incapaz para qualquer trabalho, doença extensa',
+      auto: 'Cuidado total',
+      ing: 'Cuidados com a boca apenas',
+      consc: 'Sonolento ou coma',
     },
   },
 ]
@@ -153,9 +158,9 @@ export type PpsSelection = Partial<Record<PpsColKey, string>>
 /**
  * Sugere o PPS por leitura lexicográfica da esquerda para a direita. Cada coluna
  * (na ordem deamb → ativ → auto → ing → consc) refina o conjunto de candidatas;
- * se não casar nenhuma, é ignorada (não sobrepõe as colunas mais fortes). Em
- * empate, retorna o nível mais grave (menor %). Retorna null enquanto nada foi
- * selecionado. É uma SUGESTÃO: o profissional pode ajustar manualmente.
+ * se não casar nenhuma, é ignorada (não sobrepõe as colunas mais fortes). Retorna
+ * null enquanto nada foi selecionado. É uma SUGESTÃO: o profissional pode ajustar
+ * manualmente.
  */
 export function suggestPps(sel: PpsSelection): number | null {
   const keys = ppsColumns.map((c) => c.key)
@@ -171,8 +176,10 @@ export function suggestPps(sel: PpsSelection): number | null {
     if (matches.length > 0) candidates = matches
   }
 
-  // Empate residual → arredonda para o mais grave (menor %).
-  return Math.min(...candidates.map((r) => r.value))
+  // Rede de segurança (empate residual por seleção contraditória): mantém no
+  // topo do bloco fixado pelas colunas fortes (maior %). No fluxo clínico normal
+  // as colunas já reduziram a uma única linha.
+  return Math.max(...candidates.map((r) => r.value))
 }
 
 /**

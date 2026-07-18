@@ -85,8 +85,9 @@ export function PpsExplainer() {
                 <p>
                   Se uma coluna <strong>não corresponde</strong> a nenhuma candidata do bloco
                   atual, ela é <strong>ignorada</strong>: colunas da direita nunca sobrepõem as de
-                  maior prioridade. Em empate, arredonda-se para o nível{' '}
-                  <strong>mais grave (menor %)</strong>.
+                  maior prioridade. Havendo seleções contraditórias, o valor é mantido{' '}
+                  <strong>dentro do bloco</strong> fixado pelas colunas mais fortes — sem subir
+                  acima nem descer abaixo dele.
                 </p>
                 <p className="text-sm text-forest/60">
                   A sugestão é sempre <strong>ajustável manualmente</strong> — o valor final cabe
