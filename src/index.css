@@ -26,6 +26,8 @@
   /* ---- Tipografia ---- */
   --font-sans: 'Figtree', ui-sans-serif, system-ui, sans-serif;
   --font-serif: 'EB Garamond', ui-serif, Georgia, serif;
+  /* Fonte de código da marca DesignIA — usada na assinatura da Nanda */
+  --font-mono: 'Kode Mono', ui-monospace, SFMono-Regular, monospace;
 
   /* Escala tipográfica (adotada do sistema Wispr) */
   --text-display: 7.5rem; /* hero */

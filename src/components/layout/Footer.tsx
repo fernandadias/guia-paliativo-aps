@@ -40,15 +40,15 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Assinatura mínima */}
+      {/* Assinatura mínima — Kode Mono (fonte de código da marca DesignIA) */}
       <div className="border-t border-forest/10">
-        <div className="mx-auto flex max-w-6xl items-center justify-center gap-1.5 px-6 py-4 text-xs text-forest/45 sm:px-10">
+        <div className="mx-auto flex max-w-6xl items-center justify-center gap-2 px-6 py-4 font-mono text-[0.7rem] uppercase tracking-[0.1em] text-forest/45 sm:px-10">
           <span>design &amp; desenvolvimento |</span>
           <a
             href="https://www.nandadias.com.br/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 transition-colors hover:text-moss"
+            className="inline-flex items-center gap-1.5 font-semibold transition-colors hover:text-moss"
           >
             Nanda Dias
             <NandaSignature className="h-6 w-auto" />
