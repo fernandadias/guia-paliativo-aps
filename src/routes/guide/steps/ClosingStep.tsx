@@ -51,18 +51,24 @@ export function ClosingStep({ step }: { step: Extract<Step, { kind: 'closing' }>
         </div>
       </motion.div>
 
-      {/* Rodapé: CTA de retorno + logos institucionais */}
-      <div className="relative z-10 flex flex-col items-center gap-6 pb-10">
+      {/* CTA de retorno */}
+      <div className="relative z-10 flex flex-col items-center pb-10 pt-4">
         <Button to="/" variant="cream">
           <FontAwesomeIcon icon={faArrowLeft} className="text-sm" />
           Voltar para o início
         </Button>
-        <img
-          src="/imagens/logo_prof-saude-horizontal.png"
-          alt="PROFSAÚDE — Mestrado Profissional em Saúde da Família. Realização: ABRASCO, Fiocruz e Ministério da Saúde."
-          className="h-8 w-auto max-w-full rounded-lg bg-cream-50/95 px-3 py-2"
-        />
       </div>
+
+      {/* Rodapé institucional — barra clara, edge-to-edge, com os logos maiores */}
+      <footer className="relative z-10 -mx-6 border-t border-forest/10 bg-cream-50">
+        <div className="mx-auto flex max-w-3xl items-center justify-center px-6 py-6">
+          <img
+            src="/imagens/logo_prof-saude-horizontal.png"
+            alt="PROFSAÚDE — Mestrado Profissional em Saúde da Família. Realização: ABRASCO, Fiocruz e Ministério da Saúde."
+            className="h-14 w-auto max-w-full sm:h-16"
+          />
+        </div>
+      </footer>
     </section>
   )
 }
