@@ -65,7 +65,7 @@ export function ClosingStep({ step }: { step: Extract<Step, { kind: 'closing' }>
           <img
             src="/imagens/logo_prof-saude-horizontal.png"
             alt="PROFSAÚDE — Mestrado Profissional em Saúde da Família. Realização: ABRASCO, Fiocruz e Ministério da Saúde."
-            className="h-14 w-auto max-w-full sm:h-16"
+            className="h-auto w-full max-w-[340px]"
           />
         </div>
       </footer>
