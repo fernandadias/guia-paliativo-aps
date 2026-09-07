@@ -46,6 +46,13 @@ export default function SectionPage() {
   )
 }
 
+/** Suporte mínimo a negrito inline em textos de conteúdo (`**trecho**`). */
+function renderInlineBold(text: string) {
+  return text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+    i % 2 === 1 ? <strong key={i}>{part}</strong> : part,
+  )
+}
+
 function Block({ block }: { block: SectionBlock }) {
   switch (block.kind) {
     case 'lead':
@@ -53,7 +60,7 @@ function Block({ block }: { block: SectionBlock }) {
         <p className="text-lg leading-relaxed text-forest/85">{block.text}</p>
       )
     case 'paragraph':
-      return <p className="leading-relaxed text-forest/70">{block.text}</p>
+      return <p className="leading-relaxed text-forest/70">{renderInlineBold(block.text)}</p>
     case 'quote':
       return (
         <figure className="border-l-2 border-moss/40 pl-6">

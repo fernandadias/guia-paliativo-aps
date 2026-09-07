@@ -255,8 +255,8 @@ export const sections: Section[] = [
         kind: 'paragraph',
         text:
           'Este guia foi criado a partir de uma dissertação de mestrado do Programa de Pós-Graduação ' +
-          'em Saúde da Família (PROFSAÚDE/UNIFESP) pela pesquisadora Thais Cristina da Silva e seu ' +
-          'orientador Fernando Sfair Kinker. A pesquisa ouviu profissionais de uma Unidade Básica de ' +
+          'em Saúde da Família (PROFSAÚDE/UNIFESP) pela pesquisadora **Thais Cristina da Silva** e seu ' +
+          'orientador **Fernando Sfair Kinker**. A pesquisa ouviu profissionais de uma Unidade Básica de ' +
           'Saúde, localizada na periferia da zona sul de São Paulo, sobre os desafios do cuidado ' +
           'paliativo na Atenção Primária, e um achado se repetiu, quase sem exceção: a formação sobre ' +
           'o tema, quando existiu, foi breve demais.',
