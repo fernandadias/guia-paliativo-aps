@@ -32,9 +32,9 @@ export const sections: Section[] = [
   {
     slug: 'sobre',
     path: '/sobre',
-    menuLabel: 'O que são cuidados paliativos',
+    menuLabel: 'O que são Cuidados Paliativos?',
     kicker: 'Antes de tudo',
-    title: 'O que são cuidados paliativos',
+    title: 'O que são Cuidados Paliativos?',
     intro:
       'Cuidados paliativos não significam desistir. Significam cuidar melhor, e podem começar muito antes da terminalidade.',
     blurb: 'O conceito, os princípios e por que o cuidado pode começar cedo.',
@@ -63,9 +63,9 @@ export const sections: Section[] = [
   {
     slug: 'por-que-aps',
     path: '/por-que-aps',
-    menuLabel: 'Por que atuar em cuidados paliativos na APS',
+    menuLabel: 'Por que a APS deve cuidar de pacientes em cuidados paliativos?',
     kicker: 'O seu papel',
-    title: 'Por que você deve atuar em cuidados paliativos na APS',
+    title: 'Por que a APS deve cuidar de pacientes em cuidados paliativos?',
     blurb: 'Vínculo, longitudinalidade e o lugar da APS na linha de cuidado.',
     blocks: [
       {
@@ -87,12 +87,16 @@ export const sections: Section[] = [
         ],
       },
       {
-        kind: 'quote',
+        kind: 'paragraph',
         text:
-          'É cuidar de pessoas que estão tendo doenças terminais, né, pra dar uma qualidade de vida, ' +
-          'cuidar da parte física, mental, psicológica e também espiritual também, né, entra. Então, ' +
-          'eu acho muito importante, porque dá uma qualidade de vida, a pessoa se sente viva, né?',
-        author: 'Agente Comunitário de Saúde 2',
+          'Quer se aprofundar? O Manual de Cuidados Paliativos (2ª edição, Ministério da Saúde) traz ' +
+          'definições, ferramentas de identificação e orientações completas para a prática clínica.',
+      },
+      {
+        kind: 'link',
+        text: 'Clique aqui e saiba mais',
+        href:
+          'https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/guias-e-manuais/2023/manual-de-cuidados-paliativos-2a-edicao/@@download/file',
       },
     ],
   },
@@ -114,20 +118,34 @@ export const sections: Section[] = [
           'até o último dia.',
       },
       {
+        kind: 'paragraph',
+        text:
+          'Em janeiro de 2026, a Portaria GM/MS nº 10.181 atualizou as regras da PNCP, reforçando que a ' +
+          'Atenção Primária deve realizar cuidados paliativos de forma integrada aos demais pontos da ' +
+          'rede, com o mesmo plano de cuidado compartilhado entre os níveis de atenção.',
+      },
+      {
         kind: 'link',
         text: 'Conheça a política na íntegra aqui',
         href: 'https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-3.681-de-7-de-maio-de-2024-561223717',
+      },
+      {
+        kind: 'link',
+        text: 'Veja a atualização aqui',
+        href:
+          'https://www.conass.org.br/conass-informa-n-19-2026-publicada-portaria-gm-n-10-181-que-altera-o-anexo-xliv-da-portaria-de-consolidacao-gm-ms-no-2-de-28-de-setembro-de-2017-para-atualizar-conceitos-e-regras-de-habil/',
       },
     ],
   },
   {
     slug: 'ferramentas',
     path: '/ferramentas',
-    menuLabel: 'Ferramentas de elegibilidade',
+    menuLabel: 'Ferramentas de avaliação em cuidados paliativos',
     kicker: 'Instrumentos',
-    title: 'Ferramentas de elegibilidade',
+    title: 'Ferramentas de avaliação em cuidados paliativos',
     intro:
-      'Instrumentos que ajudam a identificar quem se beneficia do cuidado paliativo, e quando.',
+      'Instrumentos validados para identificar, avaliar e acompanhar pacientes em cuidados paliativos ' +
+      'da triagem inicial ao suporte à família.',
     blurb: 'PPS, Pergunta Surpresa e SPICT-BR: quem se beneficia, e quando.',
     blocks: [
       {
@@ -151,6 +169,7 @@ export const sections: Section[] = [
         kind: 'callout',
         icon: 'clipboard-question',
         title: 'SPICT-BR Acessível',
+        text: 'Versão do SPICT-BR em linguagem simples;',
         href: '/pdfs/spict-br-versao-acessivel.pdf',
       },
       {
@@ -194,6 +213,13 @@ export const sections: Section[] = [
         href: '/pdfs/esas-r-cuidados-paliativos.pdf',
       },
       {
+        kind: 'callout',
+        icon: 'hands-praying',
+        title: 'HOPE',
+        text: 'Ferramenta de avaliação da dimensão espiritual',
+        href: '/pdfs/HOPE.pdf',
+      },
+      {
         kind: 'links',
         title: 'Para mais informações, acesse:',
         items: [
@@ -214,6 +240,51 @@ export const sections: Section[] = [
       {
         kind: 'paragraph',
         text: 'Algumas dessas ferramentas estão aplicadas de forma prática no Guia de direção clínica.',
+      },
+    ],
+  },
+  {
+    slug: 'sobre-o-mestrado',
+    path: '/sobre-o-mestrado',
+    menuLabel: 'Sobre o mestrado',
+    kicker: 'A origem deste guia',
+    title: 'Sobre o mestrado',
+    blurb: 'A pesquisa acadêmica que deu origem a este guia.',
+    blocks: [
+      {
+        kind: 'paragraph',
+        text:
+          'Este guia foi criado a partir de uma dissertação de mestrado do Programa de Pós-Graduação ' +
+          'em Saúde da Família (PROFSAÚDE/UNIFESP) pela pesquisadora Thais Cristina da Silva e seu ' +
+          'orientador Fernando Sfair Kinker. A pesquisa ouviu profissionais de uma Unidade Básica de ' +
+          'Saúde, localizada na periferia da zona sul de São Paulo, sobre os desafios do cuidado ' +
+          'paliativo na Atenção Primária, e um achado se repetiu, quase sem exceção: a formação sobre ' +
+          'o tema, quando existiu, foi breve demais.',
+      },
+      {
+        kind: 'quote',
+        text:
+          'Tivemos, mas assim, pinceladas, uma matéria, uma graduação, algo que você... muito ' +
+          'superficialmente.',
+        author: 'Médico',
+      },
+      {
+        kind: 'quote',
+        text: 'Na nossa faculdade tem uma coisa ou outra, mas nada muito profundo, só o que significa.',
+        author: 'Médico',
+      },
+      {
+        kind: 'quote',
+        text:
+          'Não era uma matéria da grade curricular, era mais um ou outro professor que tinha uma ' +
+          'especialização nisso... mas não era uma matéria consolidada.',
+        author: 'Médica',
+      },
+      {
+        kind: 'paragraph',
+        text:
+          'Este guia existe para preencher, ainda que em parte, essa lacuna: um ponto de apoio prático ' +
+          'para quem nunca teve tempo ou espaço de aprender isso na formação.',
       },
     ],
   },

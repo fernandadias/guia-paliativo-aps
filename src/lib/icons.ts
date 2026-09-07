@@ -22,6 +22,7 @@ import {
   faPersonRunning,
   faHandsBubbles,
   faUtensils,
+  faHandsPraying,
   type IconDefinition,
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -50,6 +51,7 @@ const registry: Record<string, IconDefinition> = {
   'person-running': faPersonRunning,
   'hands-bubbles': faHandsBubbles,
   utensils: faUtensils,
+  'hands-praying': faHandsPraying,
 }
 
 /** Resolve um nome de ícone; cai em stethoscope se não achar. */
