@@ -53,6 +53,13 @@ export const sections: Section[] = [
       {
         kind: 'quote',
         text:
+          'Eu não tive na faculdade, mas eu tenho também pinceladas na minha pós de estomaterapia ' +
+          '[...] e a gente cuida bastante dos pacientes que estão em cuidados paliativos.',
+        author: 'Enfermeira',
+      },
+      {
+        kind: 'quote',
+        text:
           'Tivemos, mas assim, pinceladas, uma matéria, uma graduação, algo que você, sei lá [...] ' +
           'muito superficialmente.',
         author: 'Médico',
@@ -68,13 +75,6 @@ export const sections: Section[] = [
           'Não era uma matéria da grade curricular, era mais um ou outro professor que tinha uma ' +
           'especialização nisso [...] mas não era uma matéria consolidada.',
         author: 'Médica',
-      },
-      {
-        kind: 'quote',
-        text:
-          'Eu não tive na faculdade, mas eu tenho também pinceladas na minha pós de estomaterapia ' +
-          '[...] e a gente cuida bastante dos pacientes que estão em cuidados paliativos.',
-        author: 'Enfermeira',
       },
     ],
   },
