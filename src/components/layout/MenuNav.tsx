@@ -3,12 +3,11 @@ import { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
-import { sections } from '@/content/sections'
+import { pageOrder } from '@/content/pageOrder'
 import { gentle, gentleFast } from '@/lib/motion'
 
 const items = [
-  { label: 'E agora, José?', path: '/e-agora-jose' },
-  ...sections.map((s) => ({ label: s.menuLabel, path: s.path })),
+  ...pageOrder.map((p) => ({ label: p.label, path: p.path })),
   { label: 'Guia de direção clínica', path: '/guia' },
 ]
 

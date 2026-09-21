@@ -4,7 +4,7 @@ import { faArrowDown, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { Reveal } from '@/components/motion/Reveal'
-import { sections } from '@/content/sections'
+import { pageOrder } from '@/content/pageOrder'
 import { verses } from '@/content/quotes'
 import { gentle } from '@/lib/motion'
 
@@ -113,36 +113,27 @@ function SectionsIndex() {
       </Reveal>
 
       <ol className="mt-14 border-t border-forest/12">
-        {/* 01 — o poema de Drummond como fio condutor */}
-        <IndexRow
-          n="01"
-          to="/e-agora-jose"
-          title="E agora, José?"
-          blurb="O poema de Drummond como fio condutor do cuidado."
-          delay={0}
-        />
-
-        {sections.map((s, i) => (
+        {pageOrder.map((p, i) => (
           <IndexRow
-            key={s.path}
-            n={String(i + 2).padStart(2, '0')}
-            to={s.path}
-            title={s.menuLabel}
-            blurb={s.blurb}
-            noBorder={i === sections.length - 1}
-            delay={(i + 1) * 0.05}
+            key={p.path}
+            n={String(i + 1).padStart(2, '0')}
+            to={p.path}
+            title={p.label}
+            blurb={p.blurb}
+            noBorder={i === pageOrder.length - 1}
+            delay={i * 0.05}
           />
         ))}
 
         {/* o Guia interativo como destinação acentuada */}
         <IndexRow
-          n={String(sections.length + 2).padStart(2, '0')}
+          n={String(pageOrder.length + 1).padStart(2, '0')}
           to="/guia"
           title="Guia de direção clínica"
           blurb="Passo a passo para conduzir o cuidado, do primeiro sinal ao plano."
           verse={verses.aposFuncionalidade.text}
           guide
-          delay={(sections.length + 1) * 0.05}
+          delay={pageOrder.length * 0.05}
         />
       </ol>
     </section>

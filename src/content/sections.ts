@@ -30,6 +30,55 @@ export interface Section {
 
 export const sections: Section[] = [
   {
+    slug: 'sobre-o-mestrado',
+    path: '/sobre-o-mestrado',
+    menuLabel: 'Sobre o mestrado',
+    kicker: 'A origem deste guia',
+    title: 'Sobre o mestrado',
+    blurb: 'A pesquisa acadêmica que deu origem a este guia.',
+    blocks: [
+      {
+        kind: 'paragraph',
+        text:
+          'Este guia foi criado a partir de uma dissertação de mestrado do Programa de Pós-Graduação ' +
+          'em Saúde da Família (PROFSAÚDE/UNIFESP), pela pesquisadora **Thais Cristina da Silva** e seu ' +
+          'orientador **Fernando Sfair Kinker**. A pesquisa ouviu profissionais de uma Unidade Básica de ' +
+          'Saúde, localizada na periferia da zona sul de São Paulo, sobre os desafios do cuidado ' +
+          'paliativo na Atenção Primária, e um achado se repetiu, quase sem exceção: a formação sobre ' +
+          'o tema, quando existiu, foi breve demais. É para preencher essa lacuna que este guia reúne ' +
+          'instrumentos de identificação precoce, diretrizes ministeriais e orientações práticas, ' +
+          'pensados para o cotidiano de quem, como os profissionais entrevistados, precisa de um ' +
+          'suporte que a formação não ofereceu.',
+      },
+      {
+        kind: 'quote',
+        text:
+          'Tivemos, mas assim, pinceladas, uma matéria, uma graduação, algo que você, sei lá [...] ' +
+          'muito superficialmente.',
+        author: 'Médico',
+      },
+      {
+        kind: 'quote',
+        text: 'Na nossa faculdade tem uma coisa ou outra, mas nada muito profundo, só o que significa.',
+        author: 'Médico',
+      },
+      {
+        kind: 'quote',
+        text:
+          'Não era uma matéria da grade curricular, era mais um ou outro professor que tinha uma ' +
+          'especialização nisso [...] mas não era uma matéria consolidada.',
+        author: 'Médica',
+      },
+      {
+        kind: 'quote',
+        text:
+          'Eu não tive na faculdade, mas eu tenho também pinceladas na minha pós de estomaterapia ' +
+          '[...] e a gente cuida bastante dos pacientes que estão em cuidados paliativos.',
+        author: 'Enfermeira',
+      },
+    ],
+  },
+  {
     slug: 'sobre',
     path: '/sobre',
     menuLabel: 'O que são Cuidados Paliativos?',
@@ -240,51 +289,6 @@ export const sections: Section[] = [
       {
         kind: 'paragraph',
         text: 'Algumas dessas ferramentas estão aplicadas de forma prática no Guia de direção clínica.',
-      },
-    ],
-  },
-  {
-    slug: 'sobre-o-mestrado',
-    path: '/sobre-o-mestrado',
-    menuLabel: 'Sobre o mestrado',
-    kicker: 'A origem deste guia',
-    title: 'Sobre o mestrado',
-    blurb: 'A pesquisa acadêmica que deu origem a este guia.',
-    blocks: [
-      {
-        kind: 'paragraph',
-        text:
-          'Este guia foi criado a partir de uma dissertação de mestrado do Programa de Pós-Graduação ' +
-          'em Saúde da Família (PROFSAÚDE/UNIFESP) pela pesquisadora **Thais Cristina da Silva** e seu ' +
-          'orientador **Fernando Sfair Kinker**. A pesquisa ouviu profissionais de uma Unidade Básica de ' +
-          'Saúde, localizada na periferia da zona sul de São Paulo, sobre os desafios do cuidado ' +
-          'paliativo na Atenção Primária, e um achado se repetiu, quase sem exceção: a formação sobre ' +
-          'o tema, quando existiu, foi breve demais.',
-      },
-      {
-        kind: 'quote',
-        text:
-          'Tivemos, mas assim, pinceladas, uma matéria, uma graduação, algo que você... muito ' +
-          'superficialmente.',
-        author: 'Médico',
-      },
-      {
-        kind: 'quote',
-        text: 'Na nossa faculdade tem uma coisa ou outra, mas nada muito profundo, só o que significa.',
-        author: 'Médico',
-      },
-      {
-        kind: 'quote',
-        text:
-          'Não era uma matéria da grade curricular, era mais um ou outro professor que tinha uma ' +
-          'especialização nisso... mas não era uma matéria consolidada.',
-        author: 'Médica',
-      },
-      {
-        kind: 'paragraph',
-        text:
-          'Este guia existe para preencher, ainda que em parte, essa lacuna: um ponto de apoio prático ' +
-          'para quem nunca teve tempo ou espaço de aprender isso na formação.',
       },
     ],
   },
