@@ -29,3 +29,4 @@ dist-ssr
 # variáveis locais
 .env
 .env.local
+.vercel
