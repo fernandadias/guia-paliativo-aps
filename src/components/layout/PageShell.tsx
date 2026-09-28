@@ -4,7 +4,7 @@ import { gentle } from '@/lib/motion'
 import { PageNav } from './PageNav'
 
 interface PageShellProps {
-  kicker: string
+  kicker?: string
   title: string
   intro?: string
   children: ReactNode
@@ -23,14 +23,16 @@ export function PageShell({ kicker, title, intro, children }: PageShellProps) {
       <div className="mx-auto max-w-3xl px-6 pb-24 pt-32 sm:px-10 sm:pt-36">
         <PageNav />
 
-        <motion.p
-          className="mb-4 text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-moss"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={gentle}
-        >
-          {kicker}
-        </motion.p>
+        {kicker && (
+          <motion.p
+            className="mb-4 text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-moss"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={gentle}
+          >
+            {kicker}
+          </motion.p>
+        )}
         <motion.h1
           className="font-serif text-4xl leading-[1.08] text-forest sm:text-5xl"
           initial={{ opacity: 0, y: 14 }}

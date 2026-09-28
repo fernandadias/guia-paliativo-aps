@@ -20,7 +20,7 @@ export interface Section {
   path: string
   menuLabel: string
   title: string
-  kicker: string
+  kicker?: string
   intro?: string
   /** Frase curta usada no índice "Para conhecer" da home. */
   blurb: string
@@ -32,9 +32,8 @@ export const sections: Section[] = [
   {
     slug: 'sobre-o-mestrado',
     path: '/sobre-o-mestrado',
-    menuLabel: 'Sobre o mestrado',
-    kicker: 'A origem deste guia',
-    title: 'Sobre o mestrado',
+    menuLabel: 'A origem deste guia',
+    title: 'A origem deste guia',
     blurb: 'A pesquisa acadêmica que deu origem a este guia.',
     blocks: [
       {
