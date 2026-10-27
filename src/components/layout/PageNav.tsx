@@ -21,7 +21,7 @@ export function PageNav() {
       : null
 
   return (
-    <nav className="mb-10 flex items-center justify-between gap-4">
+    <nav data-lugar="anterior-proxima" className="mb-10 flex items-center justify-between gap-4">
       <Link
         to={prev.to}
         className="group inline-flex items-center gap-2 text-sm text-forest/50 transition-colors hover:text-moss"

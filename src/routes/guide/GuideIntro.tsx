@@ -22,7 +22,10 @@ interface GuideIntroProps {
  */
 export function GuideIntro({ onStart, musicOn, onToggleMusic }: GuideIntroProps) {
   return (
-    <section className="relative flex min-h-[100svh] flex-col overflow-hidden bg-forest text-cream-50">
+    <section
+      data-lugar="abertura-do-guia"
+      className="relative flex min-h-[100svh] flex-col overflow-hidden bg-forest text-cream-50"
+    >
       {/* Vídeo de fundo (mudo, em loop). Enquanto não houver arquivo, fica o verde sólido. */}
       <video
         className="absolute inset-0 h-full w-full object-cover"

@@ -3,17 +3,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { Logo } from './Logo'
 import { MenuNav } from './MenuNav'
+import { track } from '@/lib/analytics'
 
 /** Header transparente que assenta sobre o conteúdo (papel ou degradê). */
 export function Header() {
   const [open, setOpen] = useState(false)
   return (
     <>
-      <header className="pointer-events-none absolute inset-x-0 top-0 z-40">
+      <header data-lugar="cabecalho" className="pointer-events-none absolute inset-x-0 top-0 z-40">
         <div className="pointer-events-auto mx-auto flex max-w-6xl items-center justify-between px-6 py-6 sm:px-10">
           <Logo />
           <button
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              track('menu_abrir')
+              setOpen(true)
+            }}
             aria-label="Abrir menu"
             className="inline-flex items-center gap-2 rounded-full border border-forest/10 bg-paper px-4 py-2 text-[0.8rem] font-medium text-forest transition-colors hover:bg-cream-50"
           >

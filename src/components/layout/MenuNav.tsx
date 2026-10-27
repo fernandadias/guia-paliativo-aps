@@ -40,6 +40,7 @@ export function MenuNav({ open, onClose }: MenuNavProps) {
     <AnimatePresence>
       {open && (
         <motion.div
+          data-lugar="menu"
           className="fixed inset-0 z-50 flex flex-col bg-gradient-to-b from-sage to-cream"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, transition: gentleFast }}

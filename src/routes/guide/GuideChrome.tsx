@@ -24,7 +24,10 @@ export function GuideChrome({ musicOn, onToggleMusic, onOpenRespostas }: GuideCh
   const pct = atTerminal ? 100 : Math.min(100, (progressIndex / progressTotal) * 100)
 
   return (
-    <div className="sticky top-0 z-30 border-b border-forest/10 bg-paper/85 backdrop-blur-sm">
+    <div
+      data-lugar="barra-do-guia"
+      className="sticky top-0 z-30 border-b border-forest/10 bg-paper/85 backdrop-blur-sm"
+    >
       <div className="mx-auto flex max-w-2xl items-center gap-2 px-4 py-3 sm:gap-3 sm:px-6">
         <button
           onClick={back}

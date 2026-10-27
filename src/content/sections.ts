@@ -12,8 +12,17 @@ export type SectionBlock =
   | { kind: 'quote'; text: string; author?: string; todo?: boolean }
   | { kind: 'list'; title?: string; items: string[]; todo?: boolean }
   | { kind: 'callout'; icon: string; title: string; text?: string; items?: string[]; href?: string; todo?: boolean }
-  | { kind: 'link'; text: string; href: string; todo?: boolean }
-  | { kind: 'links'; title?: string; items: { text: string; href: string }[]; todo?: boolean }
+  /**
+   * `material` nomeia o link na medição (GA). Quando o texto do link é genérico
+   * ("Clique aqui"), é ele que diz qual material a pessoa abriu.
+   */
+  | { kind: 'link'; text: string; href: string; material?: string; todo?: boolean }
+  | {
+      kind: 'links'
+      title?: string
+      items: { text: string; href: string; material?: string }[]
+      todo?: boolean
+    }
 
 export interface Section {
   slug: string
@@ -143,6 +152,7 @@ export const sections: Section[] = [
       {
         kind: 'link',
         text: 'Clique aqui e saiba mais',
+        material: 'Manual de Cuidados Paliativos, 2ª edição (Ministério da Saúde)',
         href:
           'https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/guias-e-manuais/2023/manual-de-cuidados-paliativos-2a-edicao/@@download/file',
       },
@@ -175,11 +185,13 @@ export const sections: Section[] = [
       {
         kind: 'link',
         text: 'Conheça a política na íntegra aqui',
+        material: 'Portaria GM/MS nº 3.681/2024, Política Nacional',
         href: 'https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-3.681-de-7-de-maio-de-2024-561223717',
       },
       {
         kind: 'link',
         text: 'Veja a atualização aqui',
+        material: 'Portaria GM/MS nº 10.181/2026, atualização da Política',
         href:
           'https://www.conass.org.br/conass-informa-n-19-2026-publicada-portaria-gm-n-10-181-que-altera-o-anexo-xliv-da-portaria-de-consolidacao-gm-ms-no-2-de-28-de-setembro-de-2017-para-atualizar-conceitos-e-regras-de-habil/',
       },

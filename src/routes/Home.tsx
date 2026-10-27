@@ -112,7 +112,7 @@ function SectionsIndex() {
         </h2>
       </Reveal>
 
-      <ol className="mt-14 border-t border-forest/12">
+      <ol data-lugar="indice-da-home" className="mt-14 border-t border-forest/12">
         {pageOrder.map((p, i) => (
           <IndexRow
             key={p.path}
@@ -162,6 +162,7 @@ function IndexRow({ n, to, title, blurb, verse, guide, noBorder, delay }: IndexR
     >
       <Link
         to={to}
+        data-material={title}
         className={`group flex items-baseline gap-6 py-7 sm:gap-10 sm:py-8 ${
           guide
             ? 'mt-2 -mx-6 rounded-2xl bg-pine px-6 text-cream-50 sm:-mx-8 sm:px-8'

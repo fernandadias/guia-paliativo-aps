@@ -6,17 +6,24 @@ import { Button } from '@/components/ui/Button'
 import { useGuide } from '../useGuideState'
 import { buildResult, type GuideResult } from '@/lib/result'
 import { formatDateTime, formatDuration } from '@/lib/format'
+import { track } from '@/lib/analytics'
 import type { Step } from '@/content/guide'
 
 export function SummaryStep({ step }: { step: Extract<Step, { kind: 'summary' }> }) {
-  const { answers, next, reset, finish, fillId, startedAt, finishedAt } = useGuide()
+  const { answers, next, reset, finish, fillId, startedAt, finishedAt, mode } = useGuide()
   const [downloading, setDownloading] = useState(false)
   const [pdfError, setPdfError] = useState(false)
+  const modo = mode === 'fast' ? 'rapido' : 'completo'
 
   // Fixa o horário de término assim que a tela de resultado aparece.
   useEffect(() => {
     finish()
   }, [finish])
+
+  // Chegou ao resultado, nos dois modos (no rápido, a cada "Ver resultado").
+  useEffect(() => {
+    track('guia_resultado', { modo })
+  }, [modo])
 
   const result: GuideResult = useMemo(() => {
     const end = finishedAt ?? Date.now()
@@ -53,6 +60,7 @@ export function SummaryStep({ step }: { step: Extract<Step, { kind: 'summary' }>
       a.click()
       a.remove()
       URL.revokeObjectURL(url)
+      track('guia_pdf', { modo })
     } catch {
       setPdfError(true)
     } finally {

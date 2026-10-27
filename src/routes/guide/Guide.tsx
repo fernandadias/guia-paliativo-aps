@@ -6,6 +6,7 @@ import { GuideIntro } from './GuideIntro'
 import { AnswersDrawer } from './AnswersDrawer'
 import { StepView } from './StepView'
 import { stepFade } from '@/lib/motion'
+import { track } from '@/lib/analytics'
 
 interface GuideInnerProps {
   musicOn: boolean
@@ -15,8 +16,16 @@ interface GuideInnerProps {
 function GuideInner({ musicOn, onToggleMusic }: GuideInnerProps) {
   const { current, step } = useGuide()
   const [respostasOpen, setRespostasOpen] = useState(false)
+
+  // Funil do guia: só o id da etapa, nunca a resposta.
+  useEffect(() => {
+    track('guia_etapa', { modo: 'completo', etapa: current })
+  }, [current])
+
   return (
-    <div className="min-h-[100svh] bg-paper">
+    // data-etapa: cliques em link aqui dentro dizem em que etapa aconteceram.
+    // data-clarity-mask: as gravações do Clarity não mostram o texto do guia.
+    <div data-etapa={current} data-clarity-mask="True" className="min-h-[100svh] bg-paper">
       {step.kind !== 'loading' && step.kind !== 'closing' && (
         <GuideChrome
           musicOn={musicOn}
@@ -66,7 +75,10 @@ export default function Guide() {
     void import('@/lib/persist').then((m) => m.flushQueue())
   }, [])
 
-  const start = () => setStarted(true)
+  const start = () => {
+    track('guia_inicio', { modo: 'completo' })
+    setStarted(true)
+  }
 
   const toggleMusic = () => {
     const a = audioRef.current

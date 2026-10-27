@@ -1,4 +1,5 @@
 import { Logo } from './Logo'
+import { openCookieSettings } from '@/lib/analytics'
 
 /** Assinatura manuscrita da Nanda (vetor). Herda a cor via currentColor. */
 function NandaSignature({ className }: { className?: string }) {
@@ -24,7 +25,7 @@ function NandaSignature({ className }: { className?: string }) {
 
 export function Footer() {
   return (
-    <footer className="border-t border-forest/10 bg-cream-50/50">
+    <footer data-lugar="rodape" className="border-t border-forest/10 bg-cream-50/50">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-12 sm:flex-row sm:items-center sm:justify-between sm:px-10">
         <Logo />
         <div className="flex max-w-sm flex-col gap-5">
@@ -37,6 +38,12 @@ export function Footer() {
             alt="PROFSAÚDE — Mestrado Profissional em Saúde da Família. Realização: ABRASCO, Fiocruz e Ministério da Saúde."
             className="h-8 w-auto max-w-full"
           />
+          <button
+            onClick={openCookieSettings}
+            className="self-start text-xs text-forest/50 underline-offset-4 transition-colors hover:text-moss hover:underline"
+          >
+            Preferências de cookies
+          </button>
         </div>
       </div>
 
@@ -46,6 +53,7 @@ export function Footer() {
           <span>design &amp; desenvolvimento |</span>
           <a
             href="https://www.nandadias.com.br/"
+            data-material="Assinatura Nanda Dias"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 font-semibold transition-colors hover:text-moss"

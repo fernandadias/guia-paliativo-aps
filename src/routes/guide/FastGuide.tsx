@@ -15,6 +15,7 @@ import {
   type StepId,
 } from '@/content/guide'
 import { getIcon } from '@/lib/icons'
+import { track } from '@/lib/analytics'
 import { GuideProvider, useGuide } from './useGuideState'
 import { StepView } from './StepView'
 
@@ -155,9 +156,15 @@ function FastGuideInner({ showClosing }: { showClosing: boolean }) {
 
 export default function FastGuide() {
   const [showClosing, setShowClosing] = useState(false)
+
+  useEffect(() => {
+    track('guia_inicio', { modo: 'rapido' })
+  }, [])
+
   return (
     <GuideProvider mode="fast" onFastAdvance={() => setShowClosing(true)}>
-      <div className="min-h-[100svh] bg-paper">
+      {/* As gravações do Clarity não mostram o texto do guia. */}
+      <div data-clarity-mask="True" className="min-h-[100svh] bg-paper">
         <FastGuideInner showClosing={showClosing} />
       </div>
     </GuideProvider>

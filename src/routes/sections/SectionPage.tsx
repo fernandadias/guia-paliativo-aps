@@ -92,6 +92,7 @@ function Block({ block }: { block: SectionBlock }) {
       return (
         <a
           href={encodeURI(block.href)}
+          data-material={block.material ?? block.text}
           target="_blank"
           rel="noopener noreferrer"
           className="group inline-flex items-center gap-2 font-medium text-moss transition-colors hover:text-forest"
@@ -114,6 +115,7 @@ function Block({ block }: { block: SectionBlock }) {
               <li key={i}>
                 <a
                   href={encodeURI(item.href)}
+                  data-material={item.material ?? item.text}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group inline-flex items-baseline gap-2 font-medium text-moss transition-colors hover:text-forest"
@@ -171,6 +173,7 @@ function Block({ block }: { block: SectionBlock }) {
       return block.href ? (
         <a
           href={encodeURI(block.href)}
+          data-material={block.title}
           target="_blank"
           rel="noopener noreferrer"
           className="group block"
