@@ -84,7 +84,7 @@ export function buildSections(answers: Answers): ResultSection[] {
   // Triagem
   section('Triagem', (add) => {
     if (answers.doencaAmeacadora)
-      add('Doença ameaçadora a vida', sim(answers.doencaAmeacadora))
+      add('Doença ameaçadora à vida', sim(answers.doencaAmeacadora))
     if (answers.perguntaSurpresa)
       add(
         'Pergunta surpresa',

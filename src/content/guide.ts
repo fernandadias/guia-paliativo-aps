@@ -158,7 +158,8 @@ export const steps: Record<StepId, Step> = {
     kind: 'choice',
     progress: true,
     kicker: 'Doença',
-    question: 'Você está diante de uma doença ameaçadora a vida?',
+    question: 'Você está diante de uma doença ameaçadora à vida?',
+    body: 'Exemplos: câncer, doenças crônicas não transmissíveis, insuficiência cardíaca, doenças respiratórias crônicas (DPOC, fibrose pulmonar e outras), doença renal crônica, doença hepática, demências, doenças neurológicas progressivas (ELA, AVC, esclerose múltipla) e HIV.',
     answerKey: 'doencaAmeacadora',
     options: [
       { value: 'sim', label: 'Sim' },

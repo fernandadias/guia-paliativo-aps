@@ -29,7 +29,7 @@ function buildItems(answers: Answers): Item[] {
   }
 
   if (answers.doencaAmeacadora)
-    push('Doença ameaçadora a vida', answers.doencaAmeacadora === 'sim' ? 'Sim' : 'Não')
+    push('Doença ameaçadora à vida', answers.doencaAmeacadora === 'sim' ? 'Sim' : 'Não')
 
   if (answers.perguntaSurpresa)
     push(
